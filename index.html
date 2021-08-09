@@ -301,41 +301,32 @@
                     mesh.animations.push(anim);
                     return scene.beginAnimation(mesh, 0, 30, false);
                 }
-                
-                //EVENT LISTENERS
-                document.onkeydown = checkKey;
-                function checkKey(event) {
-                    if (event.keyCode == 38) {
-                     console.log('aaaaaaaaa')
-                    }
-                    //jump on ins0
-                    if (event.keyCode == 96 && viperman.position.y == 0) {
-                        //jumpSound.play();
-                        console.log('jump')
+                //VIPER REACTIONS FUNTIONS ON EVENT LISTENERS
+                function viperJump(){
+                     //jumpSound.play();
+                     console.log('jump')
                         aniPosY(viperman)
                         jumpAnim.start(false, 1, 0);
                         runAnim.setWeightForAllAnimatables(0);
                         setTimeout(function(){ 
                             runAnim.setWeightForAllAnimatables(1);
                         }, 950)
-                    }
-                    //viper move left
-                    if (event.keyCode == 37) {
+                }
+                function viperMoveLeft(){
                     if (viperman.position.x == 0 || viperman.position.x == 3) {
                         moveViperAnim(viperman, viperman.position.x, viperman.position.x-3)
                             for (let i = 0; i < result.meshes.length; i++) {
                                 result.meshes[i].addRotation(0,-0.3,0)
                             }
-                            setTimeout(function(){ 
-                                for (let i = 0; i < result.meshes.length; i++) {
-                                    result.meshes[i].addRotation(0,0.3,0)
-                                }
-                            }, 250)
-                        }
+                        setTimeout(function(){ 
+                            for (let i = 0; i < result.meshes.length; i++) {
+                                result.meshes[i].addRotation(0,0.3,0)
+                            }
+                        }, 250)
                     }
-                    //viper move right
-                    if (event.keyCode == 39) {
-                        if (viperman.position.x == 0 || viperman.position.x == -3) {
+                }
+                function viperMoveRight(){
+                    if (viperman.position.x == 0 || viperman.position.x == -3) {
                             moveViperAnim(viperman, viperman.position.x, viperman.position.x+3)
                             for (let i = 0; i < result.meshes.length; i++) {
                                 result.meshes[i].addRotation(0,0.3,0)
@@ -346,17 +337,38 @@
                             }
                             }, 250)
                         }
+                }
+                function viperSlide(){
+                    slideAnim.start(false, 1, 0);
+                    runAnim.setWeightForAllAnimatables(0);
+                    fakeMeshEllipse.position.y = 0;
+                    setTimeout(function(){ 
+                        fakeMeshEllipse.position.y = 1;
+                        runAnim.setWeightForAllAnimatables(1);
+                    }, 1580)
+                }
+                //EVENT LISTENERS
+                //key event listeners
+                document.onkeydown = checkKey;
+                function checkKey(event) {
+                    if (event.keyCode == 38) {
+                     console.log('aaaaaaaaa')
+                    }
+                    //jump on ins0
+                    if (event.keyCode == 96 && viperman.position.y == 0) {
+                        viperJump();
+                    }
+                    //viper move left
+                    if (event.keyCode == 37) {
+                        viperMoveLeft();
+                    }
+                    //viper move right
+                    if (event.keyCode == 39) {
+                        viperMoveRight();
                     }
                     //viper slide down
                     if (event.keyCode == 40 && fakeMeshEllipse.position.y == 1) {
-                        slideAnim.start(false, 1, 0);
-                        runAnim.setWeightForAllAnimatables(0);
-                        fakeMeshEllipse.position.y = 0;
-                        setTimeout(function(){ 
-                            if (event.keyCode == 40){runAnim.setWeightForAllAnimatables(0);}
-                            fakeMeshEllipse.position.y = 1;
-                            runAnim.setWeightForAllAnimatables(1);
-                        }, 1580)
+                        viperSlide();
                     }
                 }
                 document.onkeyup = checkKeyUp;
@@ -365,10 +377,58 @@
                         console.log('bbbbbb')
                     }
                 }
+                //swipe event listeners
+                let pageWidth = window.innerWidth || document.body.clientWidth;
+                let treshold = Math.max(1,Math.floor(0.01 * (pageWidth)));
+                let touchstartX = 0;
+                let touchstartY = 0;
+                let touchendX = 0;
+                let touchendY = 0;
+                const limit = Math.tan(45 * 1.5 / 180 * Math.PI);
+
+                canvas.addEventListener('touchstart', function(event) {
+                    touchstartX = event.changedTouches[0].screenX;
+                    touchstartY = event.changedTouches[0].screenY;
+                }, false);
+
+                canvas.addEventListener('touchend', function(event) {
+                    touchendX = event.changedTouches[0].screenX;
+                    touchendY = event.changedTouches[0].screenY;
+                    handleGesture();
+                }, false); 
+
+                function handleGesture(e) {
+                    let x = touchendX - touchstartX;
+                    let y = touchendY - touchstartY;
+                    let xy = Math.abs(x / y);
+                    let yx = Math.abs(y / x);
+                    if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
+                        if (yx <= limit) {
+                            if (x < 0) {
+                                console.log("left");
+                                viperMoveLeft();
+                            } else {
+                                console.log("right");
+                                viperMoveRight();
+                            }
+                        }
+                        if (xy <= limit) {
+                            if (y < 0) {
+                                console.log("up");
+                                viperJump();
+                            } else {
+                                console.log("down");
+                                viperSlide();
+                            }
+                        }
+                    } else {
+                        console.log("tap");
+                    }
+                }
             
-            })
-            ;
+            });
            
+
             //CREATE BRIDGE-PATH FOR VIPER TO RUN
             function createRunningTrack(){
                 
