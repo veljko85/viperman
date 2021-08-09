@@ -152,19 +152,11 @@
                 var viperman =  result.meshes[0];
                 // viperman.parent = camera;
                 // viperman.position.y = -1;
-                scene.beforeRender = function() {
-                    // camera.rotation.y = 0;
-                    // camera.rotation.x = 0;
-                    viperman.position.z += 0.2;
-                    if (viperman.position.z % 500  == 0){
-                        viperman.position.y = 10;
-                    }
-                };
                 
                 //fake meshes
                 var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
                 fakeMesh.position = new BABYLON.Vector3(0,1.8,0)
-                fakeMesh.parent = viperman;
+                // fakeMesh.parent = viperman;
                 fakeMesh.isVisible = false;
                 camera.target = fakeMesh;
 
@@ -289,7 +281,7 @@
                 }
                 //jump animation
                 function aniPosY(mesh){
-                    const anim= new BABYLON.Animation("animPosY", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    const anim= new BABYLON.Animation("animPosY", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
                     anim.setKeys([
                         { frame: 0, value: 0 },
                         { frame: 10, value: 3 },
@@ -303,21 +295,27 @@
                 }
                 //VIPER REACTIONS FUNTIONS ON EVENT LISTENERS
                 function viperJump(){
-                     //jumpSound.play();
-                     console.log('jump')
+                    if (viperman.position.y == 0){
+                        //jumpSound.play();
+                        console.log('jump')
                         aniPosY(viperman)
-                        jumpAnim.start(false, 1, 0);
+                        jumpAnim.start(false, 1.66, 0);
                         runAnim.setWeightForAllAnimatables(0);
                         setTimeout(function(){ 
                             runAnim.setWeightForAllAnimatables(1);
-                        }, 950)
+                        }, 633)
+                    }
                 }
                 function viperMoveLeft(){
-                    if (viperman.position.x == 0 || viperman.position.x == 3) {
+                    if (viperman.position.y > 0.1){
+                        console.log('')
+                    } else if (viperman.position.x == 0 || viperman.position.x == 3) {
                         moveViperAnim(viperman, viperman.position.x, viperman.position.x-3)
-                            for (let i = 0; i < result.meshes.length; i++) {
-                                result.meshes[i].addRotation(0,-0.3,0)
-                            }
+                        // viperman.position.y = 0;
+                        moveViperAnim(fakeMesh, fakeMesh.position.x, fakeMesh.position.x-3)
+                        for (let i = 0; i < result.meshes.length; i++) {
+                            result.meshes[i].addRotation(0,-0.3,0)
+                        }
                         setTimeout(function(){ 
                             for (let i = 0; i < result.meshes.length; i++) {
                                 result.meshes[i].addRotation(0,0.3,0)
@@ -326,17 +324,20 @@
                     }
                 }
                 function viperMoveRight(){
-                    if (viperman.position.x == 0 || viperman.position.x == -3) {
-                            moveViperAnim(viperman, viperman.position.x, viperman.position.x+3)
-                            for (let i = 0; i < result.meshes.length; i++) {
-                                result.meshes[i].addRotation(0,0.3,0)
-                            }
-                            setTimeout(function(){ 
-                            for (let i = 0; i < result.meshes.length; i++) {
-                                result.meshes[i].addRotation(0,-0.3,0)
-                            }
-                            }, 250)
+                    if (viperman.position.y > 0.1){
+                        console.log('')
+                    } else if (viperman.position.x == 0 || viperman.position.x == -3 && viperman.position.y == 0) {
+                        moveViperAnim(viperman, viperman.position.x, viperman.position.x+3)
+                        moveViperAnim(fakeMesh, fakeMesh.position.x, fakeMesh.position.x+3)
+                        for (let i = 0; i < result.meshes.length; i++) {
+                            result.meshes[i].addRotation(0,0.3,0)
                         }
+                        setTimeout(function(){ 
+                        for (let i = 0; i < result.meshes.length; i++) {
+                            result.meshes[i].addRotation(0,-0.3,0)
+                        }
+                        }, 250)
+                    }
                 }
                 function viperSlide(){
                     slideAnim.start(false, 1, 0);
@@ -355,7 +356,7 @@
                      console.log('aaaaaaaaa')
                     }
                     //jump on ins0
-                    if (event.keyCode == 96 && viperman.position.y == 0) {
+                    if (event.keyCode == 96) {
                         viperJump();
                     }
                     //viper move left
@@ -425,6 +426,17 @@
                         console.log("tap");
                     }
                 }
+                //viper moving true track
+                scene.beforeRender = function() {
+                    // camera.rotation.y = 0;
+                    // camera.rotation.x = 0;
+                    viperman.position.z += 0.2;
+                    fakeMesh.position.z += 0.2;
+                    // if (viperman.position.z % 500  == 0){
+                    //     viperman.position.y = 10;
+                    // }
+                    console.log(viperman.position.y)
+                };
             
             });
            
@@ -435,10 +447,10 @@
                 //main platform for running
                 var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:1000}, scene);
                 var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-                // bridgeMat.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
-                bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga2.jpg", scene);
-                bridgeMat.diffuseTexture.uScale = 1;
-                bridgeMat.diffuseTexture.vScale = 200;
+                bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff');
+                // bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga2.jpg", scene);
+                // bridgeMat.diffuseTexture.uScale = 1;
+                // bridgeMat.diffuseTexture.vScale = 200;
                 bridge.material = bridgeMat;
                 bridge.position.z = 490;
 
