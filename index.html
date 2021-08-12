@@ -19,6 +19,8 @@
         <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
         <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
         <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+        <!-- HAMMER - TOUCH EVENT LIBRARY -->
+        <script src="https://hammerjs.github.io/dist/hammer.js"></script>
 
         <style>
             html, body {
@@ -37,20 +39,31 @@
         </style>
     </head>
 <body>
-    <div id='startCover' style="width: 100%; height: 100%; background-color: black;">
-        <div id='vipermanName' style="width: 90%; height: 17%; margin-left: 5%; background-image: url('img/sandviperName1.png'); background-size: cover;"></div>
-        <div id='vipermanLogo' style="width: 30%; height: 70%; margin-left: 32%; background-image: url('img/sandviperLogo.png'); background-size: cover;"></div>
-        <h1 id='start' style="font: 900 50px arial; text-align: center; color: white"; >Start Game</h1>
-    </div>
+<div id='container' style="width: 100vw; height: 100vh;">
     <canvas id="renderCanvas"></canvas>
-    
+</div> 
     <script>
-       
-        var start = document.getElementById('start');
-        var startCover = document.getElementById('startCover');
-        var gameOver = document.getElementById('gameOver');
-        var score = document.getElementById('score');
+        //GET CANVAS
+        var container = document.getElementById("container");
         var canvas = document.getElementById("renderCanvas");
+
+
+    var startAgain = document.createElement("DIV");
+    startAgain.style.width = "40%"
+    startAgain.style.height = "9.5%"
+    startAgain.style.position = 'absolute';
+    startAgain.style.left = '30%';
+    startAgain.style.top = '30%';
+    startAgain.style.backgroundImage = 'url("img/startAgain.png")';
+    startAgain.style.backgroundSize = 'cover';
+    startAgain.style.display = 'none';
+    container.append(startAgain);
+
+    startAgain.onclick = () => {
+        startAgain.style.display = 'none';
+        location.reload();
+    }
+
 
     //BABYLON START
 
@@ -59,26 +72,65 @@
         var sceneToRender = null;
         var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
 
-    //START GAME
-    // start.onclick = () => {
-        startCover.style.display = 'none';
+        //for loading
+            BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+                if (document.getElementById("customLoadingScreenDiv")) {
+                    // Do not add a loading screen if there is already one
+                    document.getElementById("customLoadingScreenDiv").style.display = "initial";
+                    return;
+                }
+                this._loadingDiv = document.createElement("div");
+                this._loadingDiv.id = "customLoadingScreenDiv";
+                // this._loadingDiv.innerHTML = "scene is currently loading";
+                var customLoadingScreenCss = document.createElement('style');
+                customLoadingScreenCss.type = 'text/css';
+                customLoadingScreenCss.innerHTML = `
+                #customLoadingScreenDiv{
+                    background-image: url("img/loadingBackgroundFin1.gif");
+                    background-size: cover;
+                }
+                `;
+                document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+                this._resizeLoadingUI();
+                window.addEventListener("resize", this._resizeLoadingUI);
+                document.body.appendChild(this._loadingDiv);
+            };
 
-        var createScene = function () {
-        
+            BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+                document.getElementById("customLoadingScreenDiv").style.display = "none";
+                console.log("scene is now loaded");
+            }
+        //end of loading
+
+    //START GAME
+        function createScene() {
+            
+            // for loading
+            engine.displayLoadingUI();
+            
             var scene = new BABYLON.Scene(engine);
-            
-            //MUSIC IN THE GAME
-            
-            var gameMusic = new BABYLON.Sound("gameMusic", "sounds/TRON Legacy (End Titles).mp3", scene, null, {
-                loop: true,
-                autoplay: true
-            });
+
+            //PAUSE GAME
+
+            // listenOtherEvents() {
+            //     window.addEventListener('blur', () => {
+            //         this.pause();
+            //     });
+
+            //     window.addEventListener('focus', () => {
+            //         this.resume();
+            //     });
+            // }
 
             //LIGHT
             var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, -1), scene);
-            light.intensity = 0.7;
+            light.intensity = 1;
             var light2 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 1), scene);
-            light2.intensity = 0.7;
+            light2.intensity = 1;
+            var light3 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, -1, -1), scene);
+            light3.intensity = 1;
+            var light4 = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, -1, 1), scene);
+            light4.intensity = 1;
             
 
             // CAMERA MAIN
@@ -117,12 +169,141 @@
                 // camera.position.z += 0.2;
             // };
             
-            //rotate around viper
-            // scene.onBeforeCameraRenderObservable.add(()=>{
-            //     scene.activeCamera.alpha += .002;
-            // })
+            
+            //GUI
+            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+            //START PANEL
+            // var startPanel = new BABYLON.GUI.StackPanel();
+            // startPanel.width = 1;
+            // startPanel.height = 1;
+            // startPanel.isVertical = true;
+            // startPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            // startPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            // advancedTexture.addControl(startPanel);
+            //start image
+            var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo.png");
+            viperDemo.width = 0.8;
+            viperDemo.height = 0.5;
+            viperDemo.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            viperDemo.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(viperDemo);
+            //start game image
+            var startGame = new BABYLON.GUI.Image("", "img/startGame.png");
+            startGame.width = 0.4;
+            startGame.height = 0.1;
+            startGame.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            startGame.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            startGame.isPointerBlocker = true;
+            advancedTexture.addControl(startGame);
+            //display pause sign
+            var pauseGameSign = new BABYLON.GUI.Image("", "img/pause.png");
+            pauseGameSign.width = 0.4;
+            pauseGameSign.height = 0.1;
+            pauseGameSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            pauseGameSign.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            pauseGameSign.notRenderable = true;
+            advancedTexture.addControl(pauseGameSign);
+            //game over sign
+            var gameOverSign = new BABYLON.GUI.Image("", "img/gameOver.png");
+            gameOverSign.width = 0.4;
+            gameOverSign.height = 0.1;
+            gameOverSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            gameOverSign.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            gameOverSign.notRenderable = true;
+            advancedTexture.addControl(gameOverSign);
+            //rotate around viper before start and at the end
+            function rotateAroundMesh(){
+                scene.onBeforeCameraRenderObservable.add(()=>{
+                    if (!gameRunning){
+                        scene.activeCamera.alpha += .002;
+                    }
+                })
+            }
+             //pause game button
+            var pauseGameButton = new BABYLON.GUI.Image("", "img/pauseButton.png");
+            pauseGameButton.width = 0.025;
+            pauseGameButton.height = 0.05;
+            pauseGameButton.top = 20 + 'px';
+            pauseGameButton.left = -20 + 'px';
+            pauseGameButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+            pauseGameButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            pauseGameButton.isPointerBlocker = true;
+            advancedTexture.addControl( pauseGameButton);
+            //start game from pause button
+            var startGameFromPauseButton = new BABYLON.GUI.Image("", "img/playButton.png");
+            startGameFromPauseButton.width = 0.025;
+            startGameFromPauseButton.height = 0.05;
+            startGameFromPauseButton.top = 20 + 'px';
+            startGameFromPauseButton.left = -20 + 'px';
+            startGameFromPauseButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+            startGameFromPauseButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            startGameFromPauseButton.isPointerBlocker = true;
+            startGameFromPauseButton.notRenderable = true;
+            advancedTexture.addControl(startGameFromPauseButton);
 
-            //CREATE A BOX  BACKGROUND
+            // startGame.notRenderable = true;
+            // viperDemo.notRenderable = true;
+
+            //COINS, LIVES AND RUNNING MESH STATUS
+            var gameRunning = false;
+            var running = false;
+            var lives = 3;
+            var colectedCoins = 0;
+            //LIFE AND COINS DISPLAY
+            //lives display
+            var lifesHolder = new BABYLON.GUI.Rectangle();
+            lifesHolder.thickness = 0;
+            lifesHolder.width = 60 + 'px';
+            lifesHolder.height = 40 + 'px';
+            lifesHolder.left = 20 + 'px';
+            lifesHolder.top = 20 + 'px';
+            lifesHolder.background = "black";
+            lifesHolder.alpha = 0.4;
+            lifesHolder.cornerRadius = 15;
+            lifesHolder.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+            lifesHolder.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(lifesHolder);
+
+            var livesBlock = new BABYLON.GUI.TextBlock();
+            livesBlock.text = "x3";
+            livesBlock.color = "#fff";
+            livesBlock.fontSize = 25 + "px";
+            livesBlock.alpha = 2.5;
+            lifesHolder.addControl(livesBlock);
+            //coins display
+            var coinsHolder = new BABYLON.GUI.Rectangle();
+            coinsHolder.thickness = 0;
+            coinsHolder.width = 120 + 'px';
+            coinsHolder.height = 40 + 'px';
+            coinsHolder.left = 20 + 'px';
+            coinsHolder.top = 70 + 'px';
+            coinsHolder.background = "black";
+            coinsHolder.alpha = 0.4;
+            coinsHolder.cornerRadius = 15;
+            coinsHolder.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+            coinsHolder.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(coinsHolder);
+
+            var imageLogo = new BABYLON.GUI.Image("imageLogo", "img/sandviperLogo.png");
+            imageLogo.width = 70 + 'px';
+            imageLogo.height = 70 + 'px';
+            imageLogo.left = -25 + 'px';
+            imageLogo.alpha = 2.5;
+            coinsHolder.addControl(imageLogo);
+
+            var coinBlock = new BABYLON.GUI.TextBlock();
+            coinBlock.text = ": 0";
+            coinBlock.color = "#fff";
+            coinBlock.fontSize = 25 + "px";
+            coinBlock.left = 15 + 'px';
+            coinBlock.alpha = 2.5;
+            coinsHolder.addControl(coinBlock);
+            
+            //MUSIC IN THE GAME
+            // var gameMusic = new BABYLON.Sound("gameMusic", "sounds/TRON Legacy (End Titles).mp3", scene, null, {
+            //     loop: true,
+            //     autoplay: true
+            // });
 
             // HDR texture of background
             var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("textures/shangai.hdr", scene, 128);
@@ -141,106 +322,55 @@
             hdrSkybox.infiniteDistance = true;
             
             //GIVE GLOW TO GLOWING OBJ
-
             var glow = new BABYLON.GlowLayer("glow", scene);
             glow.intensity = 0.8;
 
+            //fake mesh for camera
+            var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
+            fakeMesh.position = new BABYLON.Vector3(0,1.8,0)
+            fakeMesh.isVisible = false;
+            camera.target = fakeMesh;
+            //fake mesh for elipsoid
+            var fakeMeshEllipse = new BABYLON.MeshBuilder.CreateBox("fakeMeshEllipse", {width: 0.2, height: 0.2, depth: 0.2}, scene);
+            fakeMeshEllipse.position = new BABYLON.Vector3(0,-0.8,0)
+            fakeMeshEllipse.parent = fakeMesh;
+            fakeMeshEllipse.isVisible = false;
+
+            //Create Ellipsoid around mesh
+            var a = 0.5;
+            var b = 1;
+            var points = [];
+            for(var theta = -Math.PI/2; theta < Math.PI/2; theta += Math.PI/36) {
+                points.push(new BABYLON.Vector3(0, b * Math.sin(theta), a * Math.cos(theta)));
+            }
+            var ellipse = [];
+            ellipse[0] = BABYLON.MeshBuilder.CreateLines("e", {points:points}, scene);
+            ellipse[0].isVisible = false;
+            ellipse[0].parent = fakeMeshEllipse;
+            ellipse[0].rotation.y = 5 * Math.PI/ 16;
+            for(var i = 1; i < 23; i++) {
+                ellipse[i] = ellipse[0].clone("el" + i);
+                ellipse[i].parent = fakeMeshEllipse;
+                ellipse[i].rotation.y = 5 * Math.PI/ 16 + i * Math.PI/16;
+                ellipse[i].isVisible = false;
+                ellipse[i].checkCollisions = true;
+            }
+                
 
             //IMPORT VIPERMAN MESH
             //viperman
-            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
+            BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
+            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
                 var viperman =  result.meshes[0];
-                // viperman.parent = camera;
-                // viperman.position.y = -1;
-                
-                //fake meshes
-                var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
-                fakeMesh.position = new BABYLON.Vector3(0,1.8,0)
-                // fakeMesh.parent = viperman;
-                fakeMesh.isVisible = false;
-                camera.target = fakeMesh;
-
-                var fakeMeshEllipse = new BABYLON.MeshBuilder.CreateBox("fakeMeshEllipse", {width: 0.2, height: 0.2, depth: 0.2}, scene);
-                fakeMeshEllipse.position = new BABYLON.Vector3(0,1,0)
-                fakeMeshEllipse.parent = viperman;
-                fakeMeshEllipse.isVisible = false;
-                // camera.target = fakeMeshEllipse;
-
-                //Create Visible Ellipsoid around mesh
-                var a = 0.5;
-                var b = 1;
-                var points = [];
-                for(var theta = -Math.PI/2; theta < Math.PI/2; theta += Math.PI/36) {
-                    points.push(new BABYLON.Vector3(0, b * Math.sin(theta), a * Math.cos(theta)));
-                }
-                var ellipse = [];
-                ellipse[0] = BABYLON.MeshBuilder.CreateLines("e", {points:points}, scene);
-                ellipse[0].isVisible = false;
-                ellipse[0].parent = fakeMeshEllipse;
-                ellipse[0].rotation.y = 5 * Math.PI/ 16;
-                for(var i = 1; i < 23; i++) {
-                    ellipse[i] = ellipse[0].clone("el" + i);
-                    ellipse[i].parent = fakeMeshEllipse;
-                    ellipse[i].rotation.y = 5 * Math.PI/ 16 + i * Math.PI/16;
-                    ellipse[i].isVisible = false;
-                    ellipse[i].checkCollisions = true;
-                }
-                
-                //SANDVIPER LOGO FOR COINS
-                BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
-                    var coinLogo = result.meshes[0];
-                    coinLogo.position = new BABYLON.Vector3(0,-5,15)
-                    var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
-                    coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
-                    scene.getMeshByName("Plane").material = coinLogoMat;
-                    coinLogo.rotationQuaternion = null;
-                    coinLogo.checkCollisions = true;
-                    coins = [];
-                    function createCoinLane(coinLanePositionX, coinLanePositionZ){
-                        for (var i = 1; i < 11; i++) {
-                            var newCoin = coinLogo.clone("coin" + i);
-                            coins.push(newCoin);
-                            newCoin.position = new BABYLON.Vector3(coinLanePositionX, 0.5, (coinLanePositionZ + i * 3));
-                        }
-                    }
-                    createCoinLane(3, 30);
-                    createCoinLane(0.01, 100);
-                    console.log(coins.length)
-                    //coin colider
-                    for (let j = 0; j < ellipse.length; j++) {
-                        ellipse[j].actionManager = new BABYLON.ActionManager(scene);
-                        for (let i = 0; i < coins.length; i++) {
-                            coins[i].checkCollisions = true;
-                            coins[i].actionManager = new BABYLON.ActionManager(scene);
-                                let action = new BABYLON.ExecuteCodeAction(
-                                    {
-                                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
-                                        parameter: { 
-                                            mesh: coins[i]
-                                        }
-                                    },
-                                    (evt) => {
-                                        // if (coins[i].isVisible) { 
-                                        // //     coinNumber += 1;
-                                        // //     coinSound.play();
-                                        // //     console.log('Coins: ' + coinNumber)
-                                        // //     coinBlock.text = "Coins: " + coinNumber;
-                                            coins[i].isVisible = false;
-                                            coins[i].setEnabled(false);
-                                        // }
-                                    }
-                                );  
-                                ellipse[j].actionManager.registerAction(action);
-                        }
-                    }
-                })
+                viperman.parent = fakeMesh;
+                viperman.position.y = -1.8;
                 
                 //VIPER MESH IMPORT ANIMATION
                 //run animation
                 var runAnim = scene.animationGroups.find(a => a.name === 'run');
                 var runParam = { name: "Run", anim: runAnim, weight: 0 };
                 runAnim.setWeightForAllAnimatables(1);
-                runAnim.start(true, 1, 0);
+                
                 //jump animation
                 var jumpAnim = scene.animationGroups.find(a => a.name === 'jump');
                 var jumpParam = { name: "Jump", anim: jumpAnim, weight: 0 };
@@ -280,14 +410,14 @@
                     return scene.beginAnimation(mesh, 0, 15, false);
                 }
                 //jump animation
-                function aniPosY(mesh){
+                function aniPosY(mesh, meshPosition){
                     const anim= new BABYLON.Animation("animPosY", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
                     anim.setKeys([
-                        { frame: 0, value: 0 },
-                        { frame: 10, value: 3 },
-                        { frame: 18, value: 3.5 },
-                        { frame: 20, value: 3.5 },
-                        { frame: 30, value: 0 },
+                        { frame: 0, value: meshPosition + 0 },
+                        { frame: 10, value: meshPosition + 3 },
+                        { frame: 18, value: meshPosition + 3.5 },
+                        { frame: 20, value: meshPosition + 3.5 },
+                        { frame: 30, value: meshPosition + 0 },
                     ]);
                     mesh.animations = [];
                     mesh.animations.push(anim);
@@ -295,168 +425,205 @@
                 }
                 //VIPER REACTIONS FUNTIONS ON EVENT LISTENERS
                 function viperJump(){
-                    if (viperman.position.y == 0){
-                        //jumpSound.play();
-                        console.log('jump')
-                        aniPosY(viperman)
-                        jumpAnim.start(false, 1.66, 0);
-                        runAnim.setWeightForAllAnimatables(0);
-                        setTimeout(function(){ 
-                            runAnim.setWeightForAllAnimatables(1);
-                        }, 633)
-                    }
+                    //jumpSound.play();
+                    aniPosY(fakeMesh, 1.8)
+                    jumpAnim.start(false, 1.66, 0);
+                    runAnim.setWeightForAllAnimatables(0);
+                    running = false;
+                    setTimeout(function(){ 
+                        running = true;
+                        runAnim.setWeightForAllAnimatables(1);
+                    }, 633)
                 }
                 function viperMoveLeft(){
-                    if (viperman.position.y > 0.1){
-                        console.log('')
-                    } else if (viperman.position.x == 0 || viperman.position.x == 3) {
-                        moveViperAnim(viperman, viperman.position.x, viperman.position.x-3)
-                        // viperman.position.y = 0;
+                    if (fakeMesh.position.x == 0 || fakeMesh.position.x == 3) {
                         moveViperAnim(fakeMesh, fakeMesh.position.x, fakeMesh.position.x-3)
-                        for (let i = 0; i < result.meshes.length; i++) {
-                            result.meshes[i].addRotation(0,-0.3,0)
-                        }
+                            fakeMesh.addRotation(0,-0.3,0)
                         setTimeout(function(){ 
-                            for (let i = 0; i < result.meshes.length; i++) {
-                                result.meshes[i].addRotation(0,0.3,0)
-                            }
+                            fakeMesh.addRotation(0,0.3,0)
                         }, 250)
                     }
                 }
                 function viperMoveRight(){
-                    if (viperman.position.y > 0.1){
-                        console.log('')
-                    } else if (viperman.position.x == 0 || viperman.position.x == -3 && viperman.position.y == 0) {
-                        moveViperAnim(viperman, viperman.position.x, viperman.position.x+3)
+                    if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3) {
                         moveViperAnim(fakeMesh, fakeMesh.position.x, fakeMesh.position.x+3)
-                        for (let i = 0; i < result.meshes.length; i++) {
-                            result.meshes[i].addRotation(0,0.3,0)
-                        }
+                            fakeMesh.addRotation(0,0.3,0)
                         setTimeout(function(){ 
-                        for (let i = 0; i < result.meshes.length; i++) {
-                            result.meshes[i].addRotation(0,-0.3,0)
-                        }
+                            fakeMesh.addRotation(0,-0.3,0)
                         }, 250)
                     }
                 }
                 function viperSlide(){
                     slideAnim.start(false, 1, 0);
                     runAnim.setWeightForAllAnimatables(0);
-                    fakeMeshEllipse.position.y = 0;
+                    fakeMeshEllipse.position.y = -1.8;
+                    running = false;
                     setTimeout(function(){ 
-                        fakeMeshEllipse.position.y = 1;
+                        running = true;
+                        fakeMeshEllipse.position.y = -0.8;
                         runAnim.setWeightForAllAnimatables(1);
                     }, 1580)
                 }
                 //EVENT LISTENERS
                 //key event listeners
-                document.onkeydown = checkKey;
-                function checkKey(event) {
-                    if (event.keyCode == 38) {
-                     console.log('aaaaaaaaa')
-                    }
-                    //jump on ins0
-                    if (event.keyCode == 96) {
-                        viperJump();
-                    }
-                    //viper move left
-                    if (event.keyCode == 37) {
-                        viperMoveLeft();
-                    }
-                    //viper move right
-                    if (event.keyCode == 39) {
-                        viperMoveRight();
-                    }
-                    //viper slide down
-                    if (event.keyCode == 40 && fakeMeshEllipse.position.y == 1) {
-                        viperSlide();
+                function lintenKeysEvents(){
+                    document.onkeydown = checkKey;
+                    function checkKey(event) {
+                        if (event.keyCode == 38 && running) {
+                            viperJump();
+                        }
+                        //jump on ins0
+                        if (event.keyCode == 96 && running) {
+                            viperJump();
+                        }
+                        //viper move left
+                        if (event.keyCode == 37 && running) {
+                            viperMoveLeft();
+                        }
+                        //viper move right
+                        if (event.keyCode == 39 && running) {
+                            viperMoveRight();
+                        }
+                        //viper slide down
+                        if (event.keyCode == 40 && fakeMeshEllipse.position.y == -0.8 && running) {
+                            viperSlide();
+                        }
                     }
                 }
-                document.onkeyup = checkKeyUp;
-                function checkKeyUp(event) {
-                    if (event.keyCode == 38) {
-                        console.log('bbbbbb')
-                    }
+                //touch event listeners with hammer
+                function lintenTouchEvents(){
+                    var hammertime = new Hammer(canvas);
+                    hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+                    hammertime.on("swipeleft swiperight swipeup swipedown tap press", function(ev) {
+                        if (ev.type == 'swipeup'  && running){
+                            viperJump(); 
+                        } else if (ev.type == 'swipedown'  && running) {
+                            viperSlide();
+                        }
+                        else if (ev.type == 'swipeleft'  && running) {
+                            viperMoveLeft();
+                        }
+                        else if (ev.type == 'swiperight'  && running) {
+                            viperMoveRight();
+                        }
+                    });
                 }
-                //swipe event listeners
-                let pageWidth = window.innerWidth || document.body.clientWidth;
-                let treshold = Math.max(1,Math.floor(0.01 * (pageWidth)));
-                let touchstartX = 0;
-                let touchstartY = 0;
-                let touchendX = 0;
-                let touchendY = 0;
-                const limit = Math.tan(45 * 1.5 / 180 * Math.PI);
-
-                canvas.addEventListener('touchstart', function(event) {
-                    touchstartX = event.changedTouches[0].screenX;
-                    touchstartY = event.changedTouches[0].screenY;
-                }, false);
-
-                canvas.addEventListener('touchend', function(event) {
-                    touchendX = event.changedTouches[0].screenX;
-                    touchendY = event.changedTouches[0].screenY;
-                    handleGesture();
-                }, false); 
-
-                function handleGesture(e) {
-                    let x = touchendX - touchstartX;
-                    let y = touchendY - touchstartY;
-                    let xy = Math.abs(x / y);
-                    let yx = Math.abs(y / x);
-                    if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
-                        if (yx <= limit) {
-                            if (x < 0) {
-                                console.log("left");
-                                viperMoveLeft();
-                            } else {
-                                console.log("right");
-                                viperMoveRight();
-                            }
-                        }
-                        if (xy <= limit) {
-                            if (y < 0) {
-                                console.log("up");
-                                viperJump();
-                            } else {
-                                console.log("down");
-                                viperSlide();
-                            }
-                        }
+                
+                //viper moving true track function
+                function meshRunning(){
+                    //change running status
+                    running = true;
+                    gameRunning = true;
+                    if (fakeMesh.position.z < -4.9){
+                        camera.setPosition(new BABYLON.Vector3(0, 3, -5));
                     } else {
-                        console.log("tap");
+                        camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, 3, fakeMesh.position.z - 5));
+                    }
+                    //start running animation
+                    runAnim.start(true, 1, 0);
+                    //change viperman and fake mesh position z - move thrue space
+                    scene.beforeRender = function() {
+                        fakeMesh.position.z += 0.2;
+                    };
+                    //assign event listeners to mesh when running
+                }
+                
+                //pause game function
+                function pauseGame(){ 
+                    if (gameRunning){
+                        running = false;
+                        gameRunning = false;
+                        runAnim.pause(true);
+                        scene.beforeRender = function() {
+                            fakeMesh.position.z += 0;
+                        };
+                        pauseGameButton.notRenderable = true;
+                        startGameFromPauseButton.notRenderable = false;
+                        pauseGameSign.notRenderable = false;
                     }
                 }
-                //viper moving true track
-                scene.beforeRender = function() {
-                    // camera.rotation.y = 0;
-                    // camera.rotation.x = 0;
-                    viperman.position.z += 0.2;
-                    fakeMesh.position.z += 0.2;
-                    // if (viperman.position.z % 500  == 0){
-                    //     viperman.position.y = 10;
-                    // }
-                    console.log(viperman.position.y)
-                };
-            
-            });
-           
 
+                //start game from pause function
+                function startGameFromPause(){ 
+                    if (!gameRunning){ 
+                        gameRunning = true;
+                        runAnim.pause(false);
+                        runAnim.play(true);
+                        meshRunning()
+                        pauseGameButton.notRenderable = false;
+                        startGameFromPauseButton.notRenderable = true;
+                        pauseGameSign.notRenderable = true;
+                    }
+                }
+                //pause game
+                pauseGameButton.onPointerClickObservable.add(function () {
+                    pauseGame();
+                });
+                //start game from pause
+                startGameFromPauseButton.onPointerClickObservable.add(function () {
+                    startGameFromPause();
+                });
+                //rotate around the mesh at start and end of the game
+                rotateAroundMesh()
+                //START GAME
+                startGame.onPointerClickObservable.add(function () {
+                    meshRunning();
+                    viperDemo.notRenderable = true;
+                    startGame.notRenderable = true;
+                    lintenKeysEvents();
+                    lintenTouchEvents();
+                });
+
+                //for loading
+                engine.hideLoadingUI();
+                
+            });
+
+            //game over function
+            function gameOver(){ 
+                running = false;
+                gameRunning = false;
+                gameOverSign.notRenderable = false;
+                scene.animationGroups.find(a => a.name === 'run').pause(true);
+                scene.beforeRender = function() {
+                    fakeMesh.position.z += 0;
+                };
+                startAgain.style.display = 'block';
+            }
+                         
             //CREATE BRIDGE-PATH FOR VIPER TO RUN
             function createRunningTrack(){
                 
                 //main platform for running
                 var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:1000}, scene);
-                var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-                bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff');
-                // bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga2.jpg", scene);
-                // bridgeMat.diffuseTexture.uScale = 1;
-                // bridgeMat.diffuseTexture.vScale = 200;
+                var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
+                bridgeMat.reflectionTexture = hdrBcgRefTexture;
+                bridgeMat.refractionTexture = hdrBcgRefTexture;
+                bridgeMat.reflectionTexture.level = 1;
+                bridgeMat.specularPower = 150;
+                bridgeMat.indexOfRefraction = 0.52;
+                bridgeMat.alpha = 0.8;
+                bridgeMat.directIntensity = 0.0;
+                bridgeMat.environmentIntensity = 0.7;
+                bridgeMat.cameraExposure = 0.66;
+                bridgeMat.cameraContrast = 1.66;
                 bridge.material = bridgeMat;
                 bridge.position.z = 490;
 
+                //create bridge plane to go bellow
+                var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:1000}, scene);
+                bridgeLayout.position.z = 490;
+                bridgeLayout.position.y = -0.5;
+                var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
+                bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+                bridgeLayoutMat.diffuseTexture.uScale = 1;
+                bridgeLayoutMat.diffuseTexture.vScale = 200;
+                bridgeLayout.material = bridgeLayoutMat;
+
+
                 //create glass walls
                 var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 3, depth: 1000}, scene);
-                glassWall.position = new BABYLON.Vector3(-5,1,490)
+                glassWall.position = new BABYLON.Vector3(-5,1.5,490)
                 var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
                 glassWallMat.reflectionTexture = hdrBcgRefTexture;
                 glassWallMat.refractionTexture = hdrBcgRefTexture;
@@ -473,36 +640,14 @@
                 //other glass walls
                 var glassWall2 = glassWall.clone("glassWall2");
                 glassWall2.position.x = 5;
-
-                var box = new BABYLON.MeshBuilder.CreateBox("box", {width: 0.2, height: 0.5, depth: 2}, scene);
-            box.position = new BABYLON.Vector3(-5,2,30);
-            var boxMat = new BABYLON.StandardMaterial("boxMat", scene);
-            boxMat.diffuseColor = new BABYLON.Color3.FromHexString('#ff5722')
-            boxMat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
-             // boxMat.alpha = 0.5;
-             box.material = boxMat;
-
-             var box2 = new BABYLON.MeshBuilder.CreateBox("box", {width: 0.3, height: 0.4, depth: 1.8}, scene);
-            box2.position = new BABYLON.Vector3(-5,2,30);
-            // box2.addRotation(0,0.8,0)
-             box2.material = glassWallMat;
-
-             const plane = BABYLON.MeshBuilder.CreatePlane("plane", {height:1, width: 2});
-             plane.position = new BABYLON.Vector3(0,2,30);
-            // plane.addRotation(0,1.6,0)
-            var planemat = new BABYLON.StandardMaterial("planemat", scene);
-    var t = new BABYLON.Texture("img/vipermanDemo.png", scene);
-    t.hasAlpha = true;
-    planemat.diffuseTexture = t;
-    planemat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
-    planemat.useAlphaFromDiffuseTexture = true;
-    plane.material = planemat;
             
                 //side walks
                 var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 1000}, scene);
                 var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
-                sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#cd00cd')
-                sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#cd00cd');
+                sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
+                sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
+                // sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#cd00cd')
+                // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#cd00cd');
                 sideWalk.material = sideWalkMat;
                 sideWalk.position = new BABYLON.Vector3(-5,0,490)
                 //other sidewalk
@@ -531,6 +676,221 @@
                 //running tracks glass part right
                 var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
                 runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,490)
+
+                //SANDVIPER LOGO FOR COINS
+                BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
+                    var coinLogo = result.meshes[0];
+                    coinLogo.position = new BABYLON.Vector3(0,-5,15)
+                    var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
+                    coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
+                    scene.getMeshByName("Plane").material = coinLogoMat;
+                    coinLogo.rotationQuaternion = null;
+                    coinLogo.checkCollisions = true;
+                    
+                    coins = [];
+                    function createCoinLane(coinLanePositionX, coinLanePositionZ){
+                        for (var i = 1; i < 11; i++) {
+                            var newCoin = coinLogo.clone("coin" + i);
+                            coins.push(newCoin);
+                            newCoin.position = new BABYLON.Vector3(coinLanePositionX, 0.5, (coinLanePositionZ + i * 3));
+                        }
+                    }
+                    createCoinLane(3, 30);
+                    createCoinLane(0.01, 100);
+                    //coin colider
+                    for (let j = 0; j < ellipse.length; j++) {
+                        for (let i = 0; i < coins.length; i++) {
+                            coins[i].checkCollisions = true;
+                            coins[i].actionManager = new BABYLON.ActionManager(scene);
+                                let action = new BABYLON.ExecuteCodeAction(
+                                    {
+                                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                                        parameter: { 
+                                            mesh: coins[i]
+                                        }
+                                    },
+                                    (evt) => {
+                                        if (coins[i].isVisible) { 
+                                            colectedCoins += 1;
+                                            // coinSound.play();
+                                            coinBlock.text = ": " + colectedCoins;
+                                            coins[i].isVisible = false;
+                                            coins[i].setEnabled(false);
+                                        }
+                                    }
+                                );  
+                                ellipse[j].actionManager.registerAction(action);
+                        }
+                    }
+                })
+                //FOOES
+                // setTimeout(function(){
+                // console.log(scene.getMeshByUniqueId(153))
+                // // scene.getMeshByUniqueId(153).position.y = 2;
+                // var viperman2 = scene.getMeshByUniqueId(153);
+                // viperman2.position.y = 2;
+                // }, 3000)
+                function aniSimpleLaserWall(mesh){
+                    const anim= new BABYLON.Animation("aniSimpleLaserWall", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    anim.setKeys([
+                        { frame: 0, value: -1.5 },
+                        // { frame: 10, value: -1 },
+                        // { frame: 18, value: -0.5 },
+                        // { frame: 20, value: -0.5 },
+                        { frame: 30, value: 0 },
+                    ]);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 30, false);
+                }
+                //animate the mesh when it hits fooes to blink
+                function visColAnim(mesh){
+                    const anim= new BABYLON.Animation("visColAnim", "visibility", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    const colKeys = [
+                    { frame: 0, value: 1 },
+                        { frame: 5, value: 0 },
+                        { frame: 10, value: 1 },
+                        { frame: 15, value: 0 },
+                        { frame: 20, value: 1 },
+                        { frame: 25, value: 0 },
+                        { frame: 30, value: 1 },
+                        { frame: 35, value: 0 },
+                    ]; 
+                    anim.setKeys(colKeys);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 35, false);
+                }
+                //animate the mesh when it hits fooes to go back few steps
+                function animPosZMeshCollision(mesh){
+                    const anim= new BABYLON.Animation("animPosZMeshCollision", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                        anim.setKeys([
+                            {frame: 0, value: mesh.position.z},
+                            {frame: 5, value: mesh.position.z - 3},
+                            {frame: 30, value: mesh.position.z - 3},
+                        ]);
+                        mesh.animations = [];    
+                        mesh.animations.push(anim);
+                        return scene.beginAnimation(mesh, 0, 60, false);
+                }
+
+                var laserWallUpperHolder = new BABYLON.MeshBuilder.CreateBox("box", {width: 2.7, height: 0.2, depth: 0.2}, scene);
+                laserWallUpperHolder.position = new BABYLON.Vector3(0,1.5,0);
+                laserWallUpperHolder.material = glassWallMat;
+
+                var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.5});
+                laserWall.position = new BABYLON.Vector3(0,0.7,0);
+                var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
+                laserWallmat.backFaceCulling = false;
+                laserWallmat.diffuseColor = new BABYLON.Color3.FromHexString('#ff5722')
+                laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
+                laserWallmat.alpha = 0.5;
+                laserWall.material = laserWallmat;
+
+                var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWallUpperHolder, laserWall], true, true, undefined, false, true);
+                simpleLaserWall.position = new BABYLON.Vector3(-3,-5,10)
+
+                //array to put fooes
+                fooes = [];
+                //function to create simple wall
+                function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ){
+                    for (var i = 1; i < 10; i++) {       
+                        var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall" + i);
+                        fooes.push(newSimpleLaserWall);
+                        newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ + i * 10);
+                    }
+                }
+                // function createWideLaserWall(WideLaserWallLanePositionX, WideLaserWallLanePositionZ){
+                //     var newSimpleLaserWall = simpleLaserWall.clone("newSimpleLaserWall" + i);
+                //     fooes.push(newSimpleLaserWall);
+                //     newSimpleLaserWall.position = new BABYLON.Vector3(WideLaserWallLanePositionX, 0, WideLaserWallLanePositionZ);
+                //     // newSimpleLaserWall.scaling = new BABYLON.Vector3(3,1,1)
+                // }
+                // function createSimpleLaserWall2(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ){
+                //     var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall" + i);
+                //     fooes.push(newSimpleLaserWall);
+                //     newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ);
+                // }
+                //create smple laser walls
+                // createSimpleLaserWall(-3, 10);
+                // var aaa = 30;
+                // for (let i = 0; i < 5; i++) {
+
+                    createSimpleLaserWall(0, 20);
+                //     aaa += 10;
+                // }
+                // createSimpleLaserWall(0.01, 40);
+                
+                
+                //fooes colider
+                for (let f = 0; f < ellipse.length; f++) {
+                    ellipse[f].actionManager = new BABYLON.ActionManager(scene);
+                    for (let i = 0; i < fooes.length; i++) {
+                        fooes[i].checkCollisions = true;
+                        fooes[i].actionManager = new BABYLON.ActionManager(scene);
+                            let action = new BABYLON.ExecuteCodeAction(
+                                {
+                                    trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                                    parameter: { 
+                                        mesh: fooes[i]
+                                    }
+                                },
+                                (evt) => {
+                                    if (fooes[i].checkCollisions){
+                                        //give mesh animation to go back on collision
+                                        
+                                        // animPosZMeshCollision(scene.getMeshByUniqueId(153))
+                                        animPosZMeshCollision(fakeMesh)
+                                        fakeMesh.position.x = fooes[i].position.x;
+                                        //give mesh animation to blink on collision
+                                        visColAnim(fooes[i])
+                                        // visColAnim(scene.getMeshByUniqueId(156))
+                                        // visColAnim(scene.getMeshByUniqueId(160))
+                                        fooes[i].checkCollisions = false;
+                                        lives -= 1;
+                                        livesBlock.text = "x" + lives;
+                                        // hitWallSound.play();
+                                        if (lives > 0){
+                                            scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
+                                            scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
+                                            running = false;
+                                            setTimeout(function(){
+                                                scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
+                                                scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
+                                                running = true;
+                                            }, 1000);
+                                        }
+                                        if (lives < 1){
+                                            // gameOverSound.play();
+                                            // gameMusic.pause();
+                                            scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
+                                            gameOver();
+                                            // runAnim.setWeightForAllAnimatables(0);
+                                            // scene.beforeRender = function() {
+                                            //     camera.rotation.y = 0;
+                                            //     camera.rotation.x = 0;
+                                            //     camera.position.z = camera.position.z;
+                                            //     // camera.position.x -= 1;
+                                            // };
+                                        }
+                                        
+                                    }
+                                }
+                            );  
+                            ellipse[f].actionManager.registerAction(action);
+                    }
+                }
+                
+                // setTimeout(function(){ 
+                //     aniSimpleLaserWall(simpleLaserWall);
+                // }, 5000)
+                // var t = new BABYLON.Texture("img/vipermanDemo.png", scene);
+                // t.hasAlpha = true;
+                // planemat.diffuseTexture = t;
+                // planemat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
+                // planemat.useAlphaFromDiffuseTexture = true;
+                // plane.material = planemat;
+
                 
             }
 
@@ -540,89 +900,55 @@
 
 
 
-
-            createRunningTrack()
+            // setTimeout(function(){
+                createRunningTrack()
+            // }, 5000)
             console.log(scene.meshes.length)
-            // setInterval(function(){ 
-            //     console.log(engine.getFps())
-            //     console.log(camera.position)
-            // }, 1000)
-            //SCORE AND LIFE DISPLAY
+            setInterval(function(){ 
+                // console.log(engine.getFps())
+            }, 1000)
+            
+            
+            
+            
+            console.log(canvas.width);
+                console.log(navigator.userAgent);
+                
 
-            // var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-            // var panel = new BABYLON.GUI.StackPanel();
-            // panel.width = 1200 + 'px';
-            // panel.height = 500 + 'px';
-            // panel.isVertical = true;
-            // panel.left = 0 + "px";
-            // panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-            // panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-            // advancedTexture.addControl(panel);
-
-            // var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo.png");
-            // viperDemo.width = "1000px";
-            // viperDemo.height = "357px";
-            // panel.addControl(viperDemo);
-
-            // var panel = new BABYLON.GUI.StackPanel();
-            // panel.width = 800 + 'px';
-            // panel.height = 200 + 'px';
-            // panel.isVertical = true;
-            // panel.left = -100 + "px";
-            // panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-            // panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-            // advancedTexture.addControl(panel);    
-
-            // var coinBlock = new BABYLON.GUI.TextBlock();
-            // coinBlock.text = "Coins: 0";
-            // coinBlock.height = 100 + "px";
-            // coinBlock.color = "#fff";
-            // coinBlock.fontSize = 50 + "px";
-
-            // panel.addControl(coinBlock);
-
-            // var livesBlock = new BABYLON.GUI.TextBlock();
-            // livesBlock.text = "Lives: 3";
-            // livesBlock.height = 100 + "px";
-            // livesBlock.color = "#fff";
-            // livesBlock.fontSize = 50 + "px";
-
-            // panel.addControl(livesBlock);
 
             return scene;
             //END OF SCENE
         
         }
-
-
-        window.initFunction = async function() {               
-            var asyncEngineCreation = async function() {
-                try {
+function initGame(){
+    window.initFunction = async function() {               
+        var asyncEngineCreation = async function() {
+            try {
+                return createDefaultEngine();
+                } catch(e) {
+                    console.log("the available createEngine function failed. Creating the default engine instead");
                     return createDefaultEngine();
-                    } catch(e) {
-                        console.log("the available createEngine function failed. Creating the default engine instead");
-                        return createDefaultEngine();
-                    }
                 }
+            }
 
-        window.engine = await asyncEngineCreation();
-        if (!engine) throw 'engine should not be null.';
-        window.scene = createScene();};
+    window.engine = await asyncEngineCreation();
+    if (!engine) throw 'engine should not be null.';
+    window.scene = createScene();};
         
-        initFunction().then(() => {sceneToRender = scene        
-            engine.runRenderLoop(function () {
-                if (sceneToRender && sceneToRender.activeCamera) {
-                    sceneToRender.render();
-                }
-            });
+    initFunction().then(() => {sceneToRender = scene        
+        engine.runRenderLoop(function () {
+            if (sceneToRender && sceneToRender.activeCamera) {
+                sceneToRender.render();
+            }
         });
+    });
 
-        // Resize
-        window.addEventListener("resize", function () {
+    // Resize
+    window.addEventListener("resize", function () {
             engine.resize();
-        });
-    // }//END OF GAME
+    });
+}
+initGame()
 
 
     </script>
