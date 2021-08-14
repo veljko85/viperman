@@ -670,9 +670,7 @@
                 var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 1000}, scene);
                 var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
                 sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
-                sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
-                // sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#cd00cd')
-                // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#cd00cd');
+                // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
                 sideWalk.material = sideWalkMat;
                 sideWalk.position = new BABYLON.Vector3(-5,0,490)
                 //other sidewalk
@@ -680,7 +678,7 @@
                 sideWalk2.position.x = 5;
                 //side walks glass part
                 var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth: 1000}, scene);
-                sideWalkGlassPart.material = glassWallMat;
+                // sideWalkGlassPart.material = glassWallMat;
                 sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,490)
                 //other sidewalk glass part
                 var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
@@ -689,7 +687,7 @@
                 //running tracks
                 var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 1000}, scene);
                 var runningTrackMat = new BABYLON.StandardMaterial("runningTrackMat", scene);
-                runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
+                // runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
                 runningTrack.material = runningTrackMat;
                 runningTrack.position = new BABYLON.Vector3(-1.5,0,490)
                 //right running track
