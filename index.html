@@ -622,16 +622,16 @@
                 //main platform for running
                 var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:1000}, scene);
                 var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
-                bridgeMat.reflectionTexture = hdrBcgRefTexture;
-                bridgeMat.refractionTexture = hdrBcgRefTexture;
-                bridgeMat.reflectionTexture.level = 1;
-                bridgeMat.specularPower = 150;
-                bridgeMat.indexOfRefraction = 0.52;
-                bridgeMat.alpha = 0.8;
-                bridgeMat.directIntensity = 0.0;
-                bridgeMat.environmentIntensity = 0.7;
-                bridgeMat.cameraExposure = 0.66;
-                bridgeMat.cameraContrast = 1.66;
+                // bridgeMat.reflectionTexture = hdrBcgRefTexture;
+                // bridgeMat.refractionTexture = hdrBcgRefTexture;
+                // bridgeMat.reflectionTexture.level = 1;
+                // bridgeMat.specularPower = 150;
+                // bridgeMat.indexOfRefraction = 0.52;
+                // bridgeMat.alpha = 0.8;
+                // bridgeMat.directIntensity = 0.0;
+                // bridgeMat.environmentIntensity = 0.7;
+                // bridgeMat.cameraExposure = 0.66;
+                // bridgeMat.cameraContrast = 1.66;
                 bridge.material = bridgeMat;
                 bridge.position.z = 490;
 
@@ -650,17 +650,17 @@
                 var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 3, depth: 1000}, scene);
                 glassWall.position = new BABYLON.Vector3(-5,1.5,490)
                 var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
-                glassWallMat.reflectionTexture = hdrBcgRefTexture;
-                glassWallMat.refractionTexture = hdrBcgRefTexture;
-                glassWallMat.linkRefractionWithTransparency = true;
-                glassWallMat.indexOfRefraction = 0.52;
-                glassWallMat.alpha = 0;
-                glassWallMat.directIntensity = 0.0;
-                glassWallMat.environmentIntensity = 0.7;
-                glassWallMat.cameraExposure = 0.66;
-                glassWallMat.cameraContrast = 1.66;
-                glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-                glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                // glassWallMat.reflectionTexture = hdrBcgRefTexture;
+                // glassWallMat.refractionTexture = hdrBcgRefTexture;
+                // glassWallMat.linkRefractionWithTransparency = true;
+                // glassWallMat.indexOfRefraction = 0.52;
+                // glassWallMat.alpha = 0;
+                // glassWallMat.directIntensity = 0.0;
+                // glassWallMat.environmentIntensity = 0.7;
+                // glassWallMat.cameraExposure = 0.66;
+                // glassWallMat.cameraContrast = 1.66;
+                // glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                // glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
                 glassWall.material = glassWallMat;
                 //other glass walls
                 var glassWall2 = glassWall.clone("glassWall2");
