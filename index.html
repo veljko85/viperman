@@ -41,8 +41,14 @@
 <body>
 <div id='container' style="width: 100vw; height: 100vh;">
     <canvas id="renderCanvas"></canvas>
+    <p id='fps' style="position: absolute; top: 80%; left: 10%; font-size: 100px; color: white;">1111</p>
 </div> 
     <script>
+        var fps = document.getElementById('fps');
+        setInterval(function(){ 
+           fps.innerHTML = engine.getFps()
+            }, 500)
+        setInterval
         //GET CANVAS
         var container = document.getElementById("container");
         var canvas = document.getElementById("renderCanvas");
@@ -54,13 +60,14 @@
     startAgain.style.position = 'absolute';
     startAgain.style.left = '30%';
     startAgain.style.top = '30%';
-    startAgain.style.backgroundImage = 'url("img/startAgain.png")';
+    startAgain.style.backgroundImage = 'url("img/startAgain2.png")';
     startAgain.style.backgroundSize = 'cover';
+    startAgain.style.backgroundPosition = 'center';
     startAgain.style.display = 'none';
     container.append(startAgain);
 
     startAgain.onclick = () => {
-        startAgain.style.display = 'none';
+        // startAgain.style.display = 'none';
         location.reload();
     }
 
@@ -84,12 +91,25 @@
                 // this._loadingDiv.innerHTML = "scene is currently loading";
                 var customLoadingScreenCss = document.createElement('style');
                 customLoadingScreenCss.type = 'text/css';
+                // if (document.body.clientWidth < 768) {
+                    console.log(document.body.clientWidth)
+                // }
+                if(document.body.clientWidth > document.body.clientHeight){
                 customLoadingScreenCss.innerHTML = `
                 #customLoadingScreenDiv{
-                    background-image: url("img/loadingBackgroundFin1.gif");
+                    background-image: url("img/loadingBackgroundDes.gif");
                     background-size: cover;
+                    background-position: center;
                 }
-                `;
+                 `;} else {
+                    customLoadingScreenCss.innerHTML = `
+                #customLoadingScreenDiv{
+                    background-image: url("img/loadingBackgroundMob.gif");
+                    background-size: cover;
+                    background-position: center;
+                }
+                 `;
+                 }
                 document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
                 this._resizeLoadingUI();
                 window.addEventListener("resize", this._resizeLoadingUI);
@@ -181,14 +201,14 @@
             // startPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
             // advancedTexture.addControl(startPanel);
             //start image
-            var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo.png");
+            var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo2.png");
             viperDemo.width = 0.8;
-            viperDemo.height = 0.5;
+            viperDemo.height = 0.4;
             viperDemo.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             viperDemo.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
             advancedTexture.addControl(viperDemo);
             //start game image
-            var startGame = new BABYLON.GUI.Image("", "img/startGame.png");
+            var startGame = new BABYLON.GUI.Image("", "img/startGame2.png");
             startGame.width = 0.4;
             startGame.height = 0.1;
             startGame.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -196,7 +216,7 @@
             startGame.isPointerBlocker = true;
             advancedTexture.addControl(startGame);
             //display pause sign
-            var pauseGameSign = new BABYLON.GUI.Image("", "img/pause.png");
+            var pauseGameSign = new BABYLON.GUI.Image("", "img/pause2.png");
             pauseGameSign.width = 0.4;
             pauseGameSign.height = 0.1;
             pauseGameSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -204,7 +224,7 @@
             pauseGameSign.notRenderable = true;
             advancedTexture.addControl(pauseGameSign);
             //game over sign
-            var gameOverSign = new BABYLON.GUI.Image("", "img/gameOver.png");
+            var gameOverSign = new BABYLON.GUI.Image("", "img/gameOver2.png");
             gameOverSign.width = 0.4;
             gameOverSign.height = 0.1;
             gameOverSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -425,16 +445,19 @@
                 }
                 //VIPER REACTIONS FUNTIONS ON EVENT LISTENERS
                 function viperJump(){
-                    //jumpSound.play();
-                    aniPosY(fakeMesh, 1.8)
-                    jumpAnim.start(false, 1.66, 0);
-                    runAnim.setWeightForAllAnimatables(0);
-                    running = false;
-                    setTimeout(function(){ 
-                        running = true;
-                        runAnim.setWeightForAllAnimatables(1);
-                    }, 633)
+                    if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
+                        //jumpSound.play();
+                        aniPosY(fakeMesh, 1.8)
+                        jumpAnim.start(false, 1.66, 0);
+                        runAnim.setWeightForAllAnimatables(0);
+                        running = false;
+                        setTimeout(function(){ 
+                            running = true;
+                            runAnim.setWeightForAllAnimatables(1);
+                        }, 633)
+                    }
                 }
+                
                 function viperMoveLeft(){
                     if (fakeMesh.position.x == 0 || fakeMesh.position.x == 3) {
                         moveViperAnim(fakeMesh, fakeMesh.position.x, fakeMesh.position.x-3)
@@ -454,15 +477,17 @@
                     }
                 }
                 function viperSlide(){
-                    slideAnim.start(false, 1, 0);
-                    runAnim.setWeightForAllAnimatables(0);
-                    fakeMeshEllipse.position.y = -1.8;
-                    running = false;
-                    setTimeout(function(){ 
-                        running = true;
-                        fakeMeshEllipse.position.y = -0.8;
-                        runAnim.setWeightForAllAnimatables(1);
-                    }, 1580)
+                    if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
+                        slideAnim.start(false, 1, 0);
+                        runAnim.setWeightForAllAnimatables(0);
+                        fakeMeshEllipse.position.y = -1.8;
+                        running = false;
+                        setTimeout(function(){ 
+                            running = true;
+                            fakeMeshEllipse.position.y = -0.8;
+                            runAnim.setWeightForAllAnimatables(1);
+                        }, 1580)
+                    }
                 }
                 //EVENT LISTENERS
                 //key event listeners
@@ -724,12 +749,19 @@
                     }
                 })
                 //FOOES
-                // setTimeout(function(){
-                // console.log(scene.getMeshByUniqueId(153))
-                // // scene.getMeshByUniqueId(153).position.y = 2;
-                // var viperman2 = scene.getMeshByUniqueId(153);
-                // viperman2.position.y = 2;
-                // }, 3000)
+                function aniLaserWallWidth(mesh){
+                    const anim= new BABYLON.Animation("aniLaserWallWidth", "scaling", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    anim.setKeys([
+                        { frame: 0, value: new BABYLON.Vector3(1, 1, 1) },
+                        // { frame: 10, value: -1 },
+                        // { frame: 18, value: -0.5 },
+                        // { frame: 20, value: -0.5 },
+                        { frame: 60, value: new BABYLON.Vector3(3, 3, 3) },
+                    ]);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 60, false);
+                }
                 function aniSimpleLaserWall(mesh){
                     const anim= new BABYLON.Animation("aniSimpleLaserWall", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
                     anim.setKeys([
@@ -774,53 +806,47 @@
                         return scene.beginAnimation(mesh, 0, 60, false);
                 }
 
-                var laserWallUpperHolder = new BABYLON.MeshBuilder.CreateBox("box", {width: 2.7, height: 0.2, depth: 0.2}, scene);
-                laserWallUpperHolder.position = new BABYLON.Vector3(0,1.5,0);
-                laserWallUpperHolder.material = glassWallMat;
+                var laserWallUpperHolderLeft = new BABYLON.MeshBuilder.CreateBox("laserWallUpperHolderLeft", {width: 0.1, height: 1.4, depth: 0.1}, scene);
+                laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.7,0);
+                laserWallUpperHolderLeft.material = glassWallMat;
 
-                var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.5});
+                var laserWallUpperHolderRight = laserWallUpperHolderLeft.clone("laserWallUpperHolderRight");
+                laserWallUpperHolderRight.position.x = 1.5;
+
+                var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.9});
                 laserWall.position = new BABYLON.Vector3(0,0.7,0);
                 var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
+                var tex = new BABYLON.Texture("img/laserWall2.png", scene);
+                tex.hasAlpha = true;
+                laserWallmat.diffuseTexture = tex;
+                laserWallmat.useAlphaFromDiffuseTexture = true;
                 laserWallmat.backFaceCulling = false;
-                laserWallmat.diffuseColor = new BABYLON.Color3.FromHexString('#ff5722')
-                laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
-                laserWallmat.alpha = 0.5;
+                laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#DF740C')
                 laserWall.material = laserWallmat;
 
-                var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWallUpperHolder, laserWall], true, true, undefined, false, true);
+                var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWallUpperHolderLeft, laserWallUpperHolderRight, laserWall], true, true, undefined, false, true);
                 simpleLaserWall.position = new BABYLON.Vector3(-3,-5,10)
 
                 //array to put fooes
                 fooes = [];
                 //function to create simple wall
-                function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ){
-                    for (var i = 1; i < 10; i++) {       
-                        var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall" + i);
-                        fooes.push(newSimpleLaserWall);
-                        newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ + i * 10);
-                    }
+                function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ, wideOfWall){      
+                    var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall");
+                    fooes.push(newSimpleLaserWall);
+                    newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ);
+                    newSimpleLaserWall.scaling = new BABYLON.Vector3(wideOfWall,1,1)
                 }
-                // function createWideLaserWall(WideLaserWallLanePositionX, WideLaserWallLanePositionZ){
-                //     var newSimpleLaserWall = simpleLaserWall.clone("newSimpleLaserWall" + i);
-                //     fooes.push(newSimpleLaserWall);
-                //     newSimpleLaserWall.position = new BABYLON.Vector3(WideLaserWallLanePositionX, 0, WideLaserWallLanePositionZ);
-                //     // newSimpleLaserWall.scaling = new BABYLON.Vector3(3,1,1)
-                // }
-                // function createSimpleLaserWall2(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ){
-                //     var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall" + i);
-                //     fooes.push(newSimpleLaserWall);
-                //     newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ);
-                // }
-                //create smple laser walls
-                // createSimpleLaserWall(-3, 10);
-                // var aaa = 30;
-                // for (let i = 0; i < 5; i++) {
-
-                    createSimpleLaserWall(0, 20);
-                //     aaa += 10;
-                // }
-                // createSimpleLaserWall(0.01, 40);
+                var randNum = () =>{
+                    return Math.floor(Math.random() * 3);
+                }
                 
+                var fooesLanePositions = [-3, 0, 3]
+                var laserWallWidth = () => {
+
+                }
+                for (let i = 0; i < 10; i++) {
+                    createSimpleLaserWall(fooesLanePositions[randNum()], 50 + i * 30, 1);
+                }
                 
                 //fooes colider
                 for (let f = 0; f < ellipse.length; f++) {
@@ -842,6 +868,7 @@
                                         // animPosZMeshCollision(scene.getMeshByUniqueId(153))
                                         animPosZMeshCollision(fakeMesh)
                                         fakeMesh.position.x = fooes[i].position.x;
+                                        fakeMesh.position.y = 1.8;
                                         //give mesh animation to blink on collision
                                         visColAnim(fooes[i])
                                         // visColAnim(scene.getMeshByUniqueId(156))
@@ -860,18 +887,9 @@
                                                 running = true;
                                             }, 1000);
                                         }
-                                        if (lives < 1){
-                                            // gameOverSound.play();
-                                            // gameMusic.pause();
+                                        if (lives < 1){;
                                             scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
                                             gameOver();
-                                            // runAnim.setWeightForAllAnimatables(0);
-                                            // scene.beforeRender = function() {
-                                            //     camera.rotation.y = 0;
-                                            //     camera.rotation.x = 0;
-                                            //     camera.position.z = camera.position.z;
-                                            //     // camera.position.x -= 1;
-                                            // };
                                         }
                                         
                                     }
@@ -880,18 +898,6 @@
                             ellipse[f].actionManager.registerAction(action);
                     }
                 }
-                
-                // setTimeout(function(){ 
-                //     aniSimpleLaserWall(simpleLaserWall);
-                // }, 5000)
-                // var t = new BABYLON.Texture("img/vipermanDemo.png", scene);
-                // t.hasAlpha = true;
-                // planemat.diffuseTexture = t;
-                // planemat.emissiveColor = new BABYLON.Color3.FromHexString('#ff5722')
-                // planemat.useAlphaFromDiffuseTexture = true;
-                // plane.material = planemat;
-
-                
             }
 
 
@@ -900,13 +906,12 @@
 
 
 
-            // setTimeout(function(){
+
+                
                 createRunningTrack()
-            // }, 5000)
+
             console.log(scene.meshes.length)
-            setInterval(function(){ 
-                // console.log(engine.getFps())
-            }, 1000)
+            
             
             
             
