@@ -790,58 +790,58 @@
                 // bridgeUpperPartMat.roughness = 0;
                 // bridgeUpperPartMat.reflectionTexture = hdrBcgRefTexture;
 
-                var bridgeUpperPartMat = new BABYLON.PBRMetallicRoughnessMaterial("pbr", scene);
-    // sphere.material = pbr;
+    //             var bridgeUpperPartMat = new BABYLON.PBRMetallicRoughnessMaterial("pbr", scene);
+    // // sphere.material = pbr;
 
-    bridgeUpperPartMat.baseColor = new BABYLON.Color3(0, 0, 0);
-    bridgeUpperPartMat.metallic = 0;
-    bridgeUpperPartMat.roughness = 1;
-    // bridgeUpperPartMat.environmentTexture = hdrBcgRefTexture;
+    // bridgeUpperPartMat.baseColor = new BABYLON.Color3(0, 0, 0);
+    // bridgeUpperPartMat.metallic = 0;
+    // bridgeUpperPartMat.roughness = 1;
+    // // bridgeUpperPartMat.environmentTexture = hdrBcgRefTexture;
 
-                var bridgeUpperPartLeft = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 1, height: 15, depth: 1}, scene);
-                bridgeUpperPartLeft.position = new BABYLON.Vector3(-7,3,50)
-                bridgeUpperPartLeft.addRotation(0,0,-0.7);
-                bridgeUpperPartLeft.material = bridgeUpperPartMat;
+    //             var bridgeUpperPartLeft = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 1, height: 15, depth: 1}, scene);
+    //             bridgeUpperPartLeft.position = new BABYLON.Vector3(-7,3,50)
+    //             bridgeUpperPartLeft.addRotation(0,0,-0.7);
+    //             bridgeUpperPartLeft.material = bridgeUpperPartMat;
 
-                var bridgeUpperPartRight = bridgeUpperPartLeft.clone("bridgeUpperPartRight");
-                bridgeUpperPartRight.position = new BABYLON.Vector3(7,3,50)
-                bridgeUpperPartRight.addRotation(0,0,1.4);
+    //             var bridgeUpperPartRight = bridgeUpperPartLeft.clone("bridgeUpperPartRight");
+    //             bridgeUpperPartRight.position = new BABYLON.Vector3(7,3,50)
+    //             bridgeUpperPartRight.addRotation(0,0,1.4);
 
-                var bridgeUpperPartMiddle = bridgeUpperPartLeft.clone("bridgeUpperPartMiddle");
-                bridgeUpperPartMiddle.position = new BABYLON.Vector3(0,8.53,50)
-                bridgeUpperPartMiddle.scaling = new BABYLON.Vector3(1,0.35,1)
-                bridgeUpperPartMiddle.addRotation(0,0,-0.87);
+    //             var bridgeUpperPartMiddle = bridgeUpperPartLeft.clone("bridgeUpperPartMiddle");
+    //             bridgeUpperPartMiddle.position = new BABYLON.Vector3(0,8.53,50)
+    //             bridgeUpperPartMiddle.scaling = new BABYLON.Vector3(1,0.35,1)
+    //             bridgeUpperPartMiddle.addRotation(0,0,-0.87);
 
-                var bridgeUpperPartLeftEmmisive = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.2, height: 14.5, depth: 1}, scene);
-                bridgeUpperPartLeftEmmisive.position = new BABYLON.Vector3(-7,2.9,49.8)
-                bridgeUpperPartLeftEmmisive.addRotation(0,0,-0.7);
-                bridgeUpperPartLeftEmmisive.material = runningTrackMat;
+    //             var bridgeUpperPartLeftEmmisive = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.2, height: 14.5, depth: 1}, scene);
+    //             bridgeUpperPartLeftEmmisive.position = new BABYLON.Vector3(-7,2.9,49.8)
+    //             bridgeUpperPartLeftEmmisive.addRotation(0,0,-0.7);
+    //             bridgeUpperPartLeftEmmisive.material = runningTrackMat;
 
-                var bridgeUpperPartRightEmmisive = bridgeUpperPartLeftEmmisive.clone("bridgeUpperPartRight");
-                bridgeUpperPartRightEmmisive.position = new BABYLON.Vector3(7,2.9,49.8)
-                bridgeUpperPartRightEmmisive.addRotation(0,0,1.4);
+    //             var bridgeUpperPartRightEmmisive = bridgeUpperPartLeftEmmisive.clone("bridgeUpperPartRight");
+    //             bridgeUpperPartRightEmmisive.position = new BABYLON.Vector3(7,2.9,49.8)
+    //             bridgeUpperPartRightEmmisive.addRotation(0,0,1.4);
 
-                var bridgeUpperPartMiddleEmmisive = bridgeUpperPartLeftEmmisive.clone("bridgeUpperPartMiddle");
-                bridgeUpperPartMiddleEmmisive.position = new BABYLON.Vector3(0,8.38,49.8)
-                bridgeUpperPartMiddleEmmisive.scaling = new BABYLON.Vector3(1,0.34,1)
-                bridgeUpperPartMiddleEmmisive.addRotation(0,0,-0.87);
+    //             var bridgeUpperPartMiddleEmmisive = bridgeUpperPartLeftEmmisive.clone("bridgeUpperPartMiddle");
+    //             bridgeUpperPartMiddleEmmisive.position = new BABYLON.Vector3(0,8.38,49.8)
+    //             bridgeUpperPartMiddleEmmisive.scaling = new BABYLON.Vector3(1,0.34,1)
+    //             bridgeUpperPartMiddleEmmisive.addRotation(0,0,-0.87);
 
-                var bridgeUpperParts = BABYLON.Mesh.MergeMeshes([bridgeUpperPartLeft, bridgeUpperPartRight, bridgeUpperPartMiddle, bridgeUpperPartLeftEmmisive, bridgeUpperPartRightEmmisive, bridgeUpperPartMiddleEmmisive], true, true, undefined, false, true);
-                bridgeUpperParts.position.z = -30;
+    //             var bridgeUpperParts = BABYLON.Mesh.MergeMeshes([bridgeUpperPartLeft, bridgeUpperPartRight, bridgeUpperPartMiddle, bridgeUpperPartLeftEmmisive, bridgeUpperPartRightEmmisive, bridgeUpperPartMiddleEmmisive], true, true, undefined, false, true);
+    //             bridgeUpperParts.position.z = -30;
 
-                var bridgeUpperPartsDown =  bridgeUpperParts.clone("bridgeUpperPartsDown");
-                bridgeUpperPartsDown.addRotation(0,0,3.15)   
-                // bridgeUpperPartsDown.position = new BABYLON.Vector3(0,0,20)           
+    //             var bridgeUpperPartsDown =  bridgeUpperParts.clone("bridgeUpperPartsDown");
+    //             bridgeUpperPartsDown.addRotation(0,0,3.15)   
+    //             // bridgeUpperPartsDown.position = new BABYLON.Vector3(0,0,20)           
 
-                function createBridgeUpperParts(bridgeUpperPartsPositionZ){
-                    for (var i = 1; i < 20; i++) {
-                        var newBridgeUpperParts = bridgeUpperParts.clone("bridgeUpperParts" + i);
-                        newBridgeUpperParts.position = new BABYLON.Vector3(0, 0, bridgeUpperPartsPositionZ + i *50);
-                        var newBridgeUpperPartsDown = bridgeUpperPartsDown.clone("bridgeUpperParts" + i);
-                        newBridgeUpperPartsDown.position = new BABYLON.Vector3(0, 0, bridgeUpperPartsPositionZ + i *50);
-                    }
-                }
-                createBridgeUpperParts(-30)
+    //             function createBridgeUpperParts(bridgeUpperPartsPositionZ){
+    //                 for (var i = 1; i < 20; i++) {
+    //                     var newBridgeUpperParts = bridgeUpperParts.clone("bridgeUpperParts" + i);
+    //                     newBridgeUpperParts.position = new BABYLON.Vector3(0, 0, bridgeUpperPartsPositionZ + i *50);
+    //                     var newBridgeUpperPartsDown = bridgeUpperPartsDown.clone("bridgeUpperParts" + i);
+    //                     newBridgeUpperPartsDown.position = new BABYLON.Vector3(0, 0, bridgeUpperPartsPositionZ + i *50);
+    //                 }
+    //             }
+    //             createBridgeUpperParts(-30)
 
                 // highland
                 var stair = new BABYLON.MeshBuilder.CreateBox("stair", {width: 2.8, height: 0.1, depth: 0.5}, scene);
