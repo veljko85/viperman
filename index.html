@@ -624,7 +624,7 @@
                         console.log(fakeMesh.position.y)
                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                         if(fakeMesh.position.y > fakeMeshPosY){
-                            fakeMesh.position.y -= 0.2;
+                            fakeMesh.position.y -= 0.2 * scene.getAnimationRatio();
                         }
                     };
                     //assign event listeners to mesh when running
