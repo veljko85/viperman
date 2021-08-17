@@ -47,7 +47,7 @@
         var fps = document.getElementById('fps');
         setInterval(function(){ 
            fps.innerHTML = engine.getFps()
-           console.log(scene.getAnimationRatio())
+        //    console.log(scene.getAnimationRatio())
             }, 1000)
         //GET CANVAS
         var container = document.getElementById("container");
@@ -98,9 +98,6 @@
                 // this._loadingDiv.innerHTML = "scene is currently loading";
                 var customLoadingScreenCss = document.createElement('style');
                 customLoadingScreenCss.type = 'text/css';
-                // if (document.body.clientWidth < 768) {
-                    console.log(document.body.clientWidth)
-                // }
                 if(document.body.clientWidth > document.body.clientHeight){
                 customLoadingScreenCss.innerHTML = `
                 #customLoadingScreenDiv{
@@ -438,7 +435,7 @@
             ellipse[0].parent = fakeMeshEllipse;
             ellipse[0].rotation.y = 5 * Math.PI/ 16;
             for(var i = 1; i < 23; i++) {
-                ellipse[i] = ellipse[0].clone("el" + i);
+                ellipse[i] = ellipse[0].createInstance("el" + i);
                 ellipse[i].parent = fakeMeshEllipse;
                 ellipse[i].rotation.y = 5 * Math.PI/ 16 + i * Math.PI/16;
                 ellipse[i].isVisible = false;
@@ -621,10 +618,30 @@
                     runAnim.start(true, 1, 0);
                     //change viperman and fake mesh position z - move thrue space
                     scene.beforeRender = function() {
-                        console.log(fakeMesh.position.y)
                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                         if(fakeMesh.position.y > fakeMeshPosY){
                             fakeMesh.position.y -= 0.2 * scene.getAnimationRatio();
+                        }
+                        if (fooes.length > 0) {
+                            for (let i = 0; i < fooes.length; i++) {
+                                if ((fakeMesh.position.z - 10) > fooes[i].position.z){
+                                fooes[i].dispose();
+                                }
+                            }
+                        }
+                        if (coins.length > 0) {
+                            for (let i = 0; i < coins.length; i++) {
+                                if ((fakeMesh.position.z - 10) > coins[i].position.z){
+                                    coins[i].dispose();
+                                }
+                            }
+                        }
+                        if (stairsArr.length > 0) {
+                            for (let i = 0; i < stairsArr.length; i++) {
+                                if ((fakeMesh.position.z - 110) > stairsArr[i].position.z){
+                                    stairsArr[i].dispose();
+                                }
+                            }
                         }
                     };
                     //assign event listeners to mesh when running
@@ -697,7 +714,7 @@
             function createRunningTrack(){
                 
                 //main platform for running
-                var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:1000}, scene);
+                var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:500}, scene);
                 var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
                 bridgeMat.reflectionTexture = hdrBcgRefTexture;
                 bridgeMat.refractionTexture = hdrBcgRefTexture;
@@ -710,22 +727,22 @@
                 bridgeMat.cameraExposure = 0.66;
                 bridgeMat.cameraContrast = 1.66;
                 bridge.material = bridgeMat;
-                bridge.position.z = 490;
+                bridge.position.z = 240;
 
                 //create bridge plane to go bellow
-                var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:1000}, scene);
-                bridgeLayout.position.z = 490;
+                var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:500}, scene);
+                bridgeLayout.position.z = 240;
                 bridgeLayout.position.y = -0.5;
                 var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
                 bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
                 bridgeLayoutMat.diffuseTexture.uScale = 1;
-                bridgeLayoutMat.diffuseTexture.vScale = 200;
+                bridgeLayoutMat.diffuseTexture.vScale = 100;
                 bridgeLayout.material = bridgeLayoutMat;
 
 
                 //create glass walls
-                var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 3, depth: 1000}, scene);
-                glassWall.position = new BABYLON.Vector3(-5,1.5,490)
+                var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 3, depth: 500}, scene);
+                glassWall.position = new BABYLON.Vector3(-5,1.5,240)
                 var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
                 glassWallMat.reflectionTexture = hdrBcgRefTexture;
                 glassWallMat.refractionTexture = hdrBcgRefTexture;
@@ -738,52 +755,67 @@
                 glassWallMat.cameraContrast = 1.66;
                 glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
                 glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-                glassWall.material = bridgeMat;
+                glassWall.material = glassWallMat;
                 // glassWall.isVisible = false;
                 //other glass walls
-                var glassWall2 = glassWall.clone("glassWall2");
+                var glassWall2 = glassWall.createInstance("glassWall2");
                 glassWall2.position.x = 5;
 
                
 
             
                 //side walks
-                var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 1000}, scene);
+                var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 500}, scene);
                 var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
                 sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
                 sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
                 // sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#cd00cd')
                 // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#cd00cd');
                 sideWalk.material = sideWalkMat;
-                sideWalk.position = new BABYLON.Vector3(-5,0,490)
+                sideWalk.position = new BABYLON.Vector3(-5,0,240)
                 //other sidewalk
-                var sideWalk2 = sideWalk.clone("sideWalk2");
+                var sideWalk2 = sideWalk.createInstance("sideWalk2");
                 sideWalk2.position.x = 5;
                 //side walks glass part
-                var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth: 1000}, scene);
+                var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:500}, scene);
                 sideWalkGlassPart.material = glassWallMat;
-                sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,490)
+                sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,240)
                 //other sidewalk glass part
-                var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
+                var sideWalkGlassPart2 = sideWalkGlassPart.createInstance("sideWalkGlassPart2");
                 sideWalkGlassPart2.position.x = 4.5;
                 
                 //running tracks
-                var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 1000}, scene);
+                var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 500}, scene);
                 var runningTrackMat = new BABYLON.StandardMaterial("runningTrackMat", scene);
                 runningTrackMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
                 runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
                 runningTrack.material = runningTrackMat;
-                runningTrack.position = new BABYLON.Vector3(-1.5,0,490)
+                runningTrack.position = new BABYLON.Vector3(-1.5,0,240)
                 //right running track
-                var runningTrackRight = runningTrack.clone("runningTrackRight");
+                var runningTrackRight = runningTrack.createInstance("runningTrackRight");
                 runningTrackRight.position.x = 1.5;
                 //running tracks glass part
-                var runningGlassPart = sideWalkGlassPart.clone("runningGlassPart");
-                runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,490)
+                var runningGlassPart = sideWalkGlassPart.createInstance("runningGlassPart");
+                runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,240)
                 //running tracks glass part right
-                var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
-                runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,490)
-
+                var runningGlassPartRight = sideWalkGlassPart.createInstance("runningGlassPartRight");
+                runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,240)
+                for (let f = 0; f < ellipse.length; f++) {
+                    let action2 = new BABYLON.ExecuteCodeAction(
+                            {
+                                trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                                parameter: { 
+                                    mesh: bridge
+                                }
+                            },
+                                (evt) => {
+                                    fakeMesh.position.y = 1.8;
+                                    console.log('radi')
+                                }
+                                );  
+                        ellipse[f].actionManager.registerAction(action2);
+                }
+            }
                 // var bridgeUpperPartMat = new BABYLON.PBRMetallicRoughnessMaterial("bridgeUpperPartMat", scene);
                 // bridgeUpperPartMat.baseColor = new BABYLON.Color3(0.19, 0.19, 0.19);
                 // bridgeUpperPartMat.metallic = 1;
@@ -856,23 +888,54 @@
                 var highland = stair.clone("highland");
                 highland.position = new BABYLON.Vector3(0,2,29.5)
                 highland.scaling = new BABYLON.Vector3(1,1,100)
-                highland.material = bridgeMat;
+                // highland.material = bridgeMat;
 
                 var highlandFakeLeft = stair.clone("highlandFakeLeft");
-                highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,27)
-                highlandFakeLeft.scaling = new BABYLON.Vector3(1,20,108)
+                highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,25)
+                highlandFakeLeft.scaling = new BABYLON.Vector3(1,20,124)
                 highlandFakeLeft.isVisible = false;     
                 
                 var highlandFakeRight = highlandFakeLeft.clone("highlandFakeRight");
-                highlandFakeRight.position = new BABYLON.Vector3(3,0.8,27)
+                highlandFakeRight.position = new BABYLON.Vector3(3,0.8,25)
 
 
                 var stairs = BABYLON.Mesh.MergeMeshes([stair, stairs[0], stairs[1], stairs[2], stairs[3], stairs[4], stairs[5], stairs[6], stairs[7], stairs[8]], true, true, undefined, false, true);
-                stairs.position = new BABYLON.Vector3(3,0,20)
-                stairs.material = bridgeMat;
+                stairs.position = new BABYLON.Vector3(3,-5,20)
+                // stairs.material = bridgeMat;
                 highland.parent = stairs;
                 highlandFakeLeft.parent = stairs;
                 highlandFakeRight.parent = stairs;
+
+                stairsArr = [];
+                highlandArr = [];
+                highlandFakeLeftArr = []
+                highlandFakeRightArr = []
+                function createHighlandMesh(highlandPositionX, highlandPositionZ){
+
+                    var newHighland = highland.createInstance("newHighland");
+                    highlandArr.push(newHighland);
+
+                    var newHighlandFakeLeft = highlandFakeLeft.createInstance("newHighlandFakeLeft");
+                    newHighlandFakeLeft.isVisible = false;
+                    highlandFakeLeftArr.push(newHighlandFakeLeft);
+
+                    var newHighlandFakeRight = highlandFakeRight.createInstance("newHighlandFakeRight");
+                    newHighlandFakeRight.isVisible = false;
+                    highlandFakeRightArr.push(newHighlandFakeRight);
+
+                    var newStairs = stairs.createInstance("newStairs");
+                    stairsArr.push(newStairs);
+                    newStairs.position = new BABYLON.Vector3(highlandPositionX, 0, highlandPositionZ);
+
+                    newHighland.parent = newStairs;
+                    newHighlandFakeLeft.parent = newStairs;
+                    newHighlandFakeRight.parent = newStairs;
+
+                }
+
+                
+
+                console.log(stairsArr)
                 
 
                 //animations for going up and down from highland
@@ -911,18 +974,19 @@
                     scene.getMeshByName("Plane").material = coinLogoMat;
                     coinLogo.rotationQuaternion = null;
                     coinLogo.checkCollisions = true;
-                    
-                    coins = [];
-                    function createCoinLane(coinLanePositionX, coinLanePositionZ){
+                })
+                coins = [];
+                function createCoinLane(coinLanePositionX, coinLanePositionZ){
                         for (var i = 1; i < 11; i++) {
-                            var newCoin = coinLogo.clone("coin" + i);
+                            var newCoin = scene.getMeshByName("Plane").createInstance("coin" + i);
+                            
                             coins.push(newCoin);
                             newCoin.position = new BABYLON.Vector3(coinLanePositionX, 0.5, (coinLanePositionZ + i * 3));
                         }
-                    }
-                    createCoinLane(3, 30);
+                }
+                setTimeout(function(){
+                createCoinLane(3, 30);
                     createCoinLane(0.01, 100);
-                    //coin colider
                     for (let j = 0; j < ellipse.length; j++) {
                         for (let i = 0; i < coins.length; i++) {
                             coins[i].checkCollisions = true;
@@ -940,14 +1004,16 @@
                                             // coinSound.play();
                                             coinBlock.text = ": " + colectedCoins;
                                             coins[i].isVisible = false;
-                                            coins[i].setEnabled(false);
+                                            coins[i].dispose();
                                         }
                                     }
                                 );  
                                 ellipse[j].actionManager.registerAction(action);
                         }
                     }
-                })
+                }, 1000)
+                //coin colider
+                
                 //FOOES
                 function aniLaserWallWidth(mesh){
                     const anim= new BABYLON.Animation("aniLaserWallWidth", "scaling", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -1008,7 +1074,7 @@
 
                 var laserWallUpperHolderLeft = new BABYLON.MeshBuilder.CreateBox("laserWallUpperHolderLeft", {width: 0.1, height: 1.4, depth: 0.1}, scene);
                 laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.7,0);
-                laserWallUpperHolderLeft.material = glassWallMat;
+                // laserWallUpperHolderLeft.material = glassWallMat;
 
                 var laserWallUpperHolderRight = laserWallUpperHolderLeft.clone("laserWallUpperHolderRight");
                 laserWallUpperHolderRight.position.x = 1.5;
@@ -1024,14 +1090,14 @@
                 laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#DF740C')
                 laserWall.material = laserWallmat;
 
-                var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWallUpperHolderLeft, laserWallUpperHolderRight, laserWall], true, true, undefined, false, true);
+                var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWall, laserWallUpperHolderRight, laserWallUpperHolderLeft], true, true, undefined, false, true);
                 simpleLaserWall.position = new BABYLON.Vector3(-3,-5,10)
 
                 //array to put fooes
                 fooes = [];
                 //function to create simple wall
                 function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ, wideOfWall){      
-                    var newSimpleLaserWall = simpleLaserWall.clone("simpleLaserWall");
+                    var newSimpleLaserWall = simpleLaserWall.createInstance("simpleLaserWall");
                     fooes.push(newSimpleLaserWall);
                     newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ);
                     newSimpleLaserWall.scaling = new BABYLON.Vector3(wideOfWall,1,1)
@@ -1047,7 +1113,10 @@
                 for (let i = 0; i < 10; i++) {
                     createSimpleLaserWall(fooesLanePositions[randNum()], 50 + i * 30, 1);
                 }
-                
+                createHighlandMesh(-3, 100)
+                createHighlandMesh(3, 200)
+                createHighlandMesh(0, 300)
+                createHighlandMesh(-3, 400)
                 //fooes colider
                 for (let f = 0; f < ellipse.length; f++) {
                     ellipse[f].actionManager = new BABYLON.ActionManager(scene);
@@ -1064,18 +1133,18 @@
                                 (evt) => {
                                     if (fooes[i].checkCollisions){
                                         //give mesh animation to go back on collision
-                                        
-                                        // animPosZMeshCollision(scene.getMeshByUniqueId(153))
                                         animPosZMeshCollision(fakeMesh)
+                                        //goves mesh position after hit
                                         fakeMesh.position.x = fooes[i].position.x;
                                         fakeMesh.position.y = fakeMeshPosY;
-                                        //give mesh animation to blink on collision
-                                        visColAnim(fooes[i])
-                                        // visColAnim(scene.getMeshByUniqueId(156))
-                                        // visColAnim(scene.getMeshByUniqueId(160))
+                                        // fooes[i].isVisible = false;
                                         fooes[i].checkCollisions = false;
                                         lives -= 1;
                                         livesBlock.text = "x" + lives;
+                                        console.log(i);
+                                        // setTimeout(function(){
+                                        //     fooes[i].dispose();
+                                        // }, 500)
                                         // hitWallSound.play();
                                         if (lives > 0){
                                             scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
@@ -1097,103 +1166,98 @@
                             );  
                             ellipse[f].actionManager.registerAction(action);
                     }
-                    let action2 = new BABYLON.ExecuteCodeAction(
-                        {
-                            trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
-                            parameter: { 
-                                mesh: bridge
-                            }
-                        },
-                            (evt) => {
-                                console.log(fakeMesh.position.y)
-                                fakeMesh.position.y = 1.8;
-                            }
-                            );  
-                    ellipse[f].actionManager.registerAction(action2);
+                    
                     //stair collider
-                    let action4 = new BABYLON.ExecuteCodeAction(
+                    for (let i = 0; i < highlandArr.length; i++) {
+                        let action4 = new BABYLON.ExecuteCodeAction(
+                            {
+                                trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                                parameter: { 
+                                    mesh: highlandArr[i]
+                                }
+                            },
+                                (evt) => {
+                                        fakeMeshPosY = 3.8;
+                                }
+                                );  
+                        ellipse[f].actionManager.registerAction(action4);
+                    }
+                    for (let i = 0; i < highlandArr.length; i++) {
+                        let action5 = new BABYLON.ExecuteCodeAction(
+                            {
+                                trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
+                                parameter: { 
+                                    mesh: highlandArr[i]
+                                }
+                            },
+                                (evt) => {
+                                    fakeMeshPosY = 1.8;
+                                }
+                                );  
+                        ellipse[f].actionManager.registerAction(action5);
+                    }
+                    for (let i = 0; i < stairsArr.length; i++) {
+                        let action6 = new BABYLON.ExecuteCodeAction(
                         {
                             trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
                             parameter: { 
-                                mesh: highland
-                            }
-                        },
-                            (evt) => {
-                                    fakeMeshPosY = 3.8;
-                            }
-                            );  
-                    ellipse[f].actionManager.registerAction(action4);
-
-                    let action5 = new BABYLON.ExecuteCodeAction(
-                        {
-                            trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
-                            parameter: { 
-                                mesh: highland
-                            }
-                        },
-                            (evt) => {
-                                fakeMeshPosY = 1.8;
-                            }
-                            );  
-                    ellipse[f].actionManager.registerAction(action5);
-
-                    let action6 = new BABYLON.ExecuteCodeAction(
-                        {
-                            trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
-                            parameter: { 
-                                mesh: stairs
+                                mesh: stairsArr[i]
                             }
                         },
                             (evt) => {
                                 aniGoUpOnHighLand(fakeMesh)
                             }
-                            );  
-                    ellipse[f].actionManager.registerAction(action6);
-
+                        );  
+                        ellipse[f].actionManager.registerAction(action6);
+                    }
+                    for (let i = 0; i < highlandFakeLeftArr.length; i++) {
                     let action7 = new BABYLON.ExecuteCodeAction(
                         {
                             trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
                             parameter: { 
-                                mesh: highlandFakeLeft
+                                mesh: highlandFakeLeftArr[i]
                             }
                         },
-                            (evt) => {
-                                highlandOnSideLeft = true;
-                            }
-                            );  
-                    ellipse[f].actionManager.registerAction(action7);
-
-                    let action8 = new BABYLON.ExecuteCodeAction(
-                        {
-                            trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
-                            parameter: { 
-                                mesh: highlandFakeLeft
-                            }
-                        },
-                            (evt) => {
-                                highlandOnSideLeft = false;
-                            }
-                            );  
-                    ellipse[f].actionManager.registerAction(action8);
-
+                        (evt) => {
+                            highlandOnSideLeft = true;
+                        }
+                        );  
+                        ellipse[f].actionManager.registerAction(action7);
+                    }
+                    for (let i = 0; i < highlandFakeLeftArr.length; i++) {
+                        let action8 = new BABYLON.ExecuteCodeAction(
+                            {
+                                trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
+                                parameter: { 
+                                    mesh: highlandFakeLeftArr[i]
+                                }
+                            },
+                                (evt) => {
+                                    highlandOnSideLeft = false;
+                                }
+                                );  
+                        ellipse[f].actionManager.registerAction(action8);
+                    }
+                    for (let i = 0; i < highlandFakeRightArr.length; i++) {
                     let action9 = new BABYLON.ExecuteCodeAction(
                         {
                             trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
                             parameter: { 
-                                mesh: highlandFakeRight
+                                mesh: highlandFakeRightArr[i]
                             }
                         },
                             (evt) => {
                                 highlandOnSideRight = true;
                             }
                             );  
-                    ellipse[f].actionManager.registerAction(action9);
-
+                        ellipse[f].actionManager.registerAction(action9);
+                    }
+                    for (let i = 0; i < highlandFakeRightArr.length; i++) {
                     let action10 = new BABYLON.ExecuteCodeAction(
                         {
                             trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
                             parameter: { 
-                                mesh: highlandFakeRight
+                                mesh: highlandFakeRightArr[i]
                             }
                         },
                             (evt) => {
@@ -1201,6 +1265,7 @@
                             }
                             );  
                     ellipse[f].actionManager.registerAction(action10);
+                    }
 
                     let action11 = new BABYLON.ExecuteCodeAction(
                         {
@@ -1218,20 +1283,23 @@
                             );  
                     ellipse[f].actionManager.registerAction(action11);
                 }
-            }
-
-
-
-
-
-
-
-
-                
-                createRunningTrack()
-
-            console.log(scene.meshes.length)
             
+
+
+
+                createRunningTrack() 
+
+
+
+
+        
+        
+        
+        
+        
+        setInterval(function(){
+            console.log(scene.meshes.length)
+        }, 500)  
             
             
             
