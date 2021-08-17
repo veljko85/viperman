@@ -76,17 +76,19 @@ var fps = document.getElementById('fps');
             light4.intensity = 1;
 
             var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
-            camera.setPosition(new BABYLON.Vector3(0, 3, -5));
+            camera.setPosition(new BABYLON.Vector3(0, 0.5, -2));
 
-            var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
-            var fakeMeshPosY = 1.8;
+            var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.02, height: 0.02, depth: 0.02}, scene);
+            var fakeMeshPosY = 0.18;
             fakeMesh.position = new BABYLON.Vector3(0,fakeMeshPosY,0)
             // fakeMesh.isVisible = false;
             camera.target = fakeMesh;
 
             BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
                 result.meshes[0].parent = fakeMesh;
-                result.meshes[0].position.y = -1.8;
+                result.meshes[0].position.y = -0.18;
+                result.meshes[0].addRotation(0,3.1,0)
+                result.meshes[0].scaling = new BABYLON.Vector3(0.1,0.1,0.1)
                
 
                 var runAnim = scene.animationGroups.find(a => a.name === 'run');
@@ -122,7 +124,7 @@ var fps = document.getElementById('fps');
                 runAnim.start(true, 1, 0);
 
                 scene.beforeRender = function() {
-                        fakeMesh.position.z += 0.2 * scene.getAnimationRatio();
+                        fakeMesh.position.z += 0.02 * scene.getAnimationRatio();
                         console.log(fakeMesh.position.z)
                 }
             })
@@ -131,8 +133,8 @@ var fps = document.getElementById('fps');
 
 
 //create bridge plane to go bellow
-var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:500}, scene);
-                bridgeLayout.position.z = 240;
+var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 1, height:50}, scene);
+                bridgeLayout.position.z = 24;
                 var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
                 bridgeLayoutMat.diffuseColor = new BABYLON.Color3.FromHexString('#ff0000')
                 // bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
