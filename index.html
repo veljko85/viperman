@@ -136,10 +136,10 @@ var fps = document.getElementById('fps');
 var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 1, height:50}, scene);
                 bridgeLayout.position.z = 24;
                 var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
-                bridgeLayoutMat.diffuseColor = new BABYLON.Color3.FromHexString('#ff0000')
-                // bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
-                // bridgeLayoutMat.diffuseTexture.uScale = 1;
-                // bridgeLayoutMat.diffuseTexture.vScale = 100;
+                // bridgeLayoutMat.diffuseColor = new BABYLON.Color3.FromHexString('#ff0000')
+                bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.gif", scene);
+                bridgeLayoutMat.diffuseTexture.uScale = 1;
+                bridgeLayoutMat.diffuseTexture.vScale = 100;
                 bridgeLayout.material = bridgeLayoutMat;
 
                 
