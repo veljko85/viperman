@@ -78,7 +78,18 @@ var fps = document.getElementById('fps');
             var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
             camera.setPosition(new BABYLON.Vector3(0, 3, -5));
 
+            var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
+            var fakeMeshPosY = 1.8;
+            fakeMesh.position = new BABYLON.Vector3(0,fakeMeshPosY,0)
+            // fakeMesh.isVisible = false;
+            camera.target = fakeMesh;
+
             BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
+                result.meshes[0].parent = fakeMesh;
+                scene.beforeRender = function() {
+                        fakeMesh.position.z += 0.2 * scene.getAnimationRatio();
+                        console.log(fakeMesh.position.z)
+                }
             })
 
 
