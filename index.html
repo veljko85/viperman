@@ -85,7 +85,41 @@ var fps = document.getElementById('fps');
             camera.target = fakeMesh;
 
             BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
-                result.meshes[0].parent = fakeMesh;
+                                result.meshes[0].parent = fakeMesh;
+               
+
+                var runAnim = scene.animationGroups.find(a => a.name === 'run');
+                var runParam = { name: "Run", anim: runAnim, weight: 0 };
+                runAnim.setWeightForAllAnimatables(1);
+                
+                //jump animation
+                var jumpAnim = scene.animationGroups.find(a => a.name === 'jump');
+                var jumpParam = { name: "Jump", anim: jumpAnim, weight: 0 };
+                jumpAnim.setWeightForAllAnimatables(0);
+                //hit animation
+                var hitAnim = scene.animationGroups.find(a => a.name === 'hit_in');
+                var hitParam = { name: "Hit", anim: hitAnim, weight: 0 };
+                hitAnim.setWeightForAllAnimatables(0);
+                //finsh animation
+                var finishAnim = scene.animationGroups.find(a => a.name === 'finish');
+                var finishParam = { name: "Finish", anim: jumpAnim, weight: 0 };
+                finishAnim.play(true);
+                finishAnim.setWeightForAllAnimatables(0);
+                //game over animation
+                var gameOverAnim = scene.animationGroups.find(a => a.name === 'game_over');
+                var gameOverParam = { name: "gameOver", anim: gameOverAnim, weight: 0 };
+                gameOverAnim.setWeightForAllAnimatables(0);
+                //start animation
+                var startAnim = scene.animationGroups.find(a => a.name === 'start');
+                var startParam = { name: "Start", anim: startAnim, weight: 0 };
+                startAnim.setWeightForAllAnimatables(0);
+                //slide animation
+                var slideAnim = scene.animationGroups.find(a => a.name === 'slide');
+                var slideParam = { name: "Slide", anim: slideAnim, weight: 0 };
+                slideAnim.setWeightForAllAnimatables(0);
+
+                runAnim.start(true, 1, 0);
+
                 scene.beforeRender = function() {
                         fakeMesh.position.z += 0.2 * scene.getAnimationRatio();
                         console.log(fakeMesh.position.z)
