@@ -41,7 +41,7 @@
 <body>
 <div id='container' style="width: 100vw; height: 100vh; overflow: hidden;">
     <canvas id="renderCanvas"></canvas>
-    <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: white;">2222</p>
+    <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: white;">1111</p>
 </div> 
     <script>
 
@@ -203,7 +203,7 @@ var fps = document.getElementById('fps');
             function viperSlide(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
                     scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
-                    runAnim.setWeightForAllAnimatables(0);
+                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     fakeMeshEllipse.position.y = -1.8;
                     running = false;
                     setTimeout(function(){ 
@@ -299,6 +299,17 @@ var fps = document.getElementById('fps');
                     // }
                 };
             }
+
+            //CREATE TRACK
+
+            var track = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:500}, scene);
+            trackMat = new BABYLON.StandardMaterial("barrierMat", scene);
+            trackMat.diffuseTexture = new BABYLON.Texture('textures/podlogaMain.gif', scene);
+            trackMat.diffuseTexture.uScale = 2;
+            trackMat.diffuseTexture.vScale = 200;
+
+                track.material = trackMat;
+                track.position.z = 240;
 
             setTimeout(function(){ 
             meshRunning();
