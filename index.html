@@ -128,21 +128,7 @@ var fps = document.getElementById('fps');
             })
 
 
-            var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("textures/shangai.hdr", scene, 128);
-                var bridge = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:500}, scene);
-                var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
-                bridgeMat.reflectionTexture = hdrBcgRefTexture;
-                bridgeMat.refractionTexture = hdrBcgRefTexture;
-                bridgeMat.reflectionTexture.level = 1;
-                bridgeMat.specularPower = 150;
-                bridgeMat.indexOfRefraction = 0.52;
-                bridgeMat.alpha = 0.8;
-                bridgeMat.directIntensity = 0.0;
-                bridgeMat.environmentIntensity = 0.7;
-                bridgeMat.cameraExposure = 0.66;
-                bridgeMat.cameraContrast = 1.66;
-                bridge.material = bridgeMat;
-                bridge.position.z = 240;
+
 
 //create bridge plane to go bellow
 var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:500}, scene);
