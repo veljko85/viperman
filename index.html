@@ -337,7 +337,7 @@ var fps = document.getElementById('fps');
             var hitWallSound = new BABYLON.Sound("hitWall", "sounds/hitWall.wav", scene);
 
             // HDR texture of background
-            var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("https://raw.githubusercontent.com/veljko85/viperman/ghpages/textures/shangai.hdr", scene, 128);
+            // var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("https://raw.githubusercontent.com/veljko85/viperman/ghpages/textures/shangai.hdr", scene, 128);
 
             // // Skybox
             // var hdrSkybox = BABYLON.Mesh.CreateBox("hdrSkyBox", 5000.0, scene);
@@ -703,9 +703,9 @@ var fps = document.getElementById('fps');
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
             var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
-            bridgeMat.reflectionTexture = hdrBcgRefTexture;
-            bridgeMat.refractionTexture = hdrBcgRefTexture;
-            bridgeMat.reflectionTexture.level = 1;
+            // bridgeMat.reflectionTexture = hdrBcgRefTexture;
+            // bridgeMat.refractionTexture = hdrBcgRefTexture;
+            // bridgeMat.reflectionTexture.level = 1;
             bridgeMat.specularPower = 150;
             bridgeMat.indexOfRefraction = 0.52;
             bridgeMat.alpha = 0.8;
@@ -732,8 +732,8 @@ var fps = document.getElementById('fps');
             var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
             glassWall.position = new BABYLON.Vector3(-5,2.5,70)
             var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
-            glassWallMat.reflectionTexture = hdrBcgRefTexture;
-            glassWallMat.refractionTexture = hdrBcgRefTexture;
+            // glassWallMat.reflectionTexture = hdrBcgRefTexture;
+            // glassWallMat.refractionTexture = hdrBcgRefTexture;
             glassWallMat.linkRefractionWithTransparency = true;
             glassWallMat.indexOfRefraction = 0.52;
             glassWallMat.alpha = 0;
