@@ -41,15 +41,14 @@
 <body>
 <div id='container' style="width: 100vw; height: 100vh; overflow: hidden;">
     <canvas id="renderCanvas"></canvas>
-    <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p>
+    <!-- <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p> -->
 </div> 
     <script>
 
 var fps = document.getElementById('fps');
-        setInterval(function(){ 
-           fps.innerHTML = engine.getFps()
-        //    console.log(scene.getAnimationRatio())
-            }, 1000)
+        // setInterval(function(){ 
+        //    fps.innerHTML = engine.getFps()
+        //     }, 1000)
 
         //GET CANVAS
         var container = document.getElementById("container");
@@ -85,10 +84,51 @@ var fps = document.getElementById('fps');
         var sceneToRender = null;
         var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
 
-        function createScene() {
-            var scene = new BABYLON.Scene(engine);
+        //for loading
+        BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+                if (document.getElementById("customLoadingScreenDiv")) {
+                    // Do not add a loading screen if there is already one
+                    document.getElementById("customLoadingScreenDiv").style.display = "initial";
+                    return;
+                }
+                this._loadingDiv = document.createElement("div");
+                this._loadingDiv.id = "customLoadingScreenDiv";
+                // this._loadingDiv.innerHTML = "scene is currently loading";
+                var customLoadingScreenCss = document.createElement('style');
+                customLoadingScreenCss.type = 'text/css';
+                if(document.body.clientWidth > document.body.clientHeight){
+                customLoadingScreenCss.innerHTML = `
+                #customLoadingScreenDiv{
+                    background-image: url("img/loadingBackgroundDes.gif");
+                    background-size: cover;
+                    background-position: center;
+                }
+                 `;} else {
+                    customLoadingScreenCss.innerHTML = `
+                #customLoadingScreenDiv{
+                    background-image: url("img/loadingBackgroundMob.gif");
+                    background-size: cover;
+                    background-position: center;
+                }
+                 `;
+                 }
+                document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+                this._resizeLoadingUI();
+                window.addEventListener("resize", this._resizeLoadingUI);
+                document.body.appendChild(this._loadingDiv);
+            };
 
+            BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+                document.getElementById("customLoadingScreenDiv").style.display = "none";
+                console.log("scene is now loaded");
+            }
+        //end of loading
+
+        function createScene() {
+            // for loading
+            engine.displayLoadingUI();
             
+            var scene = new BABYLON.Scene(engine);
 
             var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, -1), scene);
             light.intensity = 1;
@@ -287,10 +327,14 @@ var fps = document.getElementById('fps');
             coinsHolder.addControl(coinBlock);
 
             //MUSIC IN THE GAME
-            // var gameMusic = new BABYLON.Sound("gameMusic", "sounds/TRON Legacy (End Titles).mp3", scene, null, {
-            //     loop: true,
-            //     autoplay: true
-            // });
+            var gameMusic = new BABYLON.Sound("gameMusic", "sounds/TRON Legacy (End Titles).mp3", scene, null, {
+                loop: true,
+                autoplay: true
+            });
+            //sounds
+            var jumpSound = new BABYLON.Sound("jump", "sounds/jump.wav", scene);
+            var coinSound = new BABYLON.Sound("coinSound", "sounds/coin.wav", scene);
+            var hitWallSound = new BABYLON.Sound("hitWall", "sounds/hitWall.wav", scene);
 
             // HDR texture of background
             var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("https://raw.githubusercontent.com/veljko85/viperman/ghpages/textures/shangai.hdr", scene, 128);
@@ -394,29 +438,29 @@ var fps = document.getElementById('fps');
                 return scene.beginAnimation(mesh, 0, 60, false);
             }
 
-            // var pillarMat = new BABYLON.StandardMaterial("pillarMat", scene);
-            // var pillarTexture = new BABYLON.Texture("textures/pillar3.png", scene);
-            // pillarMat.diffuseTexture = pillarTexture;
+            var pillarMat = new BABYLON.StandardMaterial("pillarMat", scene);
+            var pillarTexture = new BABYLON.Texture("textures/pillar4.png", scene);
+            pillarMat.diffuseTexture = pillarTexture;
 
-            // var faceUV = new Array(6);
+            var faceUV = new Array(6);
 
-            // for (var i = 0; i < 4; i++) {
-            //     faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
-            // }
-            // faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
-            // faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+            for (var i = 0; i < 4; i++) {
+                faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
+            }
+            faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+            faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
 
             var options = {
                 width: 0.1, 
                 height: 1.4, 
                 depth: 0.1,
-                // faceUV: faceUV,
-                // wrap: true
+                faceUV: faceUV,
+                wrap: true
             };
 
             var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', options, scene);
             laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.8,0);
-            // laserWallUpperHolderLeft.material = pillarMat;
+            laserWallUpperHolderLeft.material = pillarMat;
 
             var laserWallUpperHolderRight = laserWallUpperHolderLeft.clone("laserWallUpperHolderRight");
             laserWallUpperHolderRight.position.x = 1.5;
@@ -424,37 +468,53 @@ var fps = document.getElementById('fps');
             var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.9});
             laserWall.position = new BABYLON.Vector3(0,0.8,0);
             var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
-            var laserWalltex = new BABYLON.Texture("img/laserWall2.png", scene);
+            var laserWalltex = new BABYLON.Texture("textures/laserWallRed.png", scene);
             laserWalltex.hasAlpha = true;
             laserWallmat.diffuseTexture = laserWalltex;
             laserWallmat.useAlphaFromDiffuseTexture = true;
             laserWallmat.backFaceCulling = false;
-            laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#DF740C')
+            laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
             laserWall.material = laserWallmat;
 
             var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWall, laserWallUpperHolderRight, laserWallUpperHolderLeft], true, true, undefined, false, true);
             simpleLaserWall.position = new BABYLON.Vector3(0,0,10)
             simpleLaserWall.isVisible = false;
 
+
             //array to put fooes
             fooes = [];
             //function to create simple wall
-            function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionZ, wideOfWall){      
+            function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ, hightOfWall){      
                 var newSimpleLaserWall = simpleLaserWall.createInstance("simpleLaserWall");
                 fooes.push(newSimpleLaserWall);
-                newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, 0, SimpleLaserWallLanePositionZ);
-                newSimpleLaserWall.scaling = new BABYLON.Vector3(wideOfWall,1,1)
+                newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ);
+                newSimpleLaserWall.scaling = new BABYLON.Vector3(1,hightOfWall,1)
                 fooesCollider(newSimpleLaserWall)
             }
-            // var randNum = () =>{
-            //     return Math.floor(Math.random() * 3);
-            // }
-                
-            // var fooesLanePositions = [-3, 0, 3]
-            // var laserWallWidth = () => {
-            // }
 
             //COINS
+            function animRotY(){
+                const anim= new BABYLON.Animation("animRotY", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    {frame: 0, value: 0},
+                    {frame: 30, value: 2 * Math.PI},
+                ]);
+                return anim;
+            }
+            function animPosY(){
+                const anim= new BABYLON.Animation("animPosY", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    {frame: 0, value: 1},
+                    {frame: 15, value: 1.2},
+                    {frame: 30, value: 1},
+                ]);
+                return anim;
+            }
+            const animationsCoin = [
+                animRotY(),
+                animPosY()
+            ];
+
             BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
                 var coinLogo = result.meshes[0];
                 coinLogo.position = new BABYLON.Vector3(0, 0, 0)
@@ -462,36 +522,184 @@ var fps = document.getElementById('fps');
                 coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
                 scene.getMeshByName("Plane").material = coinLogoMat;
                 scene.getMeshByName("Plane").isVisible = false;
-                coinLogo.rotationQuaternion = null;
+                // coinLogo.rotationQuaternion = null;
                 coinLogo.checkCollisions = true;
+                coinLogo.addRotation(0,5,0)
                 // createCoinsForTielOne(0)
                 // createCoinsForTielTwo(300)
             })
             coins = [];
-            function createCoinLane(coinLanePositionX, coinLanePositionZ){
-                for (var i = 1; i < 11; i++) {
+            function createCoinLane(coinLanePositionX, coinLanePositionY, coinLanePositionZ, coinNum){
+                for (var i = 1; i < coinNum+1; i++) {
                     var newCoin = scene.getMeshByName("Plane").createInstance("coin" + i);
                     coins.push(newCoin);
-
-                    newCoin.position = new BABYLON.Vector3(coinLanePositionX, 0.5, (coinLanePositionZ + i * 3));
+                    
+                    // newCoin.rotationQuaternion = null;
+                    newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.5, (coinLanePositionZ + i * 3));
                     coinsCollider(newCoin)
+                //    scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
                 }
             }
-            function createCoinsForTielOne(coinPosZ){
-                // createCoinLane(3, coinPosZ + 30);
-                createCoinLane(-3, coinPosZ + 30);
-                // createCoinLane(0, coinPosZ + 60);
-                // createCoinLane(-3, coinPosZ + 60);
-                // createCoinLane(3, coinPosZ + 100);
-                // createCoinLane(0, coinPosZ + 100);
-            }
-            function createCoinsForTielTwo(coinPosZ){
-                createCoinLane(0.01, coinPosZ + 10);
-                createCoinLane(3, coinPosZ + 100);
-                createCoinLane(-3, coinPosZ + 150);
-            }
+            
+            // HIGHLAND
+            function aniGoUpOnHighLand(mesh){
+                    const anim= new BABYLON.Animation("aniGoUpOnHighLand", "position.y", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    anim.setKeys([
+                        { frame: 0, value: fakeMesh.position.y },
+                        { frame: 3/playerSpeed, value: 5 },
+                    ]);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 3/playerSpeed, false);
+                }
+            var stair = new BABYLON.MeshBuilder.CreateBox("stair", {width: 2.8, height: 0.1, depth: 0.5}, scene);
+            stair.position = new BABYLON.Vector3(0,0.2,0)
+            var stairMat = new BABYLON.StandardMaterial("stairMat", scene);
+            stairMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+            stairMat.diffuseTexture.uScale = 1;
+            stairMat.diffuseTexture.vScale = 5.6;
+            stair.material = stairMat;
                 
+
+            var stairs = [];
+            for (let i = 0; i < 9; i++) {
+                var newStair = stair.clone("newStair");
+                stairs.push(newStair);
+                newStair.position = new BABYLON.Vector3(0,0.2 + i/5,i/2)
+            }
+
+            var highland = new BABYLON.MeshBuilder.CreateBox("highland", {width: 2.8, height: 0.1, depth: 30}, scene);
+            highland.position = new BABYLON.Vector3(0,2,19.25)
+            var highlandMat = new BABYLON.StandardMaterial("highlandMat", scene);
+            highlandMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+            highlandMat.diffuseTexture.uScale = 56;
+            highlandMat.diffuseTexture.vScale = 5.6;
+            highland.material = highlandMat;
+            highland.isVisible = false;
+            
+
+            var highlandFakeLeft = highland.clone("highlandFakeLeft");
+            highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,17)
+            highlandFakeLeft.scaling = new BABYLON.Vector3(1,15,1.2)
+            highlandFakeLeft.isVisible = false;     
+                
+            var highlandFakeRight = highlandFakeLeft.clone("highlandFakeRight");
+            highlandFakeRight.position = new BABYLON.Vector3(3,0.8,17)
+
+            var stairs = BABYLON.Mesh.MergeMeshes([stair, stairs[0], stairs[1], stairs[2], stairs[3], stairs[4], stairs[5], stairs[6], stairs[7], stairs[8]], true, true, undefined, false, true);
+            stairs.position = new BABYLON.Vector3(3,0,20)
+            stairs.isVisible = false;
+            // stairs.material = bridgeMat;
+            highland.parent = stairs;
+            highlandFakeLeft.parent = stairs;
+            highlandFakeRight.parent = stairs;
+
+            stairsArr = [];
+            highlandArr = [];
+            highlandFakeLeftArr = []
+            highlandFakeRightArr = []
+            function createHighlandMesh(highlandPositionX, highlandPositionZ){
+
+                var newHighland = highland.createInstance("newHighland");
+                highlandArr.push(newHighland);
+
+                var newHighlandFakeLeft = highlandFakeLeft.createInstance("newHighlandFakeLeft");
+                newHighlandFakeLeft.isVisible = false;
+                highlandFakeLeftArr.push(newHighlandFakeLeft);
+
+                var newHighlandFakeRight = highlandFakeRight.createInstance("newHighlandFakeRight");
+                newHighlandFakeRight.isVisible = false;
+                highlandFakeRightArr.push(newHighlandFakeRight);
+
+                var newStairs = stairs.createInstance("newStairs");
+                stairsArr.push(newStairs);
+                newStairs.position = new BABYLON.Vector3(highlandPositionX, 0, highlandPositionZ);
+
+                newHighland.parent = newStairs;
+                newHighlandFakeLeft.parent = newStairs;
+                newHighlandFakeRight.parent = newStairs;
+
+                highlandCollider(newStairs, newHighland)
+            }
+                // createHighlandMesh(3, posZ + 10)
             //CREATE PEACES FOR GROUND/BRIDGE/TRACK
+            // comercial wall
+            var comercialWall = BABYLON.MeshBuilder.CreatePlane("comercialWall", {height:0.8, width: 7.76});
+            comercialWall.position = new BABYLON.Vector3(-4.8,2.5,2);
+            comercialWall.addRotation(0,-1.57,0)
+            var comercialWallmat = new BABYLON.StandardMaterial("comercialWallmat", scene);
+            var comercialWalltex = new BABYLON.Texture("img/sandviperName1.png", scene);
+            comercialWalltex.hasAlpha = true;
+            comercialWallmat.diffuseTexture = comercialWalltex;
+            comercialWallmat.useAlphaFromDiffuseTexture = true;
+            comercialWallmat.backFaceCulling = false;
+            comercialWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            comercialWall.material = comercialWallmat;
+            comercialWall.isVisible = false
+
+            // var comercialWall2 = comercialWall.clone("comercialWall2");
+            // comercialWall2.position.x = 4.8;
+            // comercialWall2.addRotation(0,3.14,0)
+
+            var comercialWalls = [];
+            for (let i = 0; i < 8; i++) {
+                var newComercialWall = comercialWall.clone("newComercialWall");
+                newComercialWall.position.z = (i * 20) + 2
+                comercialWalls.push(newComercialWall)
+            }
+            var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
+            bridgeComercialWalls.isVisible = false;
+
+            var bridgeComercialWallsRight = bridgeComercialWalls.clone("bridgeComercialWallsRight");
+            bridgeComercialWallsRight.position.x = 9.6;
+            // bridgeComercialWallsRight.addRotation(1,3.14,1)
+
+            var comercialWallLogo = BABYLON.MeshBuilder.CreatePlane("comercialWallLogo", {height:4, width: 4});
+            comercialWallLogo.position = new BABYLON.Vector3(-4.8,2.65,12);
+            comercialWallLogo.addRotation(0,-1.57,0)
+            var comercialWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            var comercialWallLogotex = new BABYLON.Texture("img/sandviperLogo.png", scene);
+            comercialWallLogotex.hasAlpha = true;
+            comercialWallLogomat.diffuseTexture = comercialWallLogotex;
+            comercialWallLogomat.useAlphaFromDiffuseTexture = true;
+            comercialWallLogomat.backFaceCulling = false;
+            comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            comercialWallLogo.material = comercialWallLogomat;
+            comercialWallLogo.isVisible = false
+
+            // var comercialWallLogo2 = comercialWallLogo.clone("comercialWallLogo2");
+            // comercialWallLogo2.position.x = 4.8;
+            // comercialWallLogo2.addRotation(0,3.14,0)
+
+            var comercialWallLogos = [];
+            for (let i = 0; i < 7; i++) {
+                var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
+                newComercialWallLogo.position.z = (i * 20) + 12
+                comercialWallLogos.push(newComercialWallLogo)
+            }
+            var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
+            bridgeComercialWallLogos.isVisible = false;
+
+            var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
+            bridgeComercialWallLogosRight.position.x = 9.6;
+
+            var backWallLogo = BABYLON.MeshBuilder.CreatePlane("backWallLogo", {height:5, width: 9});
+            backWallLogo.position = new BABYLON.Vector3(0,2.3,-3);
+            backWallLogo.addRotation(0.5,-3.14,0)
+            var backWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            var backWallLogotex = new BABYLON.Texture("textures/bigRedLogo.png", scene);
+            backWallLogotex.hasAlpha = true;
+            backWallLogomat.diffuseTexture = backWallLogotex;
+            backWallLogomat.useAlphaFromDiffuseTexture = true;
+            // backWallLogomat.backFaceCulling = false;
+            backWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            backWallLogo.material = backWallLogomat;
+            backWallLogo.isVisible = true;
+
+            var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
+            backWallLogoFront.position.z = 140;
+            backWallLogoFront.addRotation(0.5,3.14,0)
+            
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
             var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
@@ -521,8 +729,8 @@ var fps = document.getElementById('fps');
             bridgeLayout.material = bridgeLayoutMat;
 
             //create glass walls
-            var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 3, depth: 150}, scene);
-            glassWall.position = new BABYLON.Vector3(-5,1.5,70)
+            var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
+            glassWall.position = new BABYLON.Vector3(-5,2.5,70)
             var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
             glassWallMat.reflectionTexture = hdrBcgRefTexture;
             glassWallMat.refractionTexture = hdrBcgRefTexture;
@@ -541,6 +749,10 @@ var fps = document.getElementById('fps');
             var glassWall2 = glassWall.clone("glassWall2");
             glassWall2.position.x = 5;
 
+            // var frontGlassWall = new BABYLON.MeshBuilder.CreateBox("frontGlassWall", {width: 9, height: 5, depth: 0.5}, scene);
+            // frontGlassWall.position = new BABYLON.Vector3(-3,2.5,140)
+            // frontGlassWall.material = glassWallMat;
+
             //side walks
             var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
             var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
@@ -558,6 +770,24 @@ var fps = document.getElementById('fps');
             //other sidewalk glass part
             var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
             sideWalkGlassPart2.position.x = 4.5;
+
+            var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
+            sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
+            sideStrip.addRotation(1,0,0)
+            sideStrip.material = sideWalkMat;
+            sideStrip.isVisible = false
+
+            var sideStrips = [];
+            for (let i = 0; i < 15; i++) {
+                var newSideStrip = sideStrip.clone("sideStrip");
+                newSideStrip.position.z = (i * 10) - 3
+                sideStrips.push(newSideStrip)
+            }
+            var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
+            bridgeSideStrips.isVisible = false;
+
+            var bridgeSideStripsRight = bridgeSideStrips.clone("bridgeSideStripsRight");
+            bridgeSideStripsRight.position.x = 9.6;
                 
             //running tracks
             var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
@@ -576,7 +806,7 @@ var fps = document.getElementById('fps');
             var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
             runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
 
-            var bridgeMesh = BABYLON.Mesh.MergeMeshes([bridgeLayout, glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
+            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWall*/backWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
             bridgeMesh.isVisible = true;
 
             var runningTracks = [];
@@ -590,7 +820,122 @@ var fps = document.getElementById('fps');
                 bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 70)
                 grounds.push(bridgeGroundInstance)
                 addGravity(bridgeGroundInstance)
+                
+            }
+            
+            function createTrackOptionOne(){
+                createTrackOne()
+                createCoinLane(0, 0, posZ + 15, 10)
+                createHighlandMesh(3, posZ + 48)
+                createHighlandMesh(-3, posZ + 53)
+                createCoinLane(-3, 2, posZ + 56, 10)
+                createHighlandMesh(0, posZ + 100)
+                createSimpleLaserWall(-3, 0, posZ + 105, 3)
+                createSimpleLaserWall(3, 0, posZ + 95, 3)
+                createCoinLane(0, 2, posZ + 103, 10)
                 posZ += 150
+            }
+
+            function createTrackOptionTwo(){
+                createTrackOne()
+                createHighlandMesh(0, posZ + 15)
+                createCoinLane(0, 2, posZ + 18, 10)
+                createSimpleLaserWall(3, 0, posZ + 20, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 25, 2)
+                createHighlandMesh(-3, posZ + 70)
+                createHighlandMesh(3, posZ + 60)
+                createSimpleLaserWall(0, 1.3, posZ + 85, 2)
+                createCoinLane(0, 0, posZ + 90, 5)
+                createCoinLane(-3, 0, posZ + 110, 5)
+                createCoinLane(3, 0, posZ + 110, 5)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createSimpleLaserWall(-3, 1.3, posZ + 125, 2)
+                createSimpleLaserWall(3, 0, posZ + 130, 1)
+                posZ += 150
+            }
+
+            function createTrackOptionThree(){
+                createTrackOne()
+                createHighlandMesh(-3, posZ + 15)
+                createCoinLane(3, 0, posZ + 50, 10)
+                createSimpleLaserWall(0, 0, posZ + 50, 3)
+                createCoinLane(0, 0, posZ + 80, 10)
+                createSimpleLaserWall(-3, 0, posZ + 90, 3)
+                createSimpleLaserWall(3, 0, posZ + 90, 3)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createCoinLane(3, 0, posZ + 120, 5)
+                createCoinLane(-3, 0, posZ + 120, 5)
+                posZ += 150
+            }
+
+            function createTrackOptionFour(){
+                createTrackOne()
+                createHighlandMesh(-3, posZ + 15)
+                createHighlandMesh(3, posZ + 25)
+                createCoinLane(0, 0, posZ + 35, 15)
+                createSimpleLaserWall(-3, 0, posZ + 70, 3)
+                createSimpleLaserWall(3, 0, posZ + 70, 3)
+                createSimpleLaserWall(0, 0, posZ + 85, 3)
+                createSimpleLaserWall(-3, 0, posZ + 95, 1)
+                createCoinLane(-3, 0, posZ + 97, 5)
+                createSimpleLaserWall(-3, 0, posZ + 115, 3)
+                createSimpleLaserWall(3, 0, posZ + 115, 3)
+                createSimpleLaserWall(0, 1.3, posZ + 120, 2)
+                posZ += 150
+            }
+
+            function createTrackOptionFive(){
+                createTrackOne()
+                createCoinLane(-3, 0, posZ + 15, 10)
+                createCoinLane(0, 0, posZ + 15, 10)
+                createCoinLane(3, 0, posZ + 15, 10)
+                createSimpleLaserWall(3, 0, posZ + 31.5, 1)
+                createSimpleLaserWall(0, 0, posZ + 31.5, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 31.5, 1)
+                createSimpleLaserWall(-3, 0, posZ + 60, 3)
+                createSimpleLaserWall(0, 0, posZ + 70, 1)
+                createSimpleLaserWall(0, 0, posZ + 80, 3)
+                createCoinLane(0, 0, posZ + 81, 5)
+                createSimpleLaserWall(0, 0, posZ + 100, 3)
+                createCoinLane(0, 0, posZ + 101, 5)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createCoinLane(0, 0, posZ + 121, 5)
+                posZ += 150
+            }
+            
+            function createTrackOptionSix(){
+                createTrackOne()
+                createSimpleLaserWall(-3, 0, posZ + 15, 3)
+                createSimpleLaserWall(3, 0, posZ + 15, 3)
+                createSimpleLaserWall(0, 0, posZ + 25, 1)
+                createCoinLane(0, 0, posZ + 21, 5)
+                createSimpleLaserWall(0, 0, posZ + 45, 3)
+                createCoinLane(-3, 0, posZ + 41, 5)
+                createSimpleLaserWall(-3, 0, posZ + 60, 1)
+                createSimpleLaserWall(-3, 0, posZ + 70, 1)
+                createSimpleLaserWall(0, 0, posZ + 70, 3)
+                createSimpleLaserWall(3, 0, posZ + 70, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 85, 2)
+                createSimpleLaserWall(3, 1.3, posZ + 85, 2)
+                createSimpleLaserWall(0, 0, posZ + 90, 1)
+                createCoinLane(0, 0, posZ + 81, 5)
+                createSimpleLaserWall(-3, 0, posZ + 105, 3)
+                createSimpleLaserWall(0, 0, posZ + 105, 3)
+                createSimpleLaserWall(-3, 0, posZ + 115, 3)
+                createSimpleLaserWall(0, 0, posZ + 120, 1)
+                createSimpleLaserWall(3, 0, posZ + 125, 3)
+                createCoinLane(0, 0, posZ + 126, 5)
+                createSimpleLaserWall(0, 0, posZ + 140, 3)
+                posZ += 150
+            }
+            var randNum = () =>{
+                return Math.floor(Math.random() * 6);
+            }
+
+            var trackOptions = [createTrackOptionOne, createTrackOptionTwo, createTrackOptionThree, createTrackOptionFour, createTrackOptionFive, createTrackOptionSix];
+
+            function randomTrackOpt(){
+                trackOptions[randNum()]();
             }
           
             //game info
@@ -607,13 +952,13 @@ var fps = document.getElementById('fps');
             var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             var fakeMeshPosY = 1.8;
             fakeMesh.position = new BABYLON.Vector3(0,fakeMeshPosY,0)
-            fakeMesh.isVisible = true;
+            fakeMesh.isVisible = false;
             camera.target = fakeMesh;
             //fake mesh for elipsoid
             var fakeMeshEllipse = new BABYLON.MeshBuilder.CreateBox("fakeMeshEllipse", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             fakeMeshEllipse.position = new BABYLON.Vector3(0,-0.8,0)
             fakeMeshEllipse.parent = fakeMesh;
-            fakeMeshEllipse.isVisible = true;
+            fakeMeshEllipse.isVisible = false;
             //Create Ellipsoid around mesh
             var a = 0.5;
             var b = 1;
@@ -623,17 +968,19 @@ var fps = document.getElementById('fps');
             }
             var ellipse = [];
             ellipse[0] = BABYLON.MeshBuilder.CreateLines("e", {points:points}, scene);
-            ellipse[0].isVisible = true;
+            ellipse[0].isVisible = false;
             ellipse[0].parent = fakeMeshEllipse;
-            ellipse[0].rotation.y = Math.PI * 2;
-            for(var i = 1; i < 3; i++) {
+            ellipse[0].rotation.y = Math.PI * 1;
+            for(var i = 1; i < 4; i++) {
                 ellipse[i] = ellipse[0].createInstance("el" + i);
                 ellipse[i].parent = fakeMeshEllipse;
-                ellipse[i].isVisible = true;
+                ellipse[i].isVisible = false;
                 ellipse[i].checkCollisions = true;
             }
             ellipse[1].rotation.y = Math.PI * 2 - 1.3;
             ellipse[2].rotation.y = Math.PI * 2 + 1.3;
+            ellipse[3].rotation.y = Math.PI * 2;
+
             //IMPORT MESHES
             //viperman
             BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
@@ -645,6 +992,8 @@ var fps = document.getElementById('fps');
                 // for (let i = 0; i < result.meshes.length; i++) {
                 //     result.meshes[i].isVisible = false
                 // }
+                //for loading
+                engine.hideLoadingUI();
             })
 
             //MOVMENT
@@ -695,8 +1044,8 @@ var fps = document.getElementById('fps');
             //function for jumping
             function viperJump(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
-                    //jumpSound.play();
-                    aniPosY(fakeMesh, fakeMeshPosY)
+                    jumpSound.play();
+                    aniPosY(fakeMesh, fakeMesh.position.y)
                     scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
                     scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     running = false;
@@ -766,16 +1115,11 @@ var fps = document.getElementById('fps');
                     }
                 });
             }
-            
             function gameRender(){
                 //loop track and elements creation
                 if (runningTracks.length < 2) {
-                    createCoinsForTielOne(posZ)
-                    createSimpleLaserWall(0, posZ, 1);
-                    // createSpeedGround(3, posZ + 20)
-                    // createSpeedGround(-3,posZ + 50)
-                    createSpeedGround(0,posZ + 100)
-                    createTrackOne()
+                    randomTrackOpt()
+                    // createTrackOptionSix()
                 }
                 //dispose track
                 for (let i = 0; i < runningTracks.length; i++) {
@@ -813,13 +1157,20 @@ var fps = document.getElementById('fps');
                         }
                     }
                 }
-                // if (stairsArr.length > 0) {
-                //     for (let i = 0; i < stairsArr.length; i++) {
-                //         if ((fakeMesh.position.z - 110) > stairsArr[i].position.z){
-                //             stairsArr[i].dispose(true, true);;
-                //         }
-                //     }
-                // }
+                if (stairsArr.length > 0) {
+                    for (let i = 0; i < stairsArr.length; i++) {
+                        if ((fakeMesh.position.z - 60) > stairsArr[i].position.z){
+                            stairsArr[i].dispose();
+                            stairsArr.splice(i, 1);
+                            highlandArr[i].dispose();
+                            highlandArr.splice(i, 1);
+                            highlandFakeLeftArr[i].dispose();
+                            highlandFakeLeftArr.splice(i, 1);
+                            highlandFakeRightArr[i].dispose();
+                            highlandFakeRightArr.splice(i, 1);
+                        }
+                    }
+                }
             }
 
             //function for mesh to start running
@@ -827,11 +1178,7 @@ var fps = document.getElementById('fps');
                 //change running status
                 running = true;
                 gameRunning = true;
-                if (fakeMesh.position.z < -4.9){
-                    camera.setPosition(new BABYLON.Vector3(0, 3, -5));
-                } else {
-                    camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMeshPosY + 1.2, fakeMesh.position.z - 5));
-                }
+                
                 //start running animation
                 scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
                 //change viperman and fake mesh position z - move thrue space
@@ -859,6 +1206,7 @@ var fps = document.getElementById('fps');
             function startGameFromPause(){ 
                 if (!gameRunning){ 
                     gameRunning = true;
+                    camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
                     scene.animationGroups.find(a => a.name === 'run').pause(false);
                     scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
@@ -878,15 +1226,33 @@ var fps = document.getElementById('fps');
             //rotate around the mesh at start and end of the game
             rotateAroundMesh()
             //START GAME
+            function animMove(camera, pos) {
+                const anim = new BABYLON.Animation('movecam', 'position', 120, BABYLON.Animation.ANIMATIONTYPE_VECTOR3);
+                anim.setKeys([
+                    {frame: 0, value: camera.position.clone()},
+                    {frame: 120, value: pos},
+                ]);
+                // easing
+                // const easingFun = new BABYLON.CubicEase();
+                // easingFun.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
+                // anim.setEasingFunction(easingFun);
+                return anim;
+            }
             startGame.onPointerClickObservable.add(function () {
-                bridgeGround.isVisible = false;
-                bridgeMesh.isVisible = false;
-                createTrackOne()
-                meshRunning();
+                const cameraAnimations = [
+                    animMove(camera, new BABYLON.Vector3(0, 3, -5)),
+                ];
                 viperDemo.notRenderable = true;
                 startGame.notRenderable = true;
-                lintenKeysEvents();
-                lintenTouchEvents();
+                setTimeout(function(){
+                    backWallLogoFront.dispose();
+                    bridgeGround.isVisible = false;
+                    bridgeMesh.isVisible = false;
+                    meshRunning();
+                    lintenKeysEvents();
+                    lintenTouchEvents();
+                }, 1100)
+                scene.beginDirectAnimation(camera, cameraAnimations, 0, 120, false, 1);
             });
 
             //game over function
@@ -916,14 +1282,16 @@ var fps = document.getElementById('fps');
                             }
                         },
                         (evt) => {
-                            console.log('skocio')
-                            scene.beforeRender = function() {
-                                fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                                if(fakeMesh.position.y > 1.81){
-                                    fakeMesh.position.y -= 0.2;
-                                }
-                                gameRender()
-                            };
+                            if (thisGorund.checkCollisions){
+                                thisGorund.checkCollisions = false;
+                                scene.beforeRender = function() {
+                                    fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                    if(fakeMesh.position.y > 1.81){
+                                        fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
+                                    }
+                                    gameRender()
+                                };
+                            }
                         }
                     );
                     let actionGravityOff = new BABYLON.ExecuteCodeAction(
@@ -934,7 +1302,8 @@ var fps = document.getElementById('fps');
                             }
                         },
                         (evt) => {
-                            console.log('pao')
+                            fakeMesh.position.y = 1.8;
+                            thisGorund.checkCollisions = true;
                             scene.beforeRender = function() {
                                 fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                                 fakeMesh.position.y -= 0;
@@ -961,7 +1330,7 @@ var fps = document.getElementById('fps');
                             (evt) => {
                                 if (thisCoin.isVisible) { 
                                     colectedCoins += 1;
-                                    // coinSound.play();
+                                    coinSound.play();
                                     coinBlock.text = ": " + colectedCoins;
                                     thisCoin.isVisible = false;
                                 }
@@ -992,9 +1361,9 @@ var fps = document.getElementById('fps');
                                 visColAnim(thisFooe)
                                 // fooes[i].isVisible = false;
                                 thisFooe.checkCollisions = false;
-                                lives -= 0;
+                                lives -= 1;
                                 livesBlock.text = "x" + lives;
-                                // hitWallSound.play();
+                                hitWallSound.play();
                                 if (lives > 0){
                                     scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
                                     scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
@@ -1029,16 +1398,129 @@ var fps = document.getElementById('fps');
                     },
                     (evt) => {
                         if(thisSpeedGround.checkCollisions){
-                            console.log('izaso')
                             thisSpeedGround.checkCollisions = false;
                             playerSpeed += 0.2;
                             setTimeout(function(){
-                            playerSpeed -= 0.2;
-                            }, 4000)
+                            playerSpeed -= playerSpeed * scene.getAnimationRatio();
+                            }, 2000)
                         }
                     }
                     );  
                     ellipse[j].actionManager.registerAction(action);
+                }
+            }
+                                //stair collider
+            function highlandCollider(thisStair, thisHighland){
+                for (let hl = 0; hl < ellipse.length; hl++) {
+
+                        thisHighland.checkCollisions = true;
+                        let action4 = new BABYLON.ExecuteCodeAction(
+                            {
+                            trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                            parameter: { 
+                            mesh: thisHighland
+                            }
+                            },
+                            (evt) => {
+                                fakeMesh.position.y = 3.8;
+                                thisHighland.checkCollisions = true;
+                                scene.beforeRender = function() {
+                                    fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                    fakeMesh.position.y -= 0;
+                                    gameRender()
+                                };
+                            }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action4);
+                        let action5 = new BABYLON.ExecuteCodeAction(
+                            {
+                                trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
+                                parameter: { 
+                                    mesh: thisHighland
+                                }
+                            },
+                            (evt) => {
+                                if (thisHighland.checkCollisions){
+                                    thisHighland.checkCollisions = false;
+                                    scene.beforeRender = function() {
+                                        fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                            fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
+                                        gameRender()
+                                    };
+                                }
+                            }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action5);
+
+                    for (let i = 0; i < stairsArr.length; i++) {
+                        let action6 = new BABYLON.ExecuteCodeAction(
+                        {
+                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                        parameter: { 
+                            mesh: stairsArr[i]
+                        }
+                        },
+                        (evt) => {
+                            aniGoUpOnHighLand(fakeMesh)
+                            fakeMesh.position.x = thisStair.position.x;
+                        }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action6);
+                    }
+                    for (let i = 0; i < highlandFakeLeftArr.length; i++) {
+                    let action7 = new BABYLON.ExecuteCodeAction(
+                        {
+                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                        parameter: { 
+                            mesh: highlandFakeLeftArr[i]
+                        }
+                        },
+                        (evt) => {
+                            highlandOnSideLeft = true;
+                        }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action7);
+
+                        let action8 = new BABYLON.ExecuteCodeAction(
+                            {
+                            trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
+                            parameter: { 
+                                mesh: highlandFakeLeftArr[i]
+                            }
+                            },
+                            (evt) => {
+                                highlandOnSideLeft = false;
+                            }
+                            );  
+                        ellipse[hl].actionManager.registerAction(action8);
+                    }
+                    for (let i = 0; i < highlandFakeRightArr.length; i++) {
+                    let action9 = new BABYLON.ExecuteCodeAction(
+                        {
+                        trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger, 
+                        parameter: { 
+                            mesh: highlandFakeRightArr[i]
+                        }
+                        },
+                        (evt) => {
+                            highlandOnSideRight = true;
+                        }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action9);
+
+                    let action10 = new BABYLON.ExecuteCodeAction(
+                        {
+                        trigger: BABYLON.ActionManager.OnIntersectionExitTrigger, 
+                        parameter: { 
+                            mesh: highlandFakeRightArr[i]
+                        }
+                        },
+                        (evt) => {
+                            highlandOnSideRight = false;
+                        }
+                        );  
+                        ellipse[hl].actionManager.registerAction(action10);
+                    }
                 }
             }
             
@@ -1050,10 +1532,10 @@ var fps = document.getElementById('fps');
 
             
 
-            setInterval(function(){
-            console.log(scene.meshes.length)
-            console.log(fakeMesh.position.z)
-        }, 500) 
+        //     setInterval(function(){
+        //     console.log(scene.meshes.length)
+        //     console.log(fakeMesh.position.z)
+        // }, 500) 
             return scene;
             //END OF SCENE
         
