@@ -622,83 +622,85 @@ var fps = document.getElementById('fps');
             //     highlandCollider(newStairs, newHighland)
             // }
             //     // createHighlandMesh(3, posZ + 10)
+            
+            
             // //CREATE PEACES FOR GROUND/BRIDGE/TRACK
             // comercial wall
-            var comercialWall = BABYLON.MeshBuilder.CreatePlane("comercialWall", {height:0.8, width: 7.76});
-            comercialWall.position = new BABYLON.Vector3(-4.8,2.5,2);
-            comercialWall.addRotation(0,-1.57,0)
-            var comercialWallmat = new BABYLON.StandardMaterial("comercialWallmat", scene);
-            var comercialWalltex = new BABYLON.Texture("img/sandviperName1.png", scene);
-            comercialWalltex.hasAlpha = true;
-            comercialWallmat.diffuseTexture = comercialWalltex;
-            comercialWallmat.useAlphaFromDiffuseTexture = true;
-            comercialWallmat.backFaceCulling = false;
-            comercialWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
-            comercialWall.material = comercialWallmat;
-            comercialWall.isVisible = false
+            // var comercialWall = BABYLON.MeshBuilder.CreatePlane("comercialWall", {height:0.8, width: 7.76});
+            // comercialWall.position = new BABYLON.Vector3(-4.8,2.5,2);
+            // comercialWall.addRotation(0,-1.57,0)
+            // var comercialWallmat = new BABYLON.StandardMaterial("comercialWallmat", scene);
+            // var comercialWalltex = new BABYLON.Texture("img/sandviperName1.png", scene);
+            // comercialWalltex.hasAlpha = true;
+            // comercialWallmat.diffuseTexture = comercialWalltex;
+            // comercialWallmat.useAlphaFromDiffuseTexture = true;
+            // comercialWallmat.backFaceCulling = false;
+            // comercialWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            // comercialWall.material = comercialWallmat;
+            // comercialWall.isVisible = false
 
             // var comercialWall2 = comercialWall.clone("comercialWall2");
             // comercialWall2.position.x = 4.8;
             // comercialWall2.addRotation(0,3.14,0)
 
-            var comercialWalls = [];
-            for (let i = 0; i < 8; i++) {
-                var newComercialWall = comercialWall.clone("newComercialWall");
-                newComercialWall.position.z = (i * 20) + 2
-                comercialWalls.push(newComercialWall)
-            }
-            var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
-            bridgeComercialWalls.isVisible = false;
+            // var comercialWalls = [];
+            // for (let i = 0; i < 8; i++) {
+            //     var newComercialWall = comercialWall.clone("newComercialWall");
+            //     newComercialWall.position.z = (i * 20) + 2
+            //     comercialWalls.push(newComercialWall)
+            // }
+            // var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
+            // bridgeComercialWalls.isVisible = false;
 
-            var bridgeComercialWallsRight = bridgeComercialWalls.clone("bridgeComercialWallsRight");
-            bridgeComercialWallsRight.position.x = 9.6;
+            // var bridgeComercialWallsRight = bridgeComercialWalls.clone("bridgeComercialWallsRight");
+            // bridgeComercialWallsRight.position.x = 9.6;
             // bridgeComercialWallsRight.addRotation(1,3.14,1)
 
-            var comercialWallLogo = BABYLON.MeshBuilder.CreatePlane("comercialWallLogo", {height:4, width: 4});
-            comercialWallLogo.position = new BABYLON.Vector3(-4.8,2.65,12);
-            comercialWallLogo.addRotation(0,-1.57,0)
-            var comercialWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
-            var comercialWallLogotex = new BABYLON.Texture("img/sandviperLogo.png", scene);
-            comercialWallLogotex.hasAlpha = true;
-            comercialWallLogomat.diffuseTexture = comercialWallLogotex;
-            comercialWallLogomat.useAlphaFromDiffuseTexture = true;
-            comercialWallLogomat.backFaceCulling = false;
-            comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
-            comercialWallLogo.material = comercialWallLogomat;
-            comercialWallLogo.isVisible = false
+            // var comercialWallLogo = BABYLON.MeshBuilder.CreatePlane("comercialWallLogo", {height:4, width: 4});
+            // comercialWallLogo.position = new BABYLON.Vector3(-4.8,2.65,12);
+            // comercialWallLogo.addRotation(0,-1.57,0)
+            // var comercialWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            // var comercialWallLogotex = new BABYLON.Texture("img/sandviperLogo.png", scene);
+            // comercialWallLogotex.hasAlpha = true;
+            // comercialWallLogomat.diffuseTexture = comercialWallLogotex;
+            // comercialWallLogomat.useAlphaFromDiffuseTexture = true;
+            // comercialWallLogomat.backFaceCulling = false;
+            // comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            // comercialWallLogo.material = comercialWallLogomat;
+            // comercialWallLogo.isVisible = false
 
             // var comercialWallLogo2 = comercialWallLogo.clone("comercialWallLogo2");
             // comercialWallLogo2.position.x = 4.8;
             // comercialWallLogo2.addRotation(0,3.14,0)
 
-            var comercialWallLogos = [];
-            for (let i = 0; i < 7; i++) {
-                var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
-                newComercialWallLogo.position.z = (i * 20) + 12
-                comercialWallLogos.push(newComercialWallLogo)
-            }
-            var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
-            bridgeComercialWallLogos.isVisible = false;
+            // var comercialWallLogos = [];
+            // for (let i = 0; i < 7; i++) {
+            //     var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
+            //     newComercialWallLogo.position.z = (i * 20) + 12
+            //     comercialWallLogos.push(newComercialWallLogo)
+            // }
+            // var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
+            // bridgeComercialWallLogos.isVisible = false;
 
-            var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
-            bridgeComercialWallLogosRight.position.x = 9.6;
+            // var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
+            // bridgeComercialWallLogosRight.position.x = 9.6;
 
-            var backWallLogo = BABYLON.MeshBuilder.CreatePlane("backWallLogo", {height:5, width: 9});
-            backWallLogo.position = new BABYLON.Vector3(0,2.3,-3);
-            backWallLogo.addRotation(0.5,-3.14,0)
-            var backWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
-            var backWallLogotex = new BABYLON.Texture("textures/bigRedLogo.png", scene);
-            backWallLogotex.hasAlpha = true;
-            backWallLogomat.diffuseTexture = backWallLogotex;
-            backWallLogomat.useAlphaFromDiffuseTexture = true;
-            // backWallLogomat.backFaceCulling = false;
-            backWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            backWallLogo.material = backWallLogomat;
-            backWallLogo.isVisible = true;
+            // var backWallLogo = BABYLON.MeshBuilder.CreatePlane("backWallLogo", {height:5, width: 9});
+            // backWallLogo.position = new BABYLON.Vector3(0,2.3,-3);
+            // backWallLogo.addRotation(0.5,-3.14,0)
+            // var backWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            // var backWallLogotex = new BABYLON.Texture("textures/bigRedLogo.png", scene);
+            // backWallLogotex.hasAlpha = true;
+            // backWallLogomat.diffuseTexture = backWallLogotex;
+            // backWallLogomat.useAlphaFromDiffuseTexture = true;
+            // // backWallLogomat.backFaceCulling = false;
+            // backWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            // backWallLogo.material = backWallLogomat;
+            // backWallLogo.isVisible = true;
 
-            var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
-            backWallLogoFront.position.z = 140;
-            backWallLogoFront.addRotation(0.5,3.14,0)
+            // var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
+            // backWallLogoFront.position.z = 140;
+            // backWallLogoFront.addRotation(0.5,3.14,0)
             
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
@@ -719,14 +721,14 @@ var fps = document.getElementById('fps');
             bridgeGround.isVisible = true;
 
             //create bridge plane to go bellow
-            var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
-            bridgeLayout.position.z = 70;
-            bridgeLayout.position.y = -0.5;
-            var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
-            bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
-            bridgeLayoutMat.diffuseTexture.uScale = 1;
-            bridgeLayoutMat.diffuseTexture.vScale = 50;
-            bridgeLayout.material = bridgeLayoutMat;
+            // var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
+            // bridgeLayout.position.z = 70;
+            // bridgeLayout.position.y = -0.5;
+            // var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
+            // bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+            // bridgeLayoutMat.diffuseTexture.uScale = 1;
+            // bridgeLayoutMat.diffuseTexture.vScale = 50;
+            // bridgeLayout.material = bridgeLayoutMat;
 
             //create glass walls
             var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
@@ -771,23 +773,23 @@ var fps = document.getElementById('fps');
             var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
             sideWalkGlassPart2.position.x = 4.5;
 
-            var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
-            sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
-            sideStrip.addRotation(1,0,0)
-            sideStrip.material = sideWalkMat;
-            sideStrip.isVisible = false
+            // var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
+            // sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
+            // sideStrip.addRotation(1,0,0)
+            // sideStrip.material = sideWalkMat;
+            // sideStrip.isVisible = false
 
-            var sideStrips = [];
-            for (let i = 0; i < 15; i++) {
-                var newSideStrip = sideStrip.clone("sideStrip");
-                newSideStrip.position.z = (i * 10) - 3
-                sideStrips.push(newSideStrip)
-            }
-            var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
-            bridgeSideStrips.isVisible = false;
+            // var sideStrips = [];
+            // for (let i = 0; i < 15; i++) {
+            //     var newSideStrip = sideStrip.clone("sideStrip");
+            //     newSideStrip.position.z = (i * 10) - 3
+            //     sideStrips.push(newSideStrip)
+            // }
+            // var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
+            // bridgeSideStrips.isVisible = false;
 
-            var bridgeSideStripsRight = bridgeSideStrips.clone("bridgeSideStripsRight");
-            bridgeSideStripsRight.position.x = 9.6;
+            // var bridgeSideStripsRight = bridgeSideStrips.clone("bridgeSideStripsRight");
+            // bridgeSideStripsRight.position.x = 9.6;
                 
             //running tracks
             var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
@@ -806,7 +808,7 @@ var fps = document.getElementById('fps');
             var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
             runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
 
-            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWall*/backWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
+            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
             bridgeMesh.isVisible = true;
 
             // var runningTracks = [];
