@@ -703,9 +703,9 @@ var fps = document.getElementById('fps');
             // backWallLogoFront.addRotation(0.5,3.14,0)
             
             //main platform for running
-            var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
-            var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-            bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
+            // var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
+            // var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
+            // bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
             // bridgeMat.reflectionTexture = hdrBcgRefTexture;
             // bridgeMat.refractionTexture = hdrBcgRefTexture;
             // bridgeMat.reflectionTexture.level = 1;
@@ -718,8 +718,8 @@ var fps = document.getElementById('fps');
             // bridgeMat.cameraContrast = 1.66;
             // bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
-            bridgeGround.position = new BABYLON.Vector3(0,0,70)
-            bridgeGround.isVisible = true;
+            // bridgeGround.position = new BABYLON.Vector3(0,0,70)
+            // bridgeGround.isVisible = true;
 
             // //create bridge plane to go bellow
             // // var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
@@ -826,19 +826,19 @@ var fps = document.getElementById('fps');
             // var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, bridgeGround,sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2/*, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight*/], true, true, undefined, false, true);
             // bridgeMesh.isVisible = true;
 
-            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
-            //     var most = result.meshes[0];
-            //     most.position = new BABYLON.Vector3(3, 0, 0)
-            //     // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
-            //     // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
-            //     // scene.getMeshByName("Plane").material = coinLogoMat;
-            //     // scene.getMeshByName("Plane").isVisible = false;
-            //     // // coinLogo.rotationQuaternion = null;
-            //     // coinLogo.checkCollisions = true;
-            //     // coinLogo.addRotation(0,5,0)
-            //     // createCoinsForTielOne(0)
-            //     // createCoinsForTielTwo(300)
-            // })
+            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
+                var most = result.meshes[0];
+                most.position = new BABYLON.Vector3(3, 0, 0)
+                // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
+                // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
+                // scene.getMeshByName("Plane").material = coinLogoMat;
+                // scene.getMeshByName("Plane").isVisible = false;
+                // // coinLogo.rotationQuaternion = null;
+                // coinLogo.checkCollisions = true;
+                // coinLogo.addRotation(0,5,0)
+                // createCoinsForTielOne(0)
+                // createCoinsForTielTwo(300)
+            })
 
             // var runningTracks = [];
             // var grounds = []
@@ -1014,18 +1014,18 @@ var fps = document.getElementById('fps');
 
             //IMPORT MESHES
             //viperman
-            BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
-            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
-                var viperman =  result.meshes[0];
-                viperman.parent = fakeMesh;
-                viperman.position.y = -1.8;
-                scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
+            // BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
+            // // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
+            //     var viperman =  result.meshes[0];
+            //     viperman.parent = fakeMesh;
+            //     viperman.position.y = -1.8;
+            //     scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
                 // for (let i = 0; i < result.meshes.length; i++) {
                 //     result.meshes[i].isVisible = false
                 // }
                 //for loading
                 engine.hideLoadingUI();
-            })
+            // })
 
             //MOVMENT
             //animation for moving left and right
@@ -1077,27 +1077,27 @@ var fps = document.getElementById('fps');
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
                     jumpSound.play();
                     aniPosY(fakeMesh, fakeMesh.position.y)
-                    scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    // scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
+                    // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     running = false;
                     setTimeout(function(){ 
                         running = true;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
-                        scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
+                        // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
+                        // scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
                     }, 680)
                 }
             }
             //function for sliding
             function viperSlide(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
-                    scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    // scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
+                    // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     fakeMeshEllipse.position.y = -1.8;
                     running = false;
                     setTimeout(function(){ 
                         running = true;
                         fakeMeshEllipse.position.y = -0.8;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
+                        // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
                     }, 1580)
                 }
             }
@@ -1211,7 +1211,7 @@ var fps = document.getElementById('fps');
                 gameRunning = true;
                 
                 //start running animation
-                scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
+                // scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
                 //change viperman and fake mesh position z - move thrue space
                 scene.beforeRender = function() {
                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
@@ -1223,7 +1223,7 @@ var fps = document.getElementById('fps');
                     if (gameRunning){
                         running = false;
                         gameRunning = false;
-                        scene.animationGroups.find(a => a.name === 'run').pause(true);
+                        // scene.animationGroups.find(a => a.name === 'run').pause(true);
                         scene.beforeRender = function() {
                             fakeMesh.position.z += 0;
                         };
@@ -1238,8 +1238,8 @@ var fps = document.getElementById('fps');
                 if (!gameRunning){ 
                     gameRunning = true;
                     camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
-                    scene.animationGroups.find(a => a.name === 'run').pause(false);
-                    scene.animationGroups.find(a => a.name === 'run').play(true);
+                    // scene.animationGroups.find(a => a.name === 'run').pause(false);
+                    // scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
                     pauseGameButton.notRenderable = false;
                     startGameFromPauseButton.notRenderable = true;
@@ -1291,7 +1291,7 @@ var fps = document.getElementById('fps');
                 running = false;
                 gameRunning = false;
                 gameOverSign.notRenderable = false;
-                scene.animationGroups.find(a => a.name === 'run').pause(true);
+                // scene.animationGroups.find(a => a.name === 'run').pause(true);
                 scene.beforeRender = function() {
                     fakeMesh.position.z += 0;
                 };
@@ -1396,17 +1396,17 @@ var fps = document.getElementById('fps');
                                 livesBlock.text = "x" + lives;
                                 hitWallSound.play();
                                 if (lives > 0){
-                                    scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
-                                    scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
                                     running = false;
                                     setTimeout(function(){
-                                        scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
-                                        scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
+                                        // scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
+                                        // scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
                                         running = true;
                                     }, 1000);
                                 }
                                 if (lives < 1){;
-                                    scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
                                     gameOver();
                                 }
                             }
