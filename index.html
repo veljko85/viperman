@@ -337,650 +337,608 @@ var fps = document.getElementById('fps');
             var hitWallSound = new BABYLON.Sound("hitWall", "sounds/hitWall.wav", scene);
 
             // HDR texture of background
-            // var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("https://raw.githubusercontent.com/veljko85/viperman/ghpages/textures/shangai.hdr", scene, 128);
+            var hdrBcgRefTexture = new BABYLON.HDRCubeTexture("https://raw.githubusercontent.com/veljko85/viperman/ghpages/textures/shangai.hdr", scene, 128);
 
-            // // Skybox
-            // var hdrSkybox = BABYLON.Mesh.CreateBox("hdrSkyBox", 5000.0, scene);
-            // var hdrSkyboxMaterial = new BABYLON.PBRMaterial("skyBox", scene);
-            // hdrSkyboxMaterial.backFaceCulling = false;
-            // hdrSkyboxMaterial.reflectionTexture = hdrBcgRefTexture.clone();
-            // hdrSkyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-            // hdrSkyboxMaterial.microSurface = 1.0;
-            // hdrSkyboxMaterial.cameraExposure = 0.66;
-            // hdrSkyboxMaterial.cameraContrast = 1.66;
-            // hdrSkyboxMaterial.disableLighting = true;
-            // hdrSkybox.material = hdrSkyboxMaterial;
-            // hdrSkybox.infiniteDistance = true;
+            // Skybox
+            var hdrSkybox = BABYLON.Mesh.CreateBox("hdrSkyBox", 5000.0, scene);
+            var hdrSkyboxMaterial = new BABYLON.PBRMaterial("skyBox", scene);
+            hdrSkyboxMaterial.backFaceCulling = false;
+            hdrSkyboxMaterial.reflectionTexture = hdrBcgRefTexture.clone();
+            hdrSkyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+            hdrSkyboxMaterial.microSurface = 1.0;
+            hdrSkyboxMaterial.cameraExposure = 0.66;
+            hdrSkyboxMaterial.cameraContrast = 1.66;
+            hdrSkyboxMaterial.disableLighting = true;
+            hdrSkybox.material = hdrSkyboxMaterial;
+            hdrSkybox.infiniteDistance = true;
             
-            // //GIVE GLOW TO GLOWING OBJ
-            // var glow = new BABYLON.GlowLayer("glow", scene);
-            // glow.intensity = 0.8;
+            //GIVE GLOW TO GLOWING OBJ
+            var glow = new BABYLON.GlowLayer("glow", scene);
+            glow.intensity = 0.8;
 
-            // var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
-            // speedGround.position = new BABYLON.Vector3(-3,0.05,10);
-            // var speedGroundmat = new BABYLON.StandardMaterial("speedGroundmat", scene);
-            // var speedTex = new BABYLON.Texture("img/speedArrows.png", scene);
-            // speedTex.hasAlpha = true;
-            // speedGroundmat.diffuseTexture = speedTex;
-            // speedGroundmat.useAlphaFromDiffuseTexture = true;
-            // speedGroundmat.backFaceCulling = false;
-            // speedGroundmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            // speedGround.material = speedGroundmat;
-            // speedGround.isVisible = false;
+            var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
+            speedGround.position = new BABYLON.Vector3(-3,0.05,10);
+            var speedGroundmat = new BABYLON.StandardMaterial("speedGroundmat", scene);
+            var speedTex = new BABYLON.Texture("img/speedArrows.png", scene);
+            speedTex.hasAlpha = true;
+            speedGroundmat.diffuseTexture = speedTex;
+            speedGroundmat.useAlphaFromDiffuseTexture = true;
+            speedGroundmat.backFaceCulling = false;
+            speedGroundmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            speedGround.material = speedGroundmat;
+            speedGround.isVisible = false;
 
-            // speedGrounds = [];
+            speedGrounds = [];
 
-            // function createSpeedGround(speedGroundPositionX, speedGroundPositionZ){
-            //     var newSpeedGround = speedGround.createInstance("newSpeedGround");
-            //     speedGrounds.push(newSpeedGround);
-            //     newSpeedGround.position = new BABYLON.Vector3(speedGroundPositionX, 0, speedGroundPositionZ);
-            //     speedTrackCollider(newSpeedGround)
-            // }
+            function createSpeedGround(speedGroundPositionX, speedGroundPositionZ){
+                var newSpeedGround = speedGround.createInstance("newSpeedGround");
+                speedGrounds.push(newSpeedGround);
+                newSpeedGround.position = new BABYLON.Vector3(speedGroundPositionX, 0, speedGroundPositionZ);
+                speedTrackCollider(newSpeedGround)
+            }
 
             
-            // //POSITION Z OF THE ELEMNENTS OF GAME
+            //POSITION Z OF THE ELEMNENTS OF GAME
             var posZ = 0;
-            // //FOOES
-            // function aniLaserWallWidth(mesh){
-            //         const anim= new BABYLON.Animation("aniLaserWallWidth", "scaling", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //         anim.setKeys([
-            //             { frame: 0, value: new BABYLON.Vector3(1, 1, 1) },
-            //             // { frame: 10, value: -1 },
-            //             // { frame: 18, value: -0.5 },
-            //             // { frame: 20, value: -0.5 },
-            //             { frame: 60, value: new BABYLON.Vector3(3, 3, 3) },
-            //         ]);
-            //         mesh.animations = [];
-            //         mesh.animations.push(anim);
-            //         return scene.beginAnimation(mesh, 0, 60, false);
-            // }
-            // function aniSimpleLaserWall(mesh){
-            //     const anim= new BABYLON.Animation("aniSimpleLaserWall", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //     anim.setKeys([
-            //         { frame: 0, value: 0 },
-            //         // { frame: 10, value: -1 },
-            //         // { frame: 18, value: -0.5 },
-            //         // { frame: 20, value: -0.5 },
-            //         { frame: 30, value: -1.5 },
-            //     ]);
-            //     mesh.animations = [];
-            //     mesh.animations.push(anim);
-            //     return scene.beginAnimation(mesh, 0, 30, false);
-            // }
-            // //animate the mesh when it hits fooes to blink
-            // function visColAnim(mesh){
-            //     const anim= new BABYLON.Animation("visColAnim", "isVisible", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //     const colKeys = [
-            //     { frame: 0, value: 1 },
-            //         { frame: 5, value: false },
-            //         { frame: 10, value: true },
-            //         { frame: 15, value: false },
-            //         { frame: 20, value: true },
-            //         { frame: 25, value: false },
-            //         { frame: 30, value: true },
-            //         { frame: 35, value: false },
-            //     ]; 
-            //     anim.setKeys(colKeys);
-            //     mesh.animations = [];
-            //     mesh.animations.push(anim);
-            //     return scene.beginAnimation(mesh, 0, 35, false);
-            // }
-            // //animate the mesh when it hits fooes to go back few steps
-            // function animPosZMeshCollision(mesh){
-            //     const anim= new BABYLON.Animation("animPosZMeshCollision", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //     anim.setKeys([
-            //         {frame: 0, value: mesh.position.z},
-            //         {frame: 5, value: mesh.position.z - 3},
-            //         {frame: 30, value: mesh.position.z - 3},
-            //     ]);
-            //     mesh.animations = [];    
-            //     mesh.animations.push(anim);
-            //     return scene.beginAnimation(mesh, 0, 60, false);
-            // }
+            //FOOES
+            function aniLaserWallWidth(mesh){
+                    const anim= new BABYLON.Animation("aniLaserWallWidth", "scaling", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    anim.setKeys([
+                        { frame: 0, value: new BABYLON.Vector3(1, 1, 1) },
+                        // { frame: 10, value: -1 },
+                        // { frame: 18, value: -0.5 },
+                        // { frame: 20, value: -0.5 },
+                        { frame: 60, value: new BABYLON.Vector3(3, 3, 3) },
+                    ]);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 60, false);
+            }
+            function aniSimpleLaserWall(mesh){
+                const anim= new BABYLON.Animation("aniSimpleLaserWall", "position.y", 45, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    { frame: 0, value: 0 },
+                    // { frame: 10, value: -1 },
+                    // { frame: 18, value: -0.5 },
+                    // { frame: 20, value: -0.5 },
+                    { frame: 30, value: -1.5 },
+                ]);
+                mesh.animations = [];
+                mesh.animations.push(anim);
+                return scene.beginAnimation(mesh, 0, 30, false);
+            }
+            //animate the mesh when it hits fooes to blink
+            function visColAnim(mesh){
+                const anim= new BABYLON.Animation("visColAnim", "isVisible", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                const colKeys = [
+                { frame: 0, value: 1 },
+                    { frame: 5, value: false },
+                    { frame: 10, value: true },
+                    { frame: 15, value: false },
+                    { frame: 20, value: true },
+                    { frame: 25, value: false },
+                    { frame: 30, value: true },
+                    { frame: 35, value: false },
+                ]; 
+                anim.setKeys(colKeys);
+                mesh.animations = [];
+                mesh.animations.push(anim);
+                return scene.beginAnimation(mesh, 0, 35, false);
+            }
+            //animate the mesh when it hits fooes to go back few steps
+            function animPosZMeshCollision(mesh){
+                const anim= new BABYLON.Animation("animPosZMeshCollision", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    {frame: 0, value: mesh.position.z},
+                    {frame: 5, value: mesh.position.z - 3},
+                    {frame: 30, value: mesh.position.z - 3},
+                ]);
+                mesh.animations = [];    
+                mesh.animations.push(anim);
+                return scene.beginAnimation(mesh, 0, 60, false);
+            }
 
-            // var pillarMat = new BABYLON.StandardMaterial("pillarMat", scene);
-            // var pillarTexture = new BABYLON.Texture("textures/pillar4.png", scene);
-            // pillarMat.diffuseTexture = pillarTexture;
+            var pillarMat = new BABYLON.StandardMaterial("pillarMat", scene);
+            var pillarTexture = new BABYLON.Texture("textures/pillar4.png", scene);
+            pillarMat.diffuseTexture = pillarTexture;
 
-            // var faceUV = new Array(6);
+            var faceUV = new Array(6);
 
-            // for (var i = 0; i < 4; i++) {
-            //     faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
-            // }
-            // faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
-            // faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+            for (var i = 0; i < 4; i++) {
+                faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
+            }
+            faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+            faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
 
-            // var options = {
-            //     width: 0.1, 
-            //     height: 1.4, 
-            //     depth: 0.1,
-            //     faceUV: faceUV,
-            //     wrap: true
-            // };
+            var options = {
+                width: 0.1, 
+                height: 1.4, 
+                depth: 0.1,
+                faceUV: faceUV,
+                wrap: true
+            };
 
-            // var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', options, scene);
-            // laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.8,0);
-            // laserWallUpperHolderLeft.material = pillarMat;
+            var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', options, scene);
+            laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.8,0);
+            laserWallUpperHolderLeft.material = pillarMat;
 
-            // var laserWallUpperHolderRight = laserWallUpperHolderLeft.clone("laserWallUpperHolderRight");
-            // laserWallUpperHolderRight.position.x = 1.5;
+            var laserWallUpperHolderRight = laserWallUpperHolderLeft.clone("laserWallUpperHolderRight");
+            laserWallUpperHolderRight.position.x = 1.5;
 
-            // var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.9});
-            // laserWall.position = new BABYLON.Vector3(0,0.8,0);
-            // var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
-            // var laserWalltex = new BABYLON.Texture("textures/laserWallRed.png", scene);
-            // laserWalltex.hasAlpha = true;
-            // laserWallmat.diffuseTexture = laserWalltex;
-            // laserWallmat.useAlphaFromDiffuseTexture = true;
-            // laserWallmat.backFaceCulling = false;
-            // laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            // laserWall.material = laserWallmat;
+            var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.9});
+            laserWall.position = new BABYLON.Vector3(0,0.8,0);
+            var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
+            var laserWalltex = new BABYLON.Texture("textures/laserWallRed.png", scene);
+            laserWalltex.hasAlpha = true;
+            laserWallmat.diffuseTexture = laserWalltex;
+            laserWallmat.useAlphaFromDiffuseTexture = true;
+            laserWallmat.backFaceCulling = false;
+            laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            laserWall.material = laserWallmat;
 
-            // var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWall, laserWallUpperHolderRight, laserWallUpperHolderLeft], true, true, undefined, false, true);
-            // simpleLaserWall.position = new BABYLON.Vector3(0,0,10)
-            // simpleLaserWall.isVisible = false;
+            var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWall, laserWallUpperHolderRight, laserWallUpperHolderLeft], true, true, undefined, false, true);
+            simpleLaserWall.position = new BABYLON.Vector3(0,0,10)
+            simpleLaserWall.isVisible = false;
 
 
-            // //array to put fooes
-            // fooes = [];
-            // //function to create simple wall
-            // function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ, hightOfWall){      
-            //     var newSimpleLaserWall = simpleLaserWall.createInstance("simpleLaserWall");
-            //     fooes.push(newSimpleLaserWall);
-            //     newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ);
-            //     newSimpleLaserWall.scaling = new BABYLON.Vector3(1,hightOfWall,1)
-            //     fooesCollider(newSimpleLaserWall)
-            // }
+            //array to put fooes
+            fooes = [];
+            //function to create simple wall
+            function createSimpleLaserWall(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ, hightOfWall){      
+                var newSimpleLaserWall = simpleLaserWall.createInstance("simpleLaserWall");
+                fooes.push(newSimpleLaserWall);
+                newSimpleLaserWall.position = new BABYLON.Vector3(SimpleLaserWallLanePositionX, SimpleLaserWallLanePositionY, SimpleLaserWallLanePositionZ);
+                newSimpleLaserWall.scaling = new BABYLON.Vector3(1,hightOfWall,1)
+                fooesCollider(newSimpleLaserWall)
+            }
 
-            // //COINS
-            // function animRotY(){
-            //     const anim= new BABYLON.Animation("animRotY", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //     anim.setKeys([
-            //         {frame: 0, value: 0},
-            //         {frame: 30, value: 2 * Math.PI},
-            //     ]);
-            //     return anim;
-            // }
-            // function animPosY(){
-            //     const anim= new BABYLON.Animation("animPosY", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //     anim.setKeys([
-            //         {frame: 0, value: 1},
-            //         {frame: 15, value: 1.2},
-            //         {frame: 30, value: 1},
-            //     ]);
-            //     return anim;
-            // }
-            // const animationsCoin = [
-            //     animRotY(),
-            //     animPosY()
-            // ];
+            //COINS
+            function animRotY(){
+                const anim= new BABYLON.Animation("animRotY", "rotation.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    {frame: 0, value: 0},
+                    {frame: 30, value: 2 * Math.PI},
+                ]);
+                return anim;
+            }
+            function animPosY(){
+                const anim= new BABYLON.Animation("animPosY", "position.y", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                anim.setKeys([
+                    {frame: 0, value: 1},
+                    {frame: 15, value: 1.2},
+                    {frame: 30, value: 1},
+                ]);
+                return anim;
+            }
+            const animationsCoin = [
+                animRotY(),
+                animPosY()
+            ];
 
-            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
-            //     var coinLogo = result.meshes[0];
-            //     coinLogo.position = new BABYLON.Vector3(0, 0, 0)
-            //     var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
-            //     coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
-            //     scene.getMeshByName("Plane").material = coinLogoMat;
-            //     scene.getMeshByName("Plane").isVisible = false;
-            //     // coinLogo.rotationQuaternion = null;
-            //     coinLogo.checkCollisions = true;
-            //     coinLogo.addRotation(0,5,0)
-            //     // createCoinsForTielOne(0)
-            //     // createCoinsForTielTwo(300)
-            // })
-            // coins = [];
-            // function createCoinLane(coinLanePositionX, coinLanePositionY, coinLanePositionZ, coinNum){
-            //     for (var i = 1; i < coinNum+1; i++) {
-            //         var newCoin = scene.getMeshByName("Plane").createInstance("coin" + i);
-            //         coins.push(newCoin);
+            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
+                var coinLogo = result.meshes[0];
+                coinLogo.position = new BABYLON.Vector3(0, 0, 0)
+                var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
+                coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
+                scene.getMeshByName("Plane").material = coinLogoMat;
+                scene.getMeshByName("Plane").isVisible = false;
+                // coinLogo.rotationQuaternion = null;
+                coinLogo.checkCollisions = true;
+                coinLogo.addRotation(0,5,0)
+                // createCoinsForTielOne(0)
+                // createCoinsForTielTwo(300)
+            })
+            coins = [];
+            function createCoinLane(coinLanePositionX, coinLanePositionY, coinLanePositionZ, coinNum){
+                for (var i = 1; i < coinNum+1; i++) {
+                    var newCoin = scene.getMeshByName("Plane").createInstance("coin" + i);
+                    coins.push(newCoin);
                     
-            //         // newCoin.rotationQuaternion = null;
-            //         newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.5, (coinLanePositionZ + i * 3));
-            //         coinsCollider(newCoin)
-            //     //    scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
-            //     }
-            // }
+                    // newCoin.rotationQuaternion = null;
+                    newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.5, (coinLanePositionZ + i * 3));
+                    coinsCollider(newCoin)
+                //    scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
+                }
+            }
             
-            // // HIGHLAND
-            // function aniGoUpOnHighLand(mesh){
-            //         const anim= new BABYLON.Animation("aniGoUpOnHighLand", "position.y", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-            //         anim.setKeys([
-            //             { frame: 0, value: fakeMesh.position.y },
-            //             { frame: 3/playerSpeed, value: 5 },
-            //         ]);
-            //         mesh.animations = [];
-            //         mesh.animations.push(anim);
-            //         return scene.beginAnimation(mesh, 0, 3/playerSpeed, false);
-            //     }
-            // var stair = new BABYLON.MeshBuilder.CreateBox("stair", {width: 2.8, height: 0.1, depth: 0.5}, scene);
-            // stair.position = new BABYLON.Vector3(0,0.2,0)
-            // var stairMat = new BABYLON.StandardMaterial("stairMat", scene);
-            // stairMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
-            // stairMat.diffuseTexture.uScale = 1;
-            // stairMat.diffuseTexture.vScale = 5.6;
-            // stair.material = stairMat;
+            // HIGHLAND
+            function aniGoUpOnHighLand(mesh){
+                    const anim= new BABYLON.Animation("aniGoUpOnHighLand", "position.y", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    anim.setKeys([
+                        { frame: 0, value: fakeMesh.position.y },
+                        { frame: 3/playerSpeed, value: 5 },
+                    ]);
+                    mesh.animations = [];
+                    mesh.animations.push(anim);
+                    return scene.beginAnimation(mesh, 0, 3/playerSpeed, false);
+                }
+            var stair = new BABYLON.MeshBuilder.CreateBox("stair", {width: 2.8, height: 0.1, depth: 0.5}, scene);
+            stair.position = new BABYLON.Vector3(0,0.2,0)
+            var stairMat = new BABYLON.StandardMaterial("stairMat", scene);
+            stairMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+            stairMat.diffuseTexture.uScale = 1;
+            stairMat.diffuseTexture.vScale = 5.6;
+            stair.material = stairMat;
                 
 
-            // var stairs = [];
-            // for (let i = 0; i < 9; i++) {
-            //     var newStair = stair.clone("newStair");
-            //     stairs.push(newStair);
-            //     newStair.position = new BABYLON.Vector3(0,0.2 + i/5,i/2)
-            // }
+            var stairs = [];
+            for (let i = 0; i < 9; i++) {
+                var newStair = stair.clone("newStair");
+                stairs.push(newStair);
+                newStair.position = new BABYLON.Vector3(0,0.2 + i/5,i/2)
+            }
 
-            // var highland = new BABYLON.MeshBuilder.CreateBox("highland", {width: 2.8, height: 0.1, depth: 30}, scene);
-            // highland.position = new BABYLON.Vector3(0,2,19.25)
-            // var highlandMat = new BABYLON.StandardMaterial("highlandMat", scene);
-            // highlandMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
-            // highlandMat.diffuseTexture.uScale = 56;
-            // highlandMat.diffuseTexture.vScale = 5.6;
-            // highland.material = highlandMat;
-            // highland.isVisible = false;
+            var highland = new BABYLON.MeshBuilder.CreateBox("highland", {width: 2.8, height: 0.1, depth: 30}, scene);
+            highland.position = new BABYLON.Vector3(0,2,19.25)
+            var highlandMat = new BABYLON.StandardMaterial("highlandMat", scene);
+            highlandMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+            highlandMat.diffuseTexture.uScale = 56;
+            highlandMat.diffuseTexture.vScale = 5.6;
+            highland.material = highlandMat;
+            highland.isVisible = false;
             
 
-            // var highlandFakeLeft = highland.clone("highlandFakeLeft");
-            // highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,17)
-            // highlandFakeLeft.scaling = new BABYLON.Vector3(1,15,1.2)
-            // highlandFakeLeft.isVisible = false;     
+            var highlandFakeLeft = highland.clone("highlandFakeLeft");
+            highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,17)
+            highlandFakeLeft.scaling = new BABYLON.Vector3(1,15,1.2)
+            highlandFakeLeft.isVisible = false;     
                 
-            // var highlandFakeRight = highlandFakeLeft.clone("highlandFakeRight");
-            // highlandFakeRight.position = new BABYLON.Vector3(3,0.8,17)
+            var highlandFakeRight = highlandFakeLeft.clone("highlandFakeRight");
+            highlandFakeRight.position = new BABYLON.Vector3(3,0.8,17)
 
-            // var stairs = BABYLON.Mesh.MergeMeshes([stair, stairs[0], stairs[1], stairs[2], stairs[3], stairs[4], stairs[5], stairs[6], stairs[7], stairs[8]], true, true, undefined, false, true);
-            // stairs.position = new BABYLON.Vector3(3,0,20)
-            // stairs.isVisible = false;
-            // // stairs.material = bridgeMat;
-            // highland.parent = stairs;
-            // highlandFakeLeft.parent = stairs;
-            // highlandFakeRight.parent = stairs;
+            var stairs = BABYLON.Mesh.MergeMeshes([stair, stairs[0], stairs[1], stairs[2], stairs[3], stairs[4], stairs[5], stairs[6], stairs[7], stairs[8]], true, true, undefined, false, true);
+            stairs.position = new BABYLON.Vector3(3,0,20)
+            stairs.isVisible = false;
+            // stairs.material = bridgeMat;
+            highland.parent = stairs;
+            highlandFakeLeft.parent = stairs;
+            highlandFakeRight.parent = stairs;
 
-            // stairsArr = [];
-            // highlandArr = [];
-            // highlandFakeLeftArr = []
-            // highlandFakeRightArr = []
-            // function createHighlandMesh(highlandPositionX, highlandPositionZ){
+            stairsArr = [];
+            highlandArr = [];
+            highlandFakeLeftArr = []
+            highlandFakeRightArr = []
+            function createHighlandMesh(highlandPositionX, highlandPositionZ){
 
-            //     var newHighland = highland.createInstance("newHighland");
-            //     highlandArr.push(newHighland);
+                var newHighland = highland.createInstance("newHighland");
+                highlandArr.push(newHighland);
 
-            //     var newHighlandFakeLeft = highlandFakeLeft.createInstance("newHighlandFakeLeft");
-            //     newHighlandFakeLeft.isVisible = false;
-            //     highlandFakeLeftArr.push(newHighlandFakeLeft);
+                var newHighlandFakeLeft = highlandFakeLeft.createInstance("newHighlandFakeLeft");
+                newHighlandFakeLeft.isVisible = false;
+                highlandFakeLeftArr.push(newHighlandFakeLeft);
 
-            //     var newHighlandFakeRight = highlandFakeRight.createInstance("newHighlandFakeRight");
-            //     newHighlandFakeRight.isVisible = false;
-            //     highlandFakeRightArr.push(newHighlandFakeRight);
+                var newHighlandFakeRight = highlandFakeRight.createInstance("newHighlandFakeRight");
+                newHighlandFakeRight.isVisible = false;
+                highlandFakeRightArr.push(newHighlandFakeRight);
 
-            //     var newStairs = stairs.createInstance("newStairs");
-            //     stairsArr.push(newStairs);
-            //     newStairs.position = new BABYLON.Vector3(highlandPositionX, 0, highlandPositionZ);
+                var newStairs = stairs.createInstance("newStairs");
+                stairsArr.push(newStairs);
+                newStairs.position = new BABYLON.Vector3(highlandPositionX, 0, highlandPositionZ);
 
-            //     newHighland.parent = newStairs;
-            //     newHighlandFakeLeft.parent = newStairs;
-            //     newHighlandFakeRight.parent = newStairs;
+                newHighland.parent = newStairs;
+                newHighlandFakeLeft.parent = newStairs;
+                newHighlandFakeRight.parent = newStairs;
 
-            //     highlandCollider(newStairs, newHighland)
-            // }
-            //     // createHighlandMesh(3, posZ + 10)
-            
-            
-            // //CREATE PEACES FOR GROUND/BRIDGE/TRACK
+                highlandCollider(newStairs, newHighland)
+            }
+                // createHighlandMesh(3, posZ + 10)
+            //CREATE PEACES FOR GROUND/BRIDGE/TRACK
             // comercial wall
-            // var comercialWall = BABYLON.MeshBuilder.CreatePlane("comercialWall", {height:0.8, width: 7.76});
-            // comercialWall.position = new BABYLON.Vector3(-4.8,2.5,2);
-            // comercialWall.addRotation(0,-1.57,0)
-            // var comercialWallmat = new BABYLON.StandardMaterial("comercialWallmat", scene);
-            // var comercialWalltex = new BABYLON.Texture("img/sandviperName1.png", scene);
-            // comercialWalltex.hasAlpha = true;
-            // comercialWallmat.diffuseTexture = comercialWalltex;
-            // comercialWallmat.useAlphaFromDiffuseTexture = true;
-            // comercialWallmat.backFaceCulling = false;
-            // comercialWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
-            // comercialWall.material = comercialWallmat;
-            // comercialWall.isVisible = false
+            var comercialWall = BABYLON.MeshBuilder.CreatePlane("comercialWall", {height:0.8, width: 7.76});
+            comercialWall.position = new BABYLON.Vector3(-4.8,2.5,2);
+            comercialWall.addRotation(0,-1.57,0)
+            var comercialWallmat = new BABYLON.StandardMaterial("comercialWallmat", scene);
+            var comercialWalltex = new BABYLON.Texture("img/sandviperName1.png", scene);
+            comercialWalltex.hasAlpha = true;
+            comercialWallmat.diffuseTexture = comercialWalltex;
+            comercialWallmat.useAlphaFromDiffuseTexture = true;
+            comercialWallmat.backFaceCulling = false;
+            comercialWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            comercialWall.material = comercialWallmat;
+            comercialWall.isVisible = false
 
             // var comercialWall2 = comercialWall.clone("comercialWall2");
             // comercialWall2.position.x = 4.8;
             // comercialWall2.addRotation(0,3.14,0)
 
-            // var comercialWalls = [];
-            // for (let i = 0; i < 8; i++) {
-            //     var newComercialWall = comercialWall.clone("newComercialWall");
-            //     newComercialWall.position.z = (i * 20) + 2
-            //     comercialWalls.push(newComercialWall)
-            // }
-            // var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
-            // bridgeComercialWalls.isVisible = false;
+            var comercialWalls = [];
+            for (let i = 0; i < 8; i++) {
+                var newComercialWall = comercialWall.clone("newComercialWall");
+                newComercialWall.position.z = (i * 20) + 2
+                comercialWalls.push(newComercialWall)
+            }
+            var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
+            bridgeComercialWalls.isVisible = false;
 
-            // var bridgeComercialWallsRight = bridgeComercialWalls.clone("bridgeComercialWallsRight");
-            // bridgeComercialWallsRight.position.x = 9.6;
+            var bridgeComercialWallsRight = bridgeComercialWalls.clone("bridgeComercialWallsRight");
+            bridgeComercialWallsRight.position.x = 9.6;
             // bridgeComercialWallsRight.addRotation(1,3.14,1)
 
-            // var comercialWallLogo = BABYLON.MeshBuilder.CreatePlane("comercialWallLogo", {height:4, width: 4});
-            // comercialWallLogo.position = new BABYLON.Vector3(-4.8,2.65,12);
-            // comercialWallLogo.addRotation(0,-1.57,0)
-            // var comercialWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
-            // var comercialWallLogotex = new BABYLON.Texture("img/sandviperLogo.png", scene);
-            // comercialWallLogotex.hasAlpha = true;
-            // comercialWallLogomat.diffuseTexture = comercialWallLogotex;
-            // comercialWallLogomat.useAlphaFromDiffuseTexture = true;
-            // comercialWallLogomat.backFaceCulling = false;
-            // comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
-            // comercialWallLogo.material = comercialWallLogomat;
-            // // comercialWallLogo.isVisible = false
+            var comercialWallLogo = BABYLON.MeshBuilder.CreatePlane("comercialWallLogo", {height:4, width: 4});
+            comercialWallLogo.position = new BABYLON.Vector3(-4.8,2.65,12);
+            comercialWallLogo.addRotation(0,-1.57,0)
+            var comercialWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            var comercialWallLogotex = new BABYLON.Texture("img/sandviperLogo.png", scene);
+            comercialWallLogotex.hasAlpha = true;
+            comercialWallLogomat.diffuseTexture = comercialWallLogotex;
+            comercialWallLogomat.useAlphaFromDiffuseTexture = true;
+            comercialWallLogomat.backFaceCulling = false;
+            comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
+            comercialWallLogo.material = comercialWallLogomat;
+            comercialWallLogo.isVisible = false
 
             // var comercialWallLogo2 = comercialWallLogo.clone("comercialWallLogo2");
             // comercialWallLogo2.position.x = 4.8;
             // comercialWallLogo2.addRotation(0,3.14,0)
 
-            // var comercialWallLogos = [];
-            // for (let i = 0; i < 7; i++) {
-            //     var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
-            //     newComercialWallLogo.position.z = (i * 20) + 12
-            //     comercialWallLogos.push(newComercialWallLogo)
-            // }
-            // var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
-            // // bridgeComercialWallLogos.isVisible = false;
+            var comercialWallLogos = [];
+            for (let i = 0; i < 7; i++) {
+                var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
+                newComercialWallLogo.position.z = (i * 20) + 12
+                comercialWallLogos.push(newComercialWallLogo)
+            }
+            var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
+            bridgeComercialWallLogos.isVisible = false;
 
-            // var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
-            // bridgeComercialWallLogosRight.position.x = 9.6;
+            var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
+            bridgeComercialWallLogosRight.position.x = 9.6;
 
-            // var backWallLogo = BABYLON.MeshBuilder.CreatePlane("backWallLogo", {height:5, width: 9});
-            // backWallLogo.position = new BABYLON.Vector3(0,2.3,-3);
-            // backWallLogo.addRotation(0.5,-3.14,0)
-            // var backWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
-            // var backWallLogotex = new BABYLON.Texture("textures/bigRedLogo.png", scene);
-            // backWallLogotex.hasAlpha = true;
-            // backWallLogomat.diffuseTexture = backWallLogotex;
-            // backWallLogomat.useAlphaFromDiffuseTexture = true;
-            // // backWallLogomat.backFaceCulling = false;
-            // backWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            // backWallLogo.material = backWallLogomat;
-            // backWallLogo.isVisible = true;
+            var backWallLogo = BABYLON.MeshBuilder.CreatePlane("backWallLogo", {height:5, width: 9});
+            backWallLogo.position = new BABYLON.Vector3(0,2.3,-3);
+            backWallLogo.addRotation(0.5,-3.14,0)
+            var backWallLogomat = new BABYLON.StandardMaterial("comercialWallLogomat", scene);
+            var backWallLogotex = new BABYLON.Texture("textures/bigRedLogo.png", scene);
+            backWallLogotex.hasAlpha = true;
+            backWallLogomat.diffuseTexture = backWallLogotex;
+            backWallLogomat.useAlphaFromDiffuseTexture = true;
+            // backWallLogomat.backFaceCulling = false;
+            backWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            backWallLogo.material = backWallLogomat;
+            backWallLogo.isVisible = true;
 
-            // var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
-            // backWallLogoFront.position.z = 140;
-            // backWallLogoFront.addRotation(0.5,3.14,0)
+            var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
+            backWallLogoFront.position.z = 140;
+            backWallLogoFront.addRotation(0.5,3.14,0)
             
             //main platform for running
-            // var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
-            // var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-            // bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
-            // bridgeMat.reflectionTexture = hdrBcgRefTexture;
-            // bridgeMat.refractionTexture = hdrBcgRefTexture;
-            // bridgeMat.reflectionTexture.level = 1;
-            // bridgeMat.specularPower = 150;
-            // bridgeMat.indexOfRefraction = 0.52;
-            // bridgeMat.alpha = 0.8;
-            // bridgeMat.directIntensity = 0.0;
-            // bridgeMat.environmentIntensity = 0.7;
-            // bridgeMat.cameraExposure = 0.66;
-            // bridgeMat.cameraContrast = 1.66;
-            // bridgeGround.material = bridgeMat;
+            var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
+            var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
+            bridgeMat.reflectionTexture = hdrBcgRefTexture;
+            bridgeMat.refractionTexture = hdrBcgRefTexture;
+            bridgeMat.reflectionTexture.level = 1;
+            bridgeMat.specularPower = 150;
+            bridgeMat.indexOfRefraction = 0.52;
+            bridgeMat.alpha = 0.8;
+            bridgeMat.directIntensity = 0.0;
+            bridgeMat.environmentIntensity = 0.7;
+            bridgeMat.cameraExposure = 0.66;
+            bridgeMat.cameraContrast = 1.66;
+            bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
-            // bridgeGround.position = new BABYLON.Vector3(0,0,70)
-            // bridgeGround.isVisible = true;
+            bridgeGround.position = new BABYLON.Vector3(0,0,70)
+            bridgeGround.isVisible = true;
 
-            // //create bridge plane to go bellow
-            // // var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
-            // // bridgeLayout.position.z = 70;
-            // // bridgeLayout.position.y = -0.5;
-            // // var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
-            // // bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
-            // // bridgeLayoutMat.diffuseTexture.uScale = 1;
-            // // bridgeLayoutMat.diffuseTexture.vScale = 50;
-            // // bridgeLayout.material = bridgeLayoutMat;
+            //create bridge plane to go bellow
+            var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
+            bridgeLayout.position.z = 70;
+            bridgeLayout.position.y = -0.5;
+            var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
+            bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+            bridgeLayoutMat.diffuseTexture.uScale = 1;
+            bridgeLayoutMat.diffuseTexture.vScale = 50;
+            bridgeLayout.material = bridgeLayoutMat;
 
-            // //create glass walls
-            // var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
-            // glassWall.position = new BABYLON.Vector3(-5,2.5,70)
-            // // var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
-            // var glassWallmat = new BABYLON.StandardMaterial("bridgemat", scene);
-            // glassWallmat.diffuseTexture = new BABYLON.Texture("textures/stariFlore2.jpg", scene);
-
-            // var glassWalltex = new BABYLON.Texture("textures/bigRedLogo2.png", scene);
-            // glassWalltex.hasAlpha = true;
-            // glassWallmat.diffuseTexture = glassWalltex;
-            // glassWallmat.useAlphaFromDiffuseTexture = true;
-            // // glassWallmat.backFaceCulling = false;
-            // glassWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            // glassWallmat.diffuseTexture.uScale = 1;
-            // glassWallmat.diffuseTexture.vScale = 11;
-            // glassWall.material = glassWallmat;
-            // // comercialWallLogo.isVisible = false
-            
-            // // glassWallMat.reflectionTexture = hdrBcgRefTexture;
-            // // glassWallMat.refractionTexture = hdrBcgRefTexture;
-            // glassWallMat.linkRefractionWithTransparency = true;
-            // glassWallMat.indexOfRefraction = 0.52;
-            // glassWallMat.alpha = 0;
-            // glassWallMat.directIntensity = 0.0;
-            // glassWallMat.environmentIntensity = 0.7;
-            // glassWallMat.cameraExposure = 0.66;
-            // glassWallMat.cameraContrast = 1.66;
-            // glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-            // glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-            // glassWall.material = glassWallmat;
-            // // // glassWall.isVisible = false;
-            // // //other glass walls
-            // var glassWall2 = glassWall.clone("glassWall2");
-            // glassWall2.position.x = 5;
+            //create glass walls
+            var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
+            glassWall.position = new BABYLON.Vector3(-5,2.5,70)
+            var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
+            glassWallMat.reflectionTexture = hdrBcgRefTexture;
+            glassWallMat.refractionTexture = hdrBcgRefTexture;
+            glassWallMat.linkRefractionWithTransparency = true;
+            glassWallMat.indexOfRefraction = 0.52;
+            glassWallMat.alpha = 0;
+            glassWallMat.directIntensity = 0.0;
+            glassWallMat.environmentIntensity = 0.7;
+            glassWallMat.cameraExposure = 0.66;
+            glassWallMat.cameraContrast = 1.66;
+            glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            glassWall.material = glassWallMat;
+            // glassWall.isVisible = false;
+            //other glass walls
+            var glassWall2 = glassWall.clone("glassWall2");
+            glassWall2.position.x = 5;
 
             // var frontGlassWall = new BABYLON.MeshBuilder.CreateBox("frontGlassWall", {width: 9, height: 5, depth: 0.5}, scene);
             // frontGlassWall.position = new BABYLON.Vector3(-3,2.5,140)
-            // // frontGlassWall.material = glassWallMat;
+            // frontGlassWall.material = glassWallMat;
 
-            // //side walks
-            // var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
-            // var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
-            // sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
-            // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
-            // sideWalk.material = sideWalkMat;
-            // sideWalk.position = new BABYLON.Vector3(-5,0,70)
-            // //other sidewalk
-            // var sideWalk2 = sideWalk.clone("sideWalk2");
-            // sideWalk2.position.x = 5;
-            // //side walks glass part
-            // var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
-            // sideWalkGlassPart.material = bridgeMat;
-            // sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
-            // //other sidewalk glass part
-            // var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
-            // sideWalkGlassPart2.position.x = 4.5;
+            //side walks
+            var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
+            var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
+            sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
+            sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
+            sideWalk.material = sideWalkMat;
+            sideWalk.position = new BABYLON.Vector3(-5,0,70)
+            //other sidewalk
+            var sideWalk2 = sideWalk.clone("sideWalk2");
+            sideWalk2.position.x = 5;
+            //side walks glass part
+            var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
+            sideWalkGlassPart.material = glassWallMat;
+            sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
+            //other sidewalk glass part
+            var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
+            sideWalkGlassPart2.position.x = 4.5;
 
-            // // var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
-            // // sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
-            // // sideStrip.addRotation(1,0,0)
-            // // sideStrip.material = sideWalkMat;
-            // // sideStrip.isVisible = false
+            var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
+            sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
+            sideStrip.addRotation(1,0,0)
+            sideStrip.material = sideWalkMat;
+            sideStrip.isVisible = false
 
-            // // var sideStrips = [];
-            // // for (let i = 0; i < 15; i++) {
-            // //     var newSideStrip = sideStrip.clone("sideStrip");
-            // //     newSideStrip.position.z = (i * 10) - 3
-            // //     sideStrips.push(newSideStrip)
-            // // }
-            // // var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
-            // // bridgeSideStrips.isVisible = false;
+            var sideStrips = [];
+            for (let i = 0; i < 15; i++) {
+                var newSideStrip = sideStrip.clone("sideStrip");
+                newSideStrip.position.z = (i * 10) - 3
+                sideStrips.push(newSideStrip)
+            }
+            var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
+            bridgeSideStrips.isVisible = false;
 
-            // // var bridgeSideStripsRight = bridgeSideStrips.clone("bridgeSideStripsRight");
-            // // bridgeSideStripsRight.position.x = 9.6;
+            var bridgeSideStripsRight = bridgeSideStrips.clone("bridgeSideStripsRight");
+            bridgeSideStripsRight.position.x = 9.6;
                 
-            // //running tracks
-            // var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
-            // var runningTrackMat = new BABYLON.StandardMaterial("runningTrackMat", scene);
-            // runningTrackMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
-            // runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
-            // runningTrack.material = runningTrackMat;
-            // runningTrack.position = new BABYLON.Vector3(-1.5,0,70)
-            // //right running track
-            // var runningTrackRight = runningTrack.clone("runningTrackRight");
-            // runningTrackRight.position.x = 1.5;
-            // //running tracks glass part
-            // var runningGlassPart = sideWalkGlassPart.clone("runningGlassPart");
-            // runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,70)
-            // //running tracks glass part right
-            // var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
-            // runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
+            //running tracks
+            var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
+            var runningTrackMat = new BABYLON.StandardMaterial("runningTrackMat", scene);
+            runningTrackMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
+            runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
+            runningTrack.material = runningTrackMat;
+            runningTrack.position = new BABYLON.Vector3(-1.5,0,70)
+            //right running track
+            var runningTrackRight = runningTrack.clone("runningTrackRight");
+            runningTrackRight.position.x = 1.5;
+            //running tracks glass part
+            var runningGlassPart = sideWalkGlassPart.clone("runningGlassPart");
+            runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,70)
+            //running tracks glass part right
+            var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
+            runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
 
-            // var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, bridgeGround,sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2/*, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight*/], true, true, undefined, false, true);
-            // bridgeMesh.isVisible = true;
+            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWall*/backWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
+            bridgeMesh.isVisible = true;
 
-            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
-                var most = result.meshes[0];
-                most.position = new BABYLON.Vector3(0, 0, 0)
-                // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
-                // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
-                // scene.getMeshByName("Plane").material = coinLogoMat;
-                // scene.getMeshByName("Plane").isVisible = false;
-                // // coinLogo.rotationQuaternion = null;
-                // coinLogo.checkCollisions = true;
-                // coinLogo.addRotation(0,5,0)
-                // createCoinsForTielOne(0)
-                // createCoinsForTielTwo(300)
-                console.log(scene.getMeshByName("Plateform_primitive0"))
-            })
-
-            // var runningTracks = [];
+            var runningTracks = [];
             var grounds = []
-            var plat0 = scene.getMeshByName("Plateform_primitive0");
-            var plat1 = scene.getMeshByName("Plateform_primitive1");
-            var plat2 = scene.getMeshByName("Plateform_primitive2");
-            
-            var bridgeMesh = BABYLON.Mesh.MergeMeshes([plat0, plat1, plat2], true, true, undefined, false, true);
+                
             function createTrackOne(){
-                var bridgeMeshInstance0 = scene.getMeshByName("Plateform_primitive0").createInstance('bridgeMeshInstance');
-                var bridgeMeshInstance1 = scene.getMeshByName("Plateform_primitive1").createInstance('bridgeMeshInstance');
-                var bridgeMeshInstance2 = scene.getMeshByName("Plateform_primitive2").createInstance('bridgeMeshInstance');
-                bridgeMeshInstance0.addRotation(0,1.57,0)
-                bridgeMeshInstance1.addRotation(0,1.57,0)
-                bridgeMeshInstance2.addRotation(0,1.57,0)
-            bridgeMeshInstance0.position = new BABYLON.Vector3(0,0,posZ + 13.5)
-            bridgeMeshInstance1.position = new BABYLON.Vector3(0,0,posZ + 13.5)
-            bridgeMeshInstance2.position = new BABYLON.Vector3(0,0,posZ + 13.5)
-            grounds.push(bridgeMeshInstance0)
-            grounds.push(bridgeMeshInstance1)
-            grounds.push(bridgeMeshInstance2)
-                addGravity(bridgeMeshInstance0)
-            posZ += 13.5
+                var bridgeMeshInstance = bridgeMesh.createInstance('bridgeMeshInstance');
+                runningTracks.push(bridgeMeshInstance)
+                bridgeMeshInstance.position = new BABYLON.Vector3(0,0,posZ)
+                var bridgeGroundInstance = bridgeGround.createInstance('bridgeGroundInstance');
+                bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 70)
+                grounds.push(bridgeGroundInstance)
+                addGravity(bridgeGroundInstance)
+                
             }
             
-            // function createTrackOptionOne(){
-            //     createTrackOne()
-            //     createCoinLane(0, 0, posZ + 15, 10)
-            //     createHighlandMesh(3, posZ + 48)
-            //     createHighlandMesh(-3, posZ + 53)
-            //     createCoinLane(-3, 2, posZ + 56, 10)
-            //     createHighlandMesh(0, posZ + 100)
-            //     createSimpleLaserWall(-3, 0, posZ + 105, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 95, 3)
-            //     createCoinLane(0, 2, posZ + 103, 10)
-            //     posZ += 150
-            // }
+            function createTrackOptionOne(){
+                createTrackOne()
+                createCoinLane(0, 0, posZ + 15, 10)
+                createHighlandMesh(3, posZ + 48)
+                createHighlandMesh(-3, posZ + 53)
+                createCoinLane(-3, 2, posZ + 56, 10)
+                createHighlandMesh(0, posZ + 100)
+                createSimpleLaserWall(-3, 0, posZ + 105, 3)
+                createSimpleLaserWall(3, 0, posZ + 95, 3)
+                createCoinLane(0, 2, posZ + 103, 10)
+                posZ += 150
+            }
 
-            // function createTrackOptionTwo(){
-            //     createTrackOne()
-            //     createHighlandMesh(0, posZ + 15)
-            //     createCoinLane(0, 2, posZ + 18, 10)
-            //     createSimpleLaserWall(3, 0, posZ + 20, 1)
-            //     createSimpleLaserWall(-3, 1.3, posZ + 25, 2)
-            //     createHighlandMesh(-3, posZ + 70)
-            //     createHighlandMesh(3, posZ + 60)
-            //     createSimpleLaserWall(0, 1.3, posZ + 85, 2)
-            //     createCoinLane(0, 0, posZ + 90, 5)
-            //     createCoinLane(-3, 0, posZ + 110, 5)
-            //     createCoinLane(3, 0, posZ + 110, 5)
-            //     createSimpleLaserWall(0, 0, posZ + 120, 3)
-            //     createSimpleLaserWall(-3, 1.3, posZ + 125, 2)
-            //     createSimpleLaserWall(3, 0, posZ + 130, 1)
-            //     posZ += 150
-            // }
+            function createTrackOptionTwo(){
+                createTrackOne()
+                createHighlandMesh(0, posZ + 15)
+                createCoinLane(0, 2, posZ + 18, 10)
+                createSimpleLaserWall(3, 0, posZ + 20, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 25, 2)
+                createHighlandMesh(-3, posZ + 70)
+                createHighlandMesh(3, posZ + 60)
+                createSimpleLaserWall(0, 1.3, posZ + 85, 2)
+                createCoinLane(0, 0, posZ + 90, 5)
+                createCoinLane(-3, 0, posZ + 110, 5)
+                createCoinLane(3, 0, posZ + 110, 5)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createSimpleLaserWall(-3, 1.3, posZ + 125, 2)
+                createSimpleLaserWall(3, 0, posZ + 130, 1)
+                posZ += 150
+            }
 
-            // function createTrackOptionThree(){
-            //     createTrackOne()
-            //     createHighlandMesh(-3, posZ + 15)
-            //     createCoinLane(3, 0, posZ + 50, 10)
-            //     createSimpleLaserWall(0, 0, posZ + 50, 3)
-            //     createCoinLane(0, 0, posZ + 80, 10)
-            //     createSimpleLaserWall(-3, 0, posZ + 90, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 90, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 120, 3)
-            //     createCoinLane(3, 0, posZ + 120, 5)
-            //     createCoinLane(-3, 0, posZ + 120, 5)
-            //     posZ += 150
-            // }
+            function createTrackOptionThree(){
+                createTrackOne()
+                createHighlandMesh(-3, posZ + 15)
+                createCoinLane(3, 0, posZ + 50, 10)
+                createSimpleLaserWall(0, 0, posZ + 50, 3)
+                createCoinLane(0, 0, posZ + 80, 10)
+                createSimpleLaserWall(-3, 0, posZ + 90, 3)
+                createSimpleLaserWall(3, 0, posZ + 90, 3)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createCoinLane(3, 0, posZ + 120, 5)
+                createCoinLane(-3, 0, posZ + 120, 5)
+                posZ += 150
+            }
 
-            // function createTrackOptionFour(){
-            //     createTrackOne()
-            //     createHighlandMesh(-3, posZ + 15)
-            //     createHighlandMesh(3, posZ + 25)
-            //     createCoinLane(0, 0, posZ + 35, 15)
-            //     createSimpleLaserWall(-3, 0, posZ + 70, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 70, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 85, 3)
-            //     createSimpleLaserWall(-3, 0, posZ + 95, 1)
-            //     createCoinLane(-3, 0, posZ + 97, 5)
-            //     createSimpleLaserWall(-3, 0, posZ + 115, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 115, 3)
-            //     createSimpleLaserWall(0, 1.3, posZ + 120, 2)
-            //     posZ += 150
-            // }
+            function createTrackOptionFour(){
+                createTrackOne()
+                createHighlandMesh(-3, posZ + 15)
+                createHighlandMesh(3, posZ + 25)
+                createCoinLane(0, 0, posZ + 35, 15)
+                createSimpleLaserWall(-3, 0, posZ + 70, 3)
+                createSimpleLaserWall(3, 0, posZ + 70, 3)
+                createSimpleLaserWall(0, 0, posZ + 85, 3)
+                createSimpleLaserWall(-3, 0, posZ + 95, 1)
+                createCoinLane(-3, 0, posZ + 97, 5)
+                createSimpleLaserWall(-3, 0, posZ + 115, 3)
+                createSimpleLaserWall(3, 0, posZ + 115, 3)
+                createSimpleLaserWall(0, 1.3, posZ + 120, 2)
+                posZ += 150
+            }
 
-            // function createTrackOptionFive(){
-            //     createTrackOne()
-            //     createCoinLane(-3, 0, posZ + 15, 10)
-            //     createCoinLane(0, 0, posZ + 15, 10)
-            //     createCoinLane(3, 0, posZ + 15, 10)
-            //     createSimpleLaserWall(3, 0, posZ + 31.5, 1)
-            //     createSimpleLaserWall(0, 0, posZ + 31.5, 1)
-            //     createSimpleLaserWall(-3, 1.3, posZ + 31.5, 1)
-            //     createSimpleLaserWall(-3, 0, posZ + 60, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 70, 1)
-            //     createSimpleLaserWall(0, 0, posZ + 80, 3)
-            //     createCoinLane(0, 0, posZ + 81, 5)
-            //     createSimpleLaserWall(0, 0, posZ + 100, 3)
-            //     createCoinLane(0, 0, posZ + 101, 5)
-            //     createSimpleLaserWall(0, 0, posZ + 120, 3)
-            //     createCoinLane(0, 0, posZ + 121, 5)
-            //     posZ += 150
-            // }
+            function createTrackOptionFive(){
+                createTrackOne()
+                createCoinLane(-3, 0, posZ + 15, 10)
+                createCoinLane(0, 0, posZ + 15, 10)
+                createCoinLane(3, 0, posZ + 15, 10)
+                createSimpleLaserWall(3, 0, posZ + 31.5, 1)
+                createSimpleLaserWall(0, 0, posZ + 31.5, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 31.5, 1)
+                createSimpleLaserWall(-3, 0, posZ + 60, 3)
+                createSimpleLaserWall(0, 0, posZ + 70, 1)
+                createSimpleLaserWall(0, 0, posZ + 80, 3)
+                createCoinLane(0, 0, posZ + 81, 5)
+                createSimpleLaserWall(0, 0, posZ + 100, 3)
+                createCoinLane(0, 0, posZ + 101, 5)
+                createSimpleLaserWall(0, 0, posZ + 120, 3)
+                createCoinLane(0, 0, posZ + 121, 5)
+                posZ += 150
+            }
             
-            // function createTrackOptionSix(){
-            //     createTrackOne()
-            //     createSimpleLaserWall(-3, 0, posZ + 15, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 15, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 25, 1)
-            //     createCoinLane(0, 0, posZ + 21, 5)
-            //     createSimpleLaserWall(0, 0, posZ + 45, 3)
-            //     createCoinLane(-3, 0, posZ + 41, 5)
-            //     createSimpleLaserWall(-3, 0, posZ + 60, 1)
-            //     createSimpleLaserWall(-3, 0, posZ + 70, 1)
-            //     createSimpleLaserWall(0, 0, posZ + 70, 3)
-            //     createSimpleLaserWall(3, 0, posZ + 70, 1)
-            //     createSimpleLaserWall(-3, 1.3, posZ + 85, 2)
-            //     createSimpleLaserWall(3, 1.3, posZ + 85, 2)
-            //     createSimpleLaserWall(0, 0, posZ + 90, 1)
-            //     createCoinLane(0, 0, posZ + 81, 5)
-            //     createSimpleLaserWall(-3, 0, posZ + 105, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 105, 3)
-            //     createSimpleLaserWall(-3, 0, posZ + 115, 3)
-            //     createSimpleLaserWall(0, 0, posZ + 120, 1)
-            //     createSimpleLaserWall(3, 0, posZ + 125, 3)
-            //     createCoinLane(0, 0, posZ + 126, 5)
-            //     createSimpleLaserWall(0, 0, posZ + 140, 3)
-            //     posZ += 150
-            // }
-            // var randNum = () =>{
-            //     return Math.floor(Math.random() * 6);
-            // }
+            function createTrackOptionSix(){
+                createTrackOne()
+                createSimpleLaserWall(-3, 0, posZ + 15, 3)
+                createSimpleLaserWall(3, 0, posZ + 15, 3)
+                createSimpleLaserWall(0, 0, posZ + 25, 1)
+                createCoinLane(0, 0, posZ + 21, 5)
+                createSimpleLaserWall(0, 0, posZ + 45, 3)
+                createCoinLane(-3, 0, posZ + 41, 5)
+                createSimpleLaserWall(-3, 0, posZ + 60, 1)
+                createSimpleLaserWall(-3, 0, posZ + 70, 1)
+                createSimpleLaserWall(0, 0, posZ + 70, 3)
+                createSimpleLaserWall(3, 0, posZ + 70, 1)
+                createSimpleLaserWall(-3, 1.3, posZ + 85, 2)
+                createSimpleLaserWall(3, 1.3, posZ + 85, 2)
+                createSimpleLaserWall(0, 0, posZ + 90, 1)
+                createCoinLane(0, 0, posZ + 81, 5)
+                createSimpleLaserWall(-3, 0, posZ + 105, 3)
+                createSimpleLaserWall(0, 0, posZ + 105, 3)
+                createSimpleLaserWall(-3, 0, posZ + 115, 3)
+                createSimpleLaserWall(0, 0, posZ + 120, 1)
+                createSimpleLaserWall(3, 0, posZ + 125, 3)
+                createCoinLane(0, 0, posZ + 126, 5)
+                createSimpleLaserWall(0, 0, posZ + 140, 3)
+                posZ += 150
+            }
+            var randNum = () =>{
+                return Math.floor(Math.random() * 6);
+            }
 
-            // var trackOptions = [createTrackOptionOne, createTrackOptionTwo, createTrackOptionThree, createTrackOptionFour, createTrackOptionFive, createTrackOptionSix];
+            var trackOptions = [createTrackOptionOne, createTrackOptionTwo, createTrackOptionThree, createTrackOptionFour, createTrackOptionFive, createTrackOptionSix];
 
-            // function randomTrackOpt(){
-            //     trackOptions[randNum()]();
-            // }
+            function randomTrackOpt(){
+                trackOptions[randNum()]();
+            }
           
-            // //game info
+            //game info
             var gameRunning = false;
             var running = false;
             var highlandOnSideLeft = false;
@@ -994,13 +952,13 @@ var fps = document.getElementById('fps');
             var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             var fakeMeshPosY = 1.8;
             fakeMesh.position = new BABYLON.Vector3(0,fakeMeshPosY,0)
-            // fakeMesh.isVisible = false;
+            fakeMesh.isVisible = false;
             camera.target = fakeMesh;
             //fake mesh for elipsoid
             var fakeMeshEllipse = new BABYLON.MeshBuilder.CreateBox("fakeMeshEllipse", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             fakeMeshEllipse.position = new BABYLON.Vector3(0,-0.8,0)
             fakeMeshEllipse.parent = fakeMesh;
-            // fakeMeshEllipse.isVisible = false;
+            fakeMeshEllipse.isVisible = false;
             //Create Ellipsoid around mesh
             var a = 0.5;
             var b = 1;
@@ -1010,13 +968,13 @@ var fps = document.getElementById('fps');
             }
             var ellipse = [];
             ellipse[0] = BABYLON.MeshBuilder.CreateLines("e", {points:points}, scene);
-            // ellipse[0].isVisible = false;
+            ellipse[0].isVisible = false;
             ellipse[0].parent = fakeMeshEllipse;
             ellipse[0].rotation.y = Math.PI * 1;
             for(var i = 1; i < 4; i++) {
                 ellipse[i] = ellipse[0].createInstance("el" + i);
                 ellipse[i].parent = fakeMeshEllipse;
-                // ellipse[i].isVisible = false;
+                ellipse[i].isVisible = false;
                 ellipse[i].checkCollisions = true;
             }
             ellipse[1].rotation.y = Math.PI * 2 - 1.3;
@@ -1158,61 +1116,61 @@ var fps = document.getElementById('fps');
                 });
             }
             function gameRender(){
-            //     //loop track and elements creation
-                if (grounds.length < 20) {
-                    // randomTrackOpt()
-                    createTrackOne()
+                //loop track and elements creation
+                if (runningTracks.length < 2) {
+                    randomTrackOpt()
+                    // createTrackOptionSix()
                 }
-            //     //dispose track
-                for (let i = 0; i < grounds.length; i++) {
-                    if ((fakeMesh.position.z - 15) > grounds[i].position.z){
-                        // runningTracks[i].dispose();
+                //dispose track
+                for (let i = 0; i < runningTracks.length; i++) {
+                    if ((fakeMesh.position.z - 160) > runningTracks[i].position.z){
+                        runningTracks[i].dispose();
                         grounds[i].dispose();
-                        // runningTracks.splice(i, 1);
+                        runningTracks.splice(i, 1);
                         grounds.splice(i, 1);
                     }
                 }
-            //     //dispose fooes
-            //     if (fooes.length > 0) {
-            //         for (let i = 0; i < fooes.length; i++) {
-            //             if ((fakeMesh.position.z - 10) > fooes[i].position.z){
-            //             fooes[i].dispose();
-            //             fooes.splice(i, 1);
-            //             }
-            //         }
-            //     }
-            //     //dispose coins
-            //     if (coins.length > 0) {
-            //         for (let i = 0; i < coins.length; i++) {
-            //             if ((fakeMesh.position.z - 10) > coins[i].position.z){
-            //                 coins[i].dispose();
-            //                 coins.splice(i, 1);
-            //             }
-            //         }
-            //     }
-            //     //dispose speed ground
-            //     if (speedGrounds.length > 0) {
-            //         for (let i = 0; i < speedGrounds.length; i++) {
-            //             if ((fakeMesh.position.z - 10) > speedGrounds[i].position.z){
-            //                 speedGrounds[i].dispose();
-            //                 speedGrounds.splice(i, 1);
-            //             }
-            //         }
-            //     }
-            //     if (stairsArr.length > 0) {
-            //         for (let i = 0; i < stairsArr.length; i++) {
-            //             if ((fakeMesh.position.z - 60) > stairsArr[i].position.z){
-            //                 stairsArr[i].dispose();
-            //                 stairsArr.splice(i, 1);
-            //                 highlandArr[i].dispose();
-            //                 highlandArr.splice(i, 1);
-            //                 highlandFakeLeftArr[i].dispose();
-            //                 highlandFakeLeftArr.splice(i, 1);
-            //                 highlandFakeRightArr[i].dispose();
-            //                 highlandFakeRightArr.splice(i, 1);
-            //             }
-            //         }
-            //     }
+                //dispose fooes
+                if (fooes.length > 0) {
+                    for (let i = 0; i < fooes.length; i++) {
+                        if ((fakeMesh.position.z - 10) > fooes[i].position.z){
+                        fooes[i].dispose();
+                        fooes.splice(i, 1);
+                        }
+                    }
+                }
+                //dispose coins
+                if (coins.length > 0) {
+                    for (let i = 0; i < coins.length; i++) {
+                        if ((fakeMesh.position.z - 10) > coins[i].position.z){
+                            coins[i].dispose();
+                            coins.splice(i, 1);
+                        }
+                    }
+                }
+                //dispose speed ground
+                if (speedGrounds.length > 0) {
+                    for (let i = 0; i < speedGrounds.length; i++) {
+                        if ((fakeMesh.position.z - 10) > speedGrounds[i].position.z){
+                            speedGrounds[i].dispose();
+                            speedGrounds.splice(i, 1);
+                        }
+                    }
+                }
+                if (stairsArr.length > 0) {
+                    for (let i = 0; i < stairsArr.length; i++) {
+                        if ((fakeMesh.position.z - 60) > stairsArr[i].position.z){
+                            stairsArr[i].dispose();
+                            stairsArr.splice(i, 1);
+                            highlandArr[i].dispose();
+                            highlandArr.splice(i, 1);
+                            highlandFakeLeftArr[i].dispose();
+                            highlandFakeLeftArr.splice(i, 1);
+                            highlandFakeRightArr[i].dispose();
+                            highlandFakeRightArr.splice(i, 1);
+                        }
+                    }
+                }
             }
 
             //function for mesh to start running
@@ -1287,9 +1245,9 @@ var fps = document.getElementById('fps');
                 viperDemo.notRenderable = true;
                 startGame.notRenderable = true;
                 setTimeout(function(){
-                    // backWallLogoFront.dispose();
-                    // bridgeGround.isVisible = false;
-                    // bridgeMesh.isVisible = false;
+                    backWallLogoFront.dispose();
+                    bridgeGround.isVisible = false;
+                    bridgeMesh.isVisible = false;
                     meshRunning();
                     lintenKeysEvents();
                     lintenTouchEvents();
