@@ -667,7 +667,7 @@ var fps = document.getElementById('fps');
             // comercialWallLogomat.backFaceCulling = false;
             // comercialWallLogomat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff')
             // comercialWallLogo.material = comercialWallLogomat;
-            // comercialWallLogo.isVisible = false
+            // // comercialWallLogo.isVisible = false
 
             // var comercialWallLogo2 = comercialWallLogo.clone("comercialWallLogo2");
             // comercialWallLogo2.position.x = 4.8;
@@ -680,7 +680,7 @@ var fps = document.getElementById('fps');
             //     comercialWallLogos.push(newComercialWallLogo)
             // }
             // var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
-            // bridgeComercialWallLogos.isVisible = false;
+            // // bridgeComercialWallLogos.isVisible = false;
 
             // var bridgeComercialWallLogosRight = bridgeComercialWallLogos.clone("bridgeComercialWallLogosRight");
             // bridgeComercialWallLogosRight.position.x = 9.6;
@@ -735,8 +735,20 @@ var fps = document.getElementById('fps');
             var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
             glassWall.position = new BABYLON.Vector3(-5,2.5,70)
             // var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
-            var glassWallMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-            glassWallMat.diffuseColor = new BABYLON.Color3.FromHexString('#ff0000')
+            var glassWallmat = new BABYLON.StandardMaterial("bridgemat", scene);
+            // glassWallMat.diffuseTexture = new BABYLON.Texture("textures/bigRedLogo.png", scene);
+
+            var glassWalltex = new BABYLON.Texture("textures/bigRedLogo2.png", scene);
+            glassWalltex.hasAlpha = true;
+            glassWallmat.diffuseTexture = glassWalltex;
+            glassWallmat.useAlphaFromDiffuseTexture = true;
+            // glassWallmat.backFaceCulling = false;
+            glassWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            glassWallmat.diffuseTexture.uScale = 1;
+            glassWallmat.diffuseTexture.vScale = 11;
+            glassWall.material = glassWallmat;
+            // // comercialWallLogo.isVisible = false
+            
             // // glassWallMat.reflectionTexture = hdrBcgRefTexture;
             // // glassWallMat.refractionTexture = hdrBcgRefTexture;
             // glassWallMat.linkRefractionWithTransparency = true;
@@ -748,7 +760,7 @@ var fps = document.getElementById('fps');
             // glassWallMat.cameraContrast = 1.66;
             // glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
             // glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-            glassWall.material = glassWallMat;
+            glassWall.material = glassWallmat;
             // // glassWall.isVisible = false;
             // //other glass walls
             var glassWall2 = glassWall.clone("glassWall2");
