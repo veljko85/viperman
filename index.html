@@ -703,9 +703,9 @@ var fps = document.getElementById('fps');
             // backWallLogoFront.addRotation(0.5,3.14,0)
             
             //main platform for running
-            // var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
-            // var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
-            // bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
+            var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
+            var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
+            bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
             // bridgeMat.reflectionTexture = hdrBcgRefTexture;
             // bridgeMat.refractionTexture = hdrBcgRefTexture;
             // bridgeMat.reflectionTexture.level = 1;
@@ -718,8 +718,8 @@ var fps = document.getElementById('fps');
             // bridgeMat.cameraContrast = 1.66;
             // bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
-            // bridgeGround.position = new BABYLON.Vector3(0,0,70)
-            // bridgeGround.isVisible = true;
+            bridgeGround.position = new BABYLON.Vector3(0,0,70)
+            bridgeGround.isVisible = true;
 
             // //create bridge plane to go bellow
             // // var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
@@ -826,19 +826,19 @@ var fps = document.getElementById('fps');
             // var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, bridgeGround,sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2/*, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight*/], true, true, undefined, false, true);
             // bridgeMesh.isVisible = true;
 
-            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
-                var most = result.meshes[0];
-                most.position = new BABYLON.Vector3(3, 0, 0)
-                // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
-                // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
-                // scene.getMeshByName("Plane").material = coinLogoMat;
-                // scene.getMeshByName("Plane").isVisible = false;
-                // // coinLogo.rotationQuaternion = null;
-                // coinLogo.checkCollisions = true;
-                // coinLogo.addRotation(0,5,0)
-                // createCoinsForTielOne(0)
-                // createCoinsForTielTwo(300)
-            })
+            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
+            //     var most = result.meshes[0];
+            //     most.position = new BABYLON.Vector3(3, 0, 0)
+            //     // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
+            //     // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
+            //     // scene.getMeshByName("Plane").material = coinLogoMat;
+            //     // scene.getMeshByName("Plane").isVisible = false;
+            //     // // coinLogo.rotationQuaternion = null;
+            //     // coinLogo.checkCollisions = true;
+            //     // coinLogo.addRotation(0,5,0)
+            //     // createCoinsForTielOne(0)
+            //     // createCoinsForTielTwo(300)
+            // })
 
             // var runningTracks = [];
             // var grounds = []
