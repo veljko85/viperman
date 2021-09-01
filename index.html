@@ -379,7 +379,7 @@ var fps = document.getElementById('fps');
 
             
             // //POSITION Z OF THE ELEMNENTS OF GAME
-            // var posZ = 0;
+            var posZ = 0;
             // //FOOES
             // function aniLaserWallWidth(mesh){
             //         const anim= new BABYLON.Animation("aniLaserWallWidth", "scaling", 60, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
@@ -828,7 +828,7 @@ var fps = document.getElementById('fps');
 
             BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/most.glb").then((result) => { 
                 var most = result.meshes[0];
-                most.position = new BABYLON.Vector3(3, 0, 7)
+                most.position = new BABYLON.Vector3(0, 0, 0)
                 // var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
                 // coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
                 // scene.getMeshByName("Plane").material = coinLogoMat;
@@ -838,21 +838,32 @@ var fps = document.getElementById('fps');
                 // coinLogo.addRotation(0,5,0)
                 // createCoinsForTielOne(0)
                 // createCoinsForTielTwo(300)
+                console.log(scene.getMeshByName("Plateform_primitive0"))
             })
 
             // var runningTracks = [];
-            // var grounds = []
-                
-            // function createTrackOne(){
-            //     var bridgeMeshInstance = bridgeMesh.createInstance('bridgeMeshInstance');
-            //     runningTracks.push(bridgeMeshInstance)
-            //     bridgeMeshInstance.position = new BABYLON.Vector3(0,0,posZ)
-            //     var bridgeGroundInstance = bridgeGround.createInstance('bridgeGroundInstance');
-            //     bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 70)
-            //     grounds.push(bridgeGroundInstance)
-            //     addGravity(bridgeGroundInstance)
-                
-            // }
+            var grounds = []
+            var plat0 = scene.getMeshByName("Plateform_primitive0");
+            var plat1 = scene.getMeshByName("Plateform_primitive1");
+            var plat2 = scene.getMeshByName("Plateform_primitive2");
+            
+            var bridgeMesh = BABYLON.Mesh.MergeMeshes([plat0, plat1, plat2], true, true, undefined, false, true);
+            function createTrackOne(){
+                var bridgeMeshInstance0 = scene.getMeshByName("Plateform_primitive0").createInstance('bridgeMeshInstance');
+                var bridgeMeshInstance1 = scene.getMeshByName("Plateform_primitive1").createInstance('bridgeMeshInstance');
+                var bridgeMeshInstance2 = scene.getMeshByName("Plateform_primitive2").createInstance('bridgeMeshInstance');
+                bridgeMeshInstance0.addRotation(0,1.57,0)
+                bridgeMeshInstance1.addRotation(0,1.57,0)
+                bridgeMeshInstance2.addRotation(0,1.57,0)
+            bridgeMeshInstance0.position = new BABYLON.Vector3(0,0,posZ + 13.5)
+            bridgeMeshInstance1.position = new BABYLON.Vector3(0,0,posZ + 13.5)
+            bridgeMeshInstance2.position = new BABYLON.Vector3(0,0,posZ + 13.5)
+            grounds.push(bridgeMeshInstance0)
+            grounds.push(bridgeMeshInstance1)
+            grounds.push(bridgeMeshInstance2)
+                addGravity(bridgeMeshInstance0)
+            posZ += 13.5
+            }
             
             // function createTrackOptionOne(){
             //     createTrackOne()
@@ -1146,21 +1157,21 @@ var fps = document.getElementById('fps');
                     }
                 });
             }
-            // function gameRender(){
+            function gameRender(){
             //     //loop track and elements creation
-            //     if (runningTracks.length < 2) {
-            //         randomTrackOpt()
-            //         // createTrackOptionSix()
-            //     }
+                if (grounds.length < 20) {
+                    // randomTrackOpt()
+                    createTrackOne()
+                }
             //     //dispose track
-            //     for (let i = 0; i < runningTracks.length; i++) {
-            //         if ((fakeMesh.position.z - 160) > runningTracks[i].position.z){
-            //             runningTracks[i].dispose();
-            //             grounds[i].dispose();
-            //             runningTracks.splice(i, 1);
-            //             grounds.splice(i, 1);
-            //         }
-            //     }
+                for (let i = 0; i < grounds.length; i++) {
+                    if ((fakeMesh.position.z - 15) > grounds[i].position.z){
+                        // runningTracks[i].dispose();
+                        grounds[i].dispose();
+                        // runningTracks.splice(i, 1);
+                        grounds.splice(i, 1);
+                    }
+                }
             //     //dispose fooes
             //     if (fooes.length > 0) {
             //         for (let i = 0; i < fooes.length; i++) {
@@ -1202,7 +1213,7 @@ var fps = document.getElementById('fps');
             //             }
             //         }
             //     }
-            // }
+            }
 
             //function for mesh to start running
             function meshRunning(){
@@ -1215,7 +1226,7 @@ var fps = document.getElementById('fps');
                 //change viperman and fake mesh position z - move thrue space
                 scene.beforeRender = function() {
                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                    // gameRender()
+                    gameRender()
                 };
             }
 
