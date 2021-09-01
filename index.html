@@ -759,22 +759,22 @@ var fps = document.getElementById('fps');
             // // frontGlassWall.material = glassWallMat;
 
             // //side walks
-            // var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
-            // var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
-            // sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
-            // sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
-            // sideWalk.material = sideWalkMat;
-            // sideWalk.position = new BABYLON.Vector3(-5,0,70)
-            // //other sidewalk
-            // var sideWalk2 = sideWalk.clone("sideWalk2");
-            // sideWalk2.position.x = 5;
-            // //side walks glass part
-            // var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
-            // sideWalkGlassPart.material = glassWallMat;
-            // sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
-            // //other sidewalk glass part
-            // var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
-            // sideWalkGlassPart2.position.x = 4.5;
+            var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
+            var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
+            sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
+            sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
+            sideWalk.material = sideWalkMat;
+            sideWalk.position = new BABYLON.Vector3(-5,0,70)
+            //other sidewalk
+            var sideWalk2 = sideWalk.clone("sideWalk2");
+            sideWalk2.position.x = 5;
+            //side walks glass part
+            var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
+            sideWalkGlassPart.material = glassWallMat;
+            sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
+            //other sidewalk glass part
+            var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
+            sideWalkGlassPart2.position.x = 4.5;
 
             // // var sideStrip = new BABYLON.MeshBuilder.CreateBox("sideStrip", {width: 1, height: 0.4, depth: 6}, scene);
             // // sideStrip.position = new BABYLON.Vector3(-4.8,2.5,0)
@@ -811,7 +811,7 @@ var fps = document.getElementById('fps');
             // var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
             // runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
 
-            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, bridgeGround/*sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight*/], true, true, undefined, false, true);
+            var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWallbackWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, */glassWall, glassWall2, bridgeGround,sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2/*, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight*/], true, true, undefined, false, true);
             bridgeMesh.isVisible = true;
 
             // var runningTracks = [];
