@@ -41,14 +41,14 @@
 <body>
 <div id='container' style="width: 100vw; height: 100vh; overflow: hidden;">
     <canvas id="renderCanvas"></canvas>
-    <!-- <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p> -->
+    <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p>
 </div> 
     <script>
 
 var fps = document.getElementById('fps');
-        // setInterval(function(){ 
-        //    fps.innerHTML = engine.getFps()
-        //     }, 1000)
+        setInterval(function(){ 
+           fps.innerHTML = engine.getFps()
+            }, 1000)
 
         //GET CANVAS
         var container = document.getElementById("container");
@@ -952,13 +952,13 @@ var fps = document.getElementById('fps');
             var fakeMesh = new BABYLON.MeshBuilder.CreateBox("fakeMesh", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             var fakeMeshPosY = 1.8;
             fakeMesh.position = new BABYLON.Vector3(0,fakeMeshPosY,0)
-            fakeMesh.isVisible = false;
+            // fakeMesh.isVisible = false;
             camera.target = fakeMesh;
             //fake mesh for elipsoid
             var fakeMeshEllipse = new BABYLON.MeshBuilder.CreateBox("fakeMeshEllipse", {width: 0.2, height: 0.2, depth: 0.2}, scene);
             fakeMeshEllipse.position = new BABYLON.Vector3(0,-0.8,0)
             fakeMeshEllipse.parent = fakeMesh;
-            fakeMeshEllipse.isVisible = false;
+            // fakeMeshEllipse.isVisible = false;
             //Create Ellipsoid around mesh
             var a = 0.5;
             var b = 1;
@@ -968,13 +968,13 @@ var fps = document.getElementById('fps');
             }
             var ellipse = [];
             ellipse[0] = BABYLON.MeshBuilder.CreateLines("e", {points:points}, scene);
-            ellipse[0].isVisible = false;
+            // ellipse[0].isVisible = false;
             ellipse[0].parent = fakeMeshEllipse;
             ellipse[0].rotation.y = Math.PI * 1;
             for(var i = 1; i < 4; i++) {
                 ellipse[i] = ellipse[0].createInstance("el" + i);
                 ellipse[i].parent = fakeMeshEllipse;
-                ellipse[i].isVisible = false;
+                // ellipse[i].isVisible = false;
                 ellipse[i].checkCollisions = true;
             }
             ellipse[1].rotation.y = Math.PI * 2 - 1.3;
@@ -983,18 +983,18 @@ var fps = document.getElementById('fps');
 
             //IMPORT MESHES
             //viperman
-            BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
-            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
-                var viperman =  result.meshes[0];
-                viperman.parent = fakeMesh;
-                viperman.position.y = -1.8;
-                scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
-                // for (let i = 0; i < result.meshes.length; i++) {
-                //     result.meshes[i].isVisible = false
-                // }
-                //for loading
+            // BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
+            // // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
+            //     var viperman =  result.meshes[0];
+            //     viperman.parent = fakeMesh;
+            //     viperman.position.y = -1.8;
+            //     scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
+            //     // for (let i = 0; i < result.meshes.length; i++) {
+            //     //     result.meshes[i].isVisible = false
+            //     // }
+            //     //for loading
                 engine.hideLoadingUI();
-            })
+            // })
 
             //MOVMENT
             //animation for moving left and right
@@ -1046,27 +1046,27 @@ var fps = document.getElementById('fps');
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
                     jumpSound.play();
                     aniPosY(fakeMesh, fakeMesh.position.y)
-                    scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    // scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
+                    // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     running = false;
                     setTimeout(function(){ 
                         running = true;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
-                        scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
+                        // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
+                        // scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
                     }, 680)
                 }
             }
             //function for sliding
             function viperSlide(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
-                    scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    // scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
+                    // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     fakeMeshEllipse.position.y = -1.8;
                     running = false;
                     setTimeout(function(){ 
                         running = true;
                         fakeMeshEllipse.position.y = -0.8;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
+                        // scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
                     }, 1580)
                 }
             }
@@ -1180,7 +1180,7 @@ var fps = document.getElementById('fps');
                 gameRunning = true;
                 
                 //start running animation
-                scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
+                // scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
                 //change viperman and fake mesh position z - move thrue space
                 scene.beforeRender = function() {
                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
@@ -1192,7 +1192,7 @@ var fps = document.getElementById('fps');
                     if (gameRunning){
                         running = false;
                         gameRunning = false;
-                        scene.animationGroups.find(a => a.name === 'run').pause(true);
+                        // scene.animationGroups.find(a => a.name === 'run').pause(true);
                         scene.beforeRender = function() {
                             fakeMesh.position.z += 0;
                         };
@@ -1207,8 +1207,8 @@ var fps = document.getElementById('fps');
                 if (!gameRunning){ 
                     gameRunning = true;
                     camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
-                    scene.animationGroups.find(a => a.name === 'run').pause(false);
-                    scene.animationGroups.find(a => a.name === 'run').play(true);
+                    // scene.animationGroups.find(a => a.name === 'run').pause(false);
+                    // scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
                     pauseGameButton.notRenderable = false;
                     startGameFromPauseButton.notRenderable = true;
@@ -1260,7 +1260,7 @@ var fps = document.getElementById('fps');
                 running = false;
                 gameRunning = false;
                 gameOverSign.notRenderable = false;
-                scene.animationGroups.find(a => a.name === 'run').pause(true);
+                // scene.animationGroups.find(a => a.name === 'run').pause(true);
                 scene.beforeRender = function() {
                     fakeMesh.position.z += 0;
                 };
@@ -1365,17 +1365,17 @@ var fps = document.getElementById('fps');
                                 livesBlock.text = "x" + lives;
                                 hitWallSound.play();
                                 if (lives > 0){
-                                    scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
-                                    scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'run').stop(true, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
                                     running = false;
                                     setTimeout(function(){
-                                        scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
-                                        scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
+                                        // scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
+                                        // scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
                                         running = true;
                                     }, 1000);
                                 }
                                 if (lives < 1){;
-                                    scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
+                                    // scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
                                     gameOver();
                                 }
                             }
