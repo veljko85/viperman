@@ -770,7 +770,7 @@ var fps = document.getElementById('fps');
             sideWalk2.position.x = 5;
             //side walks glass part
             var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
-            sideWalkGlassPart.material = glassWallMat;
+            sideWalkGlassPart.material = bridgeMat;
             sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
             //other sidewalk glass part
             var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
