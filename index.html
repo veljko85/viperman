@@ -983,18 +983,18 @@ var fps = document.getElementById('fps');
 
             //IMPORT MESHES
             //viperman
-            // BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
-            // // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
-            //     var viperman =  result.meshes[0];
-            //     viperman.parent = fakeMesh;
-            //     viperman.position.y = -1.8;
-            //     scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
-            //     // for (let i = 0; i < result.meshes.length; i++) {
-            //     //     result.meshes[i].isVisible = false
-            //     // }
-            //     //for loading
+            BABYLON.SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/veljko85/glbModels/gh-pages/viperman/", "viperman.glb").then((result) => {
+            // BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/viperman.glb").then((result) => { 
+                var viperman =  result.meshes[0];
+                viperman.parent = fakeMesh;
+                viperman.position.y = -1.8;
+                scene.animationGroups.find(a => a.name === 'finish').setWeightForAllAnimatables(0);
+                // for (let i = 0; i < result.meshes.length; i++) {
+                //     result.meshes[i].isVisible = false
+                // }
+                //for loading
                 engine.hideLoadingUI();
-            // })
+            })
 
             //MOVMENT
             //animation for moving left and right
