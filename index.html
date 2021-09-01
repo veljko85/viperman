@@ -704,18 +704,18 @@ var fps = document.getElementById('fps');
             
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
-            var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
+            // var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
             // bridgeMat.reflectionTexture = hdrBcgRefTexture;
             // bridgeMat.refractionTexture = hdrBcgRefTexture;
             // bridgeMat.reflectionTexture.level = 1;
-            bridgeMat.specularPower = 150;
-            bridgeMat.indexOfRefraction = 0.52;
-            bridgeMat.alpha = 0.8;
-            bridgeMat.directIntensity = 0.0;
-            bridgeMat.environmentIntensity = 0.7;
-            bridgeMat.cameraExposure = 0.66;
-            bridgeMat.cameraContrast = 1.66;
-            bridgeGround.material = bridgeMat;
+            // bridgeMat.specularPower = 150;
+            // bridgeMat.indexOfRefraction = 0.52;
+            // bridgeMat.alpha = 0.8;
+            // bridgeMat.directIntensity = 0.0;
+            // bridgeMat.environmentIntensity = 0.7;
+            // bridgeMat.cameraExposure = 0.66;
+            // bridgeMat.cameraContrast = 1.66;
+            // bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
             bridgeGround.position = new BABYLON.Vector3(0,0,70)
             bridgeGround.isVisible = true;
@@ -1534,10 +1534,10 @@ var fps = document.getElementById('fps');
 
             
 
-        //     setInterval(function(){
-        //     console.log(scene.meshes.length)
-        //     console.log(fakeMesh.position.z)
-        // }, 500) 
+            setInterval(function(){
+            console.log(scene.meshes.length)
+            console.log(fakeMesh.position.z)
+        }, 500) 
             return scene;
             //END OF SCENE
         
