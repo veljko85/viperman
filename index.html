@@ -704,7 +704,8 @@ var fps = document.getElementById('fps');
             
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
-            // var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
+            var bridgeMat = new BABYLON.StandardMaterial("bridgeMat", scene);
+            bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#fff000')
             // bridgeMat.reflectionTexture = hdrBcgRefTexture;
             // bridgeMat.refractionTexture = hdrBcgRefTexture;
             // bridgeMat.reflectionTexture.level = 1;
@@ -715,8 +716,8 @@ var fps = document.getElementById('fps');
             // bridgeMat.environmentIntensity = 0.7;
             // bridgeMat.cameraExposure = 0.66;
             // bridgeMat.cameraContrast = 1.66;
-            // bridgeGround.material = bridgeMat;
-            // bridgeGround.position.z = 140;
+            bridgeGround.material = bridgeMat;
+            bridgeGround.position.z = 140;
             bridgeGround.position = new BABYLON.Vector3(0,0,70)
             bridgeGround.isVisible = true;
 
