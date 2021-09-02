@@ -45,6 +45,25 @@
 </div> 
     <script>
 
+function isMobile() {
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)) {
+            return true;
+        }
+
+        return false;
+    }
+    console.log(navigator.userAgent);
+    console.log((document.body.clientWidth - 800) / 2)
+if(isMobile()){
+    console.log('mob je')
+} else {console.log('nije mob')}
+
 var fps = document.getElementById('fps');
         setInterval(function(){ 
            fps.innerHTML = engine.getFps()
@@ -62,9 +81,9 @@ var fps = document.getElementById('fps');
             startAgain.style.left = '30%';
             startAgain.style.top = '30%';
         } else {
-            startAgain.style.width = "70%"
-            startAgain.style.height = "5%"
-            startAgain.style.left = '15%';
+            startAgain.style.width = "800px"
+            startAgain.style.height = "107.8px"
+            startAgain.style.left = (document.body.clientWidth - 800) / 2 + 'px';
             startAgain.style.top = '30%';
         }
         startAgain.style.position = 'absolute';
@@ -156,8 +175,8 @@ var fps = document.getElementById('fps');
                 viperDemo.height = 0.4;
             } else {
                 viperDemo.width = 0.9;
-                viperDemo.height = 0.25;
-                viperDemo.top = 150 + 'px';
+                viperDemo.height = 0.15;
+                viperDemo.top = 300 + 'px';
             }
             viperDemo.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             viperDemo.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
@@ -170,7 +189,7 @@ var fps = document.getElementById('fps');
             startGame.height = 0.1;
             } else {
                 startGame.width = 0.7;
-                startGame.height = 0.1;
+                startGame.height = 0.05;
             }
             startGame.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             startGame.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -184,7 +203,7 @@ var fps = document.getElementById('fps');
                 pauseGameSign.height = 0.1;
             } else {
                 pauseGameSign.width = 0.7;
-                pauseGameSign.height = 0.1;
+                pauseGameSign.height = 0.08;
             }
             pauseGameSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             pauseGameSign.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -197,7 +216,7 @@ var fps = document.getElementById('fps');
                 gameOverSign.height = 0.1;
             } else {
                 gameOverSign.width = 0.7;
-                gameOverSign.height = 0.1;
+                gameOverSign.height = 0.05;
             }
             gameOverSign.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             gameOverSign.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -257,8 +276,8 @@ var fps = document.getElementById('fps');
                 lifesHolder.left = 20 + 'px';
                 lifesHolder.top = 20 + 'px';
             } else {
-                lifesHolder.width = 0.2;
-                lifesHolder.height = 0.06;
+                lifesHolder.width = 100 + 'px';
+                lifesHolder.height = 70 + 'px';
                 lifesHolder.left = 30 + 'px';
                 lifesHolder.top = 30 + 'px';
             }
@@ -288,10 +307,10 @@ var fps = document.getElementById('fps');
                 coinsHolder.left = 20 + 'px';
                 coinsHolder.top = 70 + 'px';
             } else {
-                coinsHolder.width = 0.28;
-                coinsHolder.height = 0.06;
+                coinsHolder.width = 200 + 'px';
+                coinsHolder.height = 70 + 'px';
                 coinsHolder.left = 30 + 'px';
-                coinsHolder.top = 150 + 'px';
+                coinsHolder.top = 120 + 'px';
             }
             coinsHolder.background = "black";
             coinsHolder.alpha = 0.4;
@@ -306,7 +325,7 @@ var fps = document.getElementById('fps');
                 imageLogo.height = 2;
                 imageLogo.left = -25 + 'px';
             } else {
-                imageLogo.width = 0.5;
+                imageLogo.width = 0.7;
                 imageLogo.height = 2;
                 imageLogo.left = -50 + 'px';
             }
@@ -353,8 +372,10 @@ var fps = document.getElementById('fps');
             hdrSkybox.infiniteDistance = true;
             
             //GIVE GLOW TO GLOWING OBJ
-            var glow = new BABYLON.GlowLayer("glow", scene);
-            glow.intensity = 0.8;
+            if(!isMobile()){
+                var glow = new BABYLON.GlowLayer("glow", scene);
+                glow.intensity = 0.8;
+            }
 
             var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
             speedGround.position = new BABYLON.Vector3(-3,0.05,10);
@@ -702,6 +723,8 @@ var fps = document.getElementById('fps');
             
             //main platform for running
             var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
+            
+            if(!isMobile()){
             var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
             bridgeMat.reflectionTexture = hdrBcgRefTexture;
             bridgeMat.refractionTexture = hdrBcgRefTexture;
@@ -713,36 +736,48 @@ var fps = document.getElementById('fps');
             bridgeMat.environmentIntensity = 0.7;
             bridgeMat.cameraExposure = 0.66;
             bridgeMat.cameraContrast = 1.66;
+            } else {
+                var bridgeMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
+                bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+                bridgeMat.diffuseTexture.uScale = 1;
+                bridgeMat.diffuseTexture.vScale = 50;
+            }
             bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
             bridgeGround.position = new BABYLON.Vector3(0,0,70)
             bridgeGround.isVisible = true;
 
             //create bridge plane to go bellow
-            var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
-            bridgeLayout.position.z = 70;
-            bridgeLayout.position.y = -0.5;
-            var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
-            bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
-            bridgeLayoutMat.diffuseTexture.uScale = 1;
-            bridgeLayoutMat.diffuseTexture.vScale = 50;
-            bridgeLayout.material = bridgeLayoutMat;
-
+            if(!isMobile()){
+                var bridgeLayout = BABYLON.MeshBuilder.CreateGround("ground", {width: 10.5, height:150}, scene);
+                bridgeLayout.position.z = 70;
+                bridgeLayout.position.y = -0.5;
+                var bridgeLayoutMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
+                bridgeLayoutMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+                bridgeLayoutMat.diffuseTexture.uScale = 1;
+                bridgeLayoutMat.diffuseTexture.vScale = 50;
+                bridgeLayout.material = bridgeLayoutMat;
+            }
             //create glass walls
             var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
             glassWall.position = new BABYLON.Vector3(-5,2.5,70)
-            var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
-            glassWallMat.reflectionTexture = hdrBcgRefTexture;
-            glassWallMat.refractionTexture = hdrBcgRefTexture;
-            glassWallMat.linkRefractionWithTransparency = true;
-            glassWallMat.indexOfRefraction = 0.52;
-            glassWallMat.alpha = 0;
-            glassWallMat.directIntensity = 0.0;
-            glassWallMat.environmentIntensity = 0.7;
-            glassWallMat.cameraExposure = 0.66;
-            glassWallMat.cameraContrast = 1.66;
-            glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-            glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            if(!isMobile()){
+                var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
+                glassWallMat.reflectionTexture = hdrBcgRefTexture;
+                glassWallMat.refractionTexture = hdrBcgRefTexture;
+                glassWallMat.linkRefractionWithTransparency = true;
+                glassWallMat.indexOfRefraction = 0.52;
+                glassWallMat.alpha = 0;
+                glassWallMat.directIntensity = 0.0;
+                glassWallMat.environmentIntensity = 0.7;
+                glassWallMat.cameraExposure = 0.66;
+                glassWallMat.cameraContrast = 1.66;
+                glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            } else {
+                var glassWallMat = new BABYLON.StandardMaterial("glassWallMat", scene);
+                glassWallMat.diffuseColor = new BABYLON.Color3.FromHexString('#000000')
+            }
             glassWall.material = glassWallMat;
             // glassWall.isVisible = false;
             //other glass walls
