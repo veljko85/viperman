@@ -600,8 +600,8 @@ var fps = document.getElementById('fps');
             
 
             var highlandFakeLeft = highland.clone("highlandFakeLeft");
-            highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,17)
-            highlandFakeLeft.scaling = new BABYLON.Vector3(1,15,1.2)
+            highlandFakeLeft.position = new BABYLON.Vector3(-3,0.8,14.5)
+            highlandFakeLeft.scaling = new BABYLON.Vector3(1,15,1)
             highlandFakeLeft.isVisible = false;     
                 
             var highlandFakeRight = highlandFakeLeft.clone("highlandFakeRight");
@@ -1094,15 +1094,19 @@ var fps = document.getElementById('fps');
             //function for sliding
             function viperSlide(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
-                    scene.animationGroups.find(a => a.name === 'slide').start(false, 1, 0);
+                    scene.animationGroups.find(a => a.name === 'slide').start(false, 1.5, 0);
                     scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
                     fakeMeshEllipse.position.y = -1.8;
                     running = false;
                     setTimeout(function(){ 
                         running = true;
+                    }, 800)
+                    setTimeout(function(){ 
+                        
                         fakeMeshEllipse.position.y = -0.8;
                         scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
-                    }, 1580)
+                        // alert('aaaa')
+                    }, 1000)
                 }
             }
             
@@ -1241,7 +1245,7 @@ var fps = document.getElementById('fps');
             function startGameFromPause(){ 
                 if (!gameRunning){ 
                     gameRunning = true;
-                    camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
+                    // camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
                     scene.animationGroups.find(a => a.name === 'run').pause(false);
                     scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
