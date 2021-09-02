@@ -1248,7 +1248,7 @@ var fps = document.getElementById('fps');
             function startGameFromPause(){ 
                 if (!gameRunning){ 
                     gameRunning = true;
-                    // camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
+                    camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
                     scene.animationGroups.find(a => a.name === 'run').pause(false);
                     scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
