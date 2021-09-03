@@ -87,7 +87,7 @@ var fps = document.getElementById('fps');
             startAgain.style.top = '30%';
         }
         startAgain.style.position = 'absolute';
-        startAgain.style.backgroundImage = 'url("img/startAgain2.png")';
+        startAgain.style.backgroundImage = 'url("img/startAgain3.png")';
         startAgain.style.backgroundSize = 'cover';
         startAgain.style.backgroundPosition = 'center';
         startAgain.style.display = 'none';
@@ -170,7 +170,7 @@ var fps = document.getElementById('fps');
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
             //START PANEL
             //start image
-            var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo2.png");
+            var viperDemo = new BABYLON.GUI.Image("", "img/vipermanDemo3.png");
             if(document.body.clientWidth > document.body.clientHeight){
                 viperDemo.width = 0.8;
                 viperDemo.height = 0.4;
@@ -184,7 +184,7 @@ var fps = document.getElementById('fps');
             // viperDemo.notRenderable = true;
             advancedTexture.addControl(viperDemo);
             //start game image
-            var startGame = new BABYLON.GUI.Image("", "img/startGame2.png");
+            var startGame = new BABYLON.GUI.Image("", "img/startGame3.png");
             if(document.body.clientWidth > document.body.clientHeight){
             startGame.width = 0.4;
             startGame.height = 0.1;
@@ -198,7 +198,7 @@ var fps = document.getElementById('fps');
             // startGame.notRenderable = true;
             advancedTexture.addControl(startGame);
             //display pause sign
-            var pauseGameSign = new BABYLON.GUI.Image("", "img/pause2.png");
+            var pauseGameSign = new BABYLON.GUI.Image("", "img/pause3.png");
             if(document.body.clientWidth > document.body.clientHeight){
                 pauseGameSign.width = 0.4;
                 pauseGameSign.height = 0.1;
@@ -211,7 +211,7 @@ var fps = document.getElementById('fps');
             pauseGameSign.notRenderable = true;
             advancedTexture.addControl(pauseGameSign);
             //game over sign
-            var gameOverSign = new BABYLON.GUI.Image("", "img/gameOver2.png");
+            var gameOverSign = new BABYLON.GUI.Image("", "img/gameOver3.png");
             if(document.body.clientWidth > document.body.clientHeight){
                 gameOverSign.width = 0.4;
                 gameOverSign.height = 0.1;
@@ -383,7 +383,7 @@ var fps = document.getElementById('fps');
             var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
             speedGround.position = new BABYLON.Vector3(-3,0.05,10);
             var speedGroundmat = new BABYLON.StandardMaterial("speedGroundmat", scene);
-            var speedTex = new BABYLON.Texture("img/speedArrows.png", scene);
+            var speedTex = new BABYLON.Texture("img/speedArrows2.png", scene);
             speedTex.hasAlpha = true;
             speedGroundmat.diffuseTexture = speedTex;
             speedGroundmat.useAlphaFromDiffuseTexture = true;
@@ -536,16 +536,16 @@ var fps = document.getElementById('fps');
             }
             const animationsCoin = [
                 animRotY(),
-                animPosY()
+                // animPosY()
             ];
 
-            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo.glb").then((result) => { 
+            BABYLON.SceneLoader.ImportMeshAsync("", "", "meshes/logo2.glb").then((result) => { 
                 var coinLogo = result.meshes[0];
-                coinLogo.position = new BABYLON.Vector3(0, 0, 0)
+                coinLogo.position = new BABYLON.Vector3(0, 0, 2)
                 var coinLogoMat = new BABYLON.StandardMaterial("coinLogoMat", scene);
                 coinLogoMat.emissiveColor = new BABYLON.Color3.FromHexString('#ffffff');
                 scene.getMeshByName("Plane").material = coinLogoMat;
-                scene.getMeshByName("Plane").isVisible = false;
+                scene.getMeshByName("Plane").isVisible =false;
                 // coinLogo.rotationQuaternion = null;
                 coinLogo.checkCollisions = true;
                 coinLogo.addRotation(0,5,0)
@@ -557,11 +557,10 @@ var fps = document.getElementById('fps');
                 for (var i = 1; i < coinNum+1; i++) {
                     var newCoin = scene.getMeshByName("Plane").createInstance("coin" + i);
                     coins.push(newCoin);
-                    
-                    // newCoin.rotationQuaternion = null;
-                    newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.5, (coinLanePositionZ + i * 3));
+                    newCoin.rotationQuaternion = null;
+                    newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.7, (coinLanePositionZ + i * 3));
                     coinsCollider(newCoin)
-                //    scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
+                   scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
                 }
             }
             
@@ -741,9 +740,10 @@ var fps = document.getElementById('fps');
             bridgeMat.cameraContrast = 1.66;
             } else {
                 var bridgeMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
-                bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
-                bridgeMat.diffuseTexture.uScale = 1;
-                bridgeMat.diffuseTexture.vScale = 50;
+                bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#000000')
+                // bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
+                // bridgeMat.diffuseTexture.uScale = 1;
+                // bridgeMat.diffuseTexture.vScale = 50;
             }
             bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
@@ -984,6 +984,7 @@ var fps = document.getElementById('fps');
             var playerSpeed = 0.3;
             var lives = 3;
             var colectedCoins = 0;
+            var pause = false;
 
             //FAKE MESHES AND ELLIPSOID
             //main fake mesh for camera
@@ -1085,12 +1086,14 @@ var fps = document.getElementById('fps');
                     jumpSound.play();
                     aniPosY(fakeMesh, fakeMesh.position.y)
                     scene.animationGroups.find(a => a.name === 'jump').start(false, 1, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    scene.animationGroups.find(a => a.name === 'run').pause(true);
                     running = false;
                     setTimeout(function(){ 
-                        running = true;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
-                        scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
+                        if(gameRunning){
+                            running = true;
+                            scene.animationGroups.find(a => a.name === 'run').play(true);
+                            scene.animationGroups.find(a => a.name === 'jump').stop(false, 1, 0);
+                        }
                     }, 680)
                 }
             }
@@ -1098,16 +1101,19 @@ var fps = document.getElementById('fps');
             function viperSlide(){
                 if (fakeMesh.position.x == 0 || fakeMesh.position.x == -3 || fakeMesh.position.x == 3) {
                     scene.animationGroups.find(a => a.name === 'slide').start(false, 1.5, 0);
-                    scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(0);
+                    scene.animationGroups.find(a => a.name === 'run').pause(true);
                     fakeMeshEllipse.position.y = -1.8;
                     running = false;
-                    setTimeout(function(){ 
-                        running = true;
+                    setTimeout(function(){
+                        if(gameRunning){
+                            running = true;
+                        }
                     }, 800)
                     setTimeout(function(){ 
-                        
                         fakeMeshEllipse.position.y = -0.8;
-                        scene.animationGroups.find(a => a.name === 'run').setWeightForAllAnimatables(1);
+                        if(gameRunning){
+                            scene.animationGroups.find(a => a.name === 'run').play(true);
+                        }
                         // alert('aaaa')
                     }, 1000)
                 }
@@ -1234,7 +1240,9 @@ var fps = document.getElementById('fps');
                     if (gameRunning){
                         running = false;
                         gameRunning = false;
+                        pause = true;
                         scene.animationGroups.find(a => a.name === 'run').pause(true);
+                        scene.animationGroups.find(a => a.name === 'hit_in').pause(true);
                         scene.beforeRender = function() {
                             fakeMesh.position.z += 0;
                         };
@@ -1248,8 +1256,10 @@ var fps = document.getElementById('fps');
             function startGameFromPause(){ 
                 if (!gameRunning){ 
                     gameRunning = true;
+                    running = true;
+                    pause = false;
                     camera.setPosition(new BABYLON.Vector3(fakeMesh.position.x, fakeMesh.position.y + 1.2, fakeMesh.position.z - 5));
-                    scene.animationGroups.find(a => a.name === 'run').pause(false);
+                    // scene.animationGroups.find(a => a.name === 'run').pause(false);
                     scene.animationGroups.find(a => a.name === 'run').play(true);
                     meshRunning()
                     pauseGameButton.notRenderable = false;
@@ -1301,8 +1311,10 @@ var fps = document.getElementById('fps');
             function gameOver(){ 
                 running = false;
                 gameRunning = false;
+                console.log(running)
                 gameOverSign.notRenderable = false;
                 scene.animationGroups.find(a => a.name === 'run').pause(true);
+                scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
                 scene.beforeRender = function() {
                     fakeMesh.position.z += 0;
                 };
@@ -1327,9 +1339,11 @@ var fps = document.getElementById('fps');
                             if (thisGorund.checkCollisions){
                                 thisGorund.checkCollisions = false;
                                 scene.beforeRender = function() {
-                                    fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                                    if(fakeMesh.position.y > 1.81){
-                                        fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
+                                    if(gameRunning){
+                                        fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                        if(fakeMesh.position.y > 1.81){
+                                            fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
+                                        }
                                     }
                                     gameRender()
                                 };
@@ -1347,9 +1361,11 @@ var fps = document.getElementById('fps');
                             fakeMesh.position.y = 1.8;
                             thisGorund.checkCollisions = true;
                             scene.beforeRender = function() {
-                                fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                                fakeMesh.position.y -= 0;
-                                gameRender()
+                                if(gameRunning){
+                                    fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                    fakeMesh.position.y -= 0;
+                                    gameRender()
+                                }
                             };
                         }
                     );
@@ -1411,13 +1427,14 @@ var fps = document.getElementById('fps');
                                     scene.animationGroups.find(a => a.name === 'hit_in').start(false, 1, 0)
                                     running = false;
                                     setTimeout(function(){
-                                        scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
-                                        scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
-                                        running = true;
+                                        if(!pause){
+                                            scene.animationGroups.find(a => a.name === 'hit_in').stop(false, 1, 0)
+                                            scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0)
+                                            running = true;
+                                        }
                                     }, 1000);
                                 }
-                                if (lives < 1){;
-                                    scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
+                                if (lives < 1){
                                     gameOver();
                                 }
                             }
@@ -1467,9 +1484,11 @@ var fps = document.getElementById('fps');
                                 fakeMesh.position.y = 3.8;
                                 thisHighland.checkCollisions = true;
                                 scene.beforeRender = function() {
-                                    fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                                    fakeMesh.position.y -= 0;
-                                    gameRender()
+                                    if(gameRunning){
+                                        fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                        fakeMesh.position.y -= 0;
+                                        gameRender()
+                                    }
                                 };
                             }
                         );  
@@ -1485,9 +1504,11 @@ var fps = document.getElementById('fps');
                                 if (thisHighland.checkCollisions){
                                     thisHighland.checkCollisions = false;
                                     scene.beforeRender = function() {
-                                        fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
-                                            fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
-                                        gameRender()
+                                        if(gameRunning){
+                                            fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                                fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
+                                            gameRender()
+                                        }
                                     };
                                 }
                             }
