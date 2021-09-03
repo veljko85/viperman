@@ -215,6 +215,7 @@ var fps = document.getElementById('fps');
             if(document.body.clientWidth > document.body.clientHeight){
                 gameOverSign.width = 0.4;
                 gameOverSign.height = 0.1;
+                gameOverSign.top = document.body.clientHeight * 0.15 + 'px';
             } else {
                 gameOverSign.width = 0.7;
                 gameOverSign.height = 0.05;
@@ -231,7 +232,7 @@ var fps = document.getElementById('fps');
                     }
                 })
             }
-             //pause game button
+            //pause game button
             var pauseGameButton = new BABYLON.GUI.Image("", "img/pauseButton.png");
             if(document.body.clientWidth > document.body.clientHeight){
                 pauseGameButton.width = 0.025;
@@ -333,15 +334,26 @@ var fps = document.getElementById('fps');
             imageLogo.alpha = 2.5;
             coinsHolder.addControl(imageLogo);
 
+            var coinDevider = new BABYLON.GUI.TextBlock();
+            coinDevider.text = ":";
+            coinDevider.color = "#fff";
+            if(document.body.clientWidth > document.body.clientHeight){
+                coinDevider.fontSize = 25 + "px";
+            } else {
+                coinDevider.fontSize = 50 + "px";
+            }
+            coinDevider.alpha = 2.5;
+            coinsHolder.addControl(coinDevider);
+
             var coinBlock = new BABYLON.GUI.TextBlock();
-            coinBlock.text = ": 0";
+            coinBlock.text = "0";
             coinBlock.color = "#fff";
             if(document.body.clientWidth > document.body.clientHeight){
                 coinBlock.fontSize = 25 + "px";
-                coinBlock.left = 15 + 'px';
+                coinBlock.left = document.body.clientWidth/64 + 'px';
             } else {
                 coinBlock.fontSize = 50 + "px";
-                coinBlock.left = 35 + 'px';
+                coinBlock.left = 50 + 'px';
             }
             coinBlock.alpha = 2.5;
             coinsHolder.addControl(coinBlock);
@@ -1319,8 +1331,41 @@ var fps = document.getElementById('fps');
                     fakeMesh.position.z += 0;
                 };
                 startAgain.style.display = 'block';
+                //display num of coins in the middle of the screen at game over
+                if(document.body.clientWidth > document.body.clientHeight){
+                coinsHolder.width = 0.35;
+                coinsHolder.height = 0.20;
+                coinsHolder.left = (document.body.clientWidth - document.body.clientWidth*0.35)/2 + 'px';
+                coinsHolder.top = (document.body.clientHeight- document.body.clientHeight*0.20)/2 + 'px';
+                } else {
+                    coinsHolder.width = 500 + 'px';
+                    coinsHolder.height = 175 + 'px';
+                    coinsHolder.left = (document.body.clientWidth - 500)/2 + 'px';
+                    coinsHolder.top = (document.body.clientHeight - 175)/2 + 'px';
+                }
+                if(document.body.clientWidth > document.body.clientHeight){
+                    coinDevider.fontSize = 125 + "px";
+                } else {
+                    coinDevider.fontSize = 125 + "px";
+                }
+                if(document.body.clientWidth > document.body.clientHeight){
+                imageLogo.width = 0.25;
+                imageLogo.height = 1;
+                imageLogo.left = -(document.body.clientWidth/15.12) + 'px';
+                } else {
+                    imageLogo.width = 0.25;
+                    imageLogo.height = 1;
+                    imageLogo.left = -90 + 'px';
+                }
+                if(document.body.clientWidth > document.body.clientHeight){
+                    coinBlock.fontSize = 125 + "px";
+                    coinBlock.left = document.body.clientWidth/15.36 + 'px';
+                } else {
+                    coinBlock.fontSize = 125 + "px";
+                    coinBlock.left = 125 + 'px';
+                }
             }
-            
+            console.log(document.body.clientWidth)
             
             //COLLIDERS
             //add collision and gravity to ground
@@ -1389,7 +1434,7 @@ var fps = document.getElementById('fps');
                                 if (thisCoin.isVisible) { 
                                     colectedCoins += 1;
                                     coinSound.play();
-                                    coinBlock.text = ": " + colectedCoins;
+                                    coinBlock.text = "" + colectedCoins;
                                     thisCoin.isVisible = false;
                                 }
                             }
