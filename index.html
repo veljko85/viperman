@@ -475,26 +475,31 @@ var fps = document.getElementById('fps');
             }
 
             var pillarMat = new BABYLON.StandardMaterial("pillarMat", scene);
-            var pillarTexture = new BABYLON.Texture("textures/pillar4.png", scene);
-            pillarMat.diffuseTexture = pillarTexture;
+            if(!isMobile()){
+                var pillarTexture = new BABYLON.Texture("textures/pillar4.png", scene);
+                pillarMat.diffuseTexture = pillarTexture;
 
-            var faceUV = new Array(6);
+                var faceUV = new Array(6);
 
-            for (var i = 0; i < 4; i++) {
-                faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
+                for (var i = 0; i < 4; i++) {
+                    faceUV[i] = new BABYLON.Vector4( 0, 1/6, 1, 1);
+                }
+                faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+                faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
+
+                var options = {
+                    width: 0.1, 
+                    height: 1.4, 
+                    depth: 0.1,
+                    faceUV: faceUV,
+                    wrap: true
+                };
+                var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', options, scene);
+            } else {
+                pillarMat.diffuseColor = new BABYLON.Color3.FromHexString('#303030');
+                var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', {width: 0.1, height: 1.4, depth: 0.1}, scene);
             }
-            faceUV[4] = new BABYLON.Vector4( 1/6, 0, 1, 1);
-            faceUV[5] = new BABYLON.Vector4( 1/6, 0, 1, 1);
 
-            var options = {
-                width: 0.1, 
-                height: 1.4, 
-                depth: 0.1,
-                faceUV: faceUV,
-                wrap: true
-            };
-
-            var laserWallUpperHolderLeft = BABYLON.MeshBuilder.CreateBox('laserWallUpperHolderLeft', options, scene);
             laserWallUpperHolderLeft.position = new BABYLON.Vector3(-1.5,0.8,0);
             laserWallUpperHolderLeft.material = pillarMat;
 
@@ -572,7 +577,9 @@ var fps = document.getElementById('fps');
                     newCoin.rotationQuaternion = null;
                     newCoin.position = new BABYLON.Vector3(coinLanePositionX, coinLanePositionY + 0.7, (coinLanePositionZ + i * 3));
                     coinsCollider(newCoin)
-                   scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
+                    if(!isMobile()){
+                        scene.beginDirectAnimation(newCoin, animationsCoin, 0, 30, true, 0.3);
+                    }
                 }
             }
             
@@ -590,9 +597,13 @@ var fps = document.getElementById('fps');
             var stair = new BABYLON.MeshBuilder.CreateBox("stair", {width: 2.8, height: 0.1, depth: 0.5}, scene);
             stair.position = new BABYLON.Vector3(0,0.2,0)
             var stairMat = new BABYLON.StandardMaterial("stairMat", scene);
-            stairMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
-            stairMat.diffuseTexture.uScale = 1;
-            stairMat.diffuseTexture.vScale = 5.6;
+            if(!isMobile()){
+                stairMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+                stairMat.diffuseTexture.uScale = 1;
+                stairMat.diffuseTexture.vScale = 5.6;
+            } else {      
+                stairMat.diffuseColor = new BABYLON.Color3.FromHexString('#303030')
+            }
             stair.material = stairMat;
                 
 
@@ -606,9 +617,13 @@ var fps = document.getElementById('fps');
             var highland = new BABYLON.MeshBuilder.CreateBox("highland", {width: 2.8, height: 0.1, depth: 30}, scene);
             highland.position = new BABYLON.Vector3(0,2,19.25)
             var highlandMat = new BABYLON.StandardMaterial("highlandMat", scene);
-            highlandMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
-            highlandMat.diffuseTexture.uScale = 56;
-            highlandMat.diffuseTexture.vScale = 5.6;
+            if(!isMobile()){
+                highlandMat.diffuseTexture = new BABYLON.Texture("textures/stariFlore.jpg", scene);
+                highlandMat.diffuseTexture.uScale = 56;
+                highlandMat.diffuseTexture.vScale = 5.6;
+            }else {      
+                highlandMat.diffuseColor = new BABYLON.Color3.FromHexString('#303030')
+            }
             highland.material = highlandMat;
             highland.isVisible = false;
             
@@ -1341,7 +1356,7 @@ var fps = document.getElementById('fps');
                     coinsHolder.width = 500 + 'px';
                     coinsHolder.height = 175 + 'px';
                     coinsHolder.left = (document.body.clientWidth - 500)/2 + 'px';
-                    coinsHolder.top = (document.body.clientHeight - 175)/2 + 'px';
+                    coinsHolder.top = (document.body.clientHeight - 175)/2 - 140 + 'px';
                 }
                 if(document.body.clientWidth > document.body.clientHeight){
                     coinDevider.fontSize = 125 + "px";
