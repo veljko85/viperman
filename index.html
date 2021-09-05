@@ -385,22 +385,21 @@ var fps = document.getElementById('fps');
                 hdrSkybox.material = hdrSkyboxMaterial;
                 hdrSkybox.infiniteDistance = true;
             } else {
-                // var fog = BABYLON.Mesh.CreateBox("skyBox", 110.0, scene);
-                // var fogMat = new BABYLON.StandardMaterial("skyBox", scene);
-                // fogMat.backFaceCulling = false;
-                // fogMat.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
-                // // fogMat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-                // // fogMat.diffuseTexture = new BABYLON.Texture("textures/bigRedLogo.png", scene);
-                // fog.material = fogMat;
+                // var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:110.0}, scene);
+                // var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+                // skyboxMaterial.backFaceCulling = false;
+                // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+                // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+                // skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+                // skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                // skybox.material = skyboxMaterial;	
 
-                var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:110.0}, scene);
-                var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-                skyboxMaterial.backFaceCulling = false;
-                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
-                skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-                skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-                skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-                skybox.material = skyboxMaterial;	
+                var city = BABYLON.MeshBuilder.CreatePlane("city", {height:32, width: 140});
+                city.position.y = 15.5;
+                city.position.z = 65;
+                cityMat = new BABYLON.StandardMaterial("cityMat", scene);
+                cityMat.diffuseTexture = new BABYLON.Texture("textures/skybox7.png", scene);
+                city.material = cityMat;
             }
             
             //GIVE GLOW TO GLOWING OBJ
@@ -526,12 +525,18 @@ var fps = document.getElementById('fps');
             var laserWall = BABYLON.MeshBuilder.CreatePlane("laserWall", {height:1.4, width: 2.9});
             laserWall.position = new BABYLON.Vector3(0,0.8,0);
             var laserWallmat = new BABYLON.StandardMaterial("laserWallmat", scene);
-            var laserWalltex = new BABYLON.Texture("textures/laserWallRed.png", scene);
-            laserWalltex.hasAlpha = true;
-            laserWallmat.diffuseTexture = laserWalltex;
-            laserWallmat.useAlphaFromDiffuseTexture = true;
-            laserWallmat.backFaceCulling = false;
-            laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            if(!isMobile()){
+                var laserWalltex = new BABYLON.Texture("textures/laserWallRed.png", scene);
+                laserWalltex.hasAlpha = true;
+                laserWallmat.diffuseTexture = laserWalltex;
+                laserWallmat.useAlphaFromDiffuseTexture = true;
+                laserWallmat.backFaceCulling = false;
+                laserWallmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000');
+            } else {
+                laserWallmat.diffuseColor = new BABYLON.Color3.FromHexString('#ff0000');
+                laserWallmat.alpha = 0.5;
+            }
+            
             laserWall.material = laserWallmat;
 
             var simpleLaserWall = BABYLON.Mesh.MergeMeshes([laserWall, laserWallUpperHolderRight, laserWallUpperHolderLeft], true, true, undefined, false, true);
@@ -1428,7 +1433,7 @@ var fps = document.getElementById('fps');
                 //change viperman and fake mesh position z - move thrue space
                 scene.beforeRender = function() {
                     if(isMobile()){
-                        skybox.position.z = fakeMesh.position.z;
+                        city.position.z = fakeMesh.position.z + 65;
                     }
                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                     gameRender()
@@ -1475,7 +1480,9 @@ var fps = document.getElementById('fps');
                 startGameFromPause();
             });
             //rotate around the mesh at start and end of the game
-            rotateAroundMesh()
+            if(!isMobile()){
+                rotateAroundMesh()
+            }
             //START GAME
             function animMove(camera, pos) {
                 const anim = new BABYLON.Animation('movecam', 'position', 120, BABYLON.Animation.ANIMATIONTYPE_VECTOR3);
@@ -1576,7 +1583,7 @@ var fps = document.getElementById('fps');
                                     if(gameRunning){
                                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                                         if(isMobile()){
-                                            skybox.position.z = fakeMesh.position.z;
+                                            city.position.z = fakeMesh.position.z + 65;
                                         }
                                         if(fakeMesh.position.y > 1.81){
                                             fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
@@ -1601,7 +1608,7 @@ var fps = document.getElementById('fps');
                                 if(gameRunning){
                                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                                     if(isMobile()){
-                                        skybox.position.z = fakeMesh.position.z;
+                                        city.position.z = fakeMesh.position.z + 65;
                                     }
                                     fakeMesh.position.y -= 0;
                                     gameRender()
@@ -1727,7 +1734,7 @@ var fps = document.getElementById('fps');
                                     if(gameRunning){
                                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                                         if(isMobile()){
-                                            skybox.position.z = fakeMesh.position.z;
+                                            city.position.z = fakeMesh.position.z + 65;
                                         }
                                         fakeMesh.position.y -= 0;
                                         gameRender()
@@ -1750,7 +1757,7 @@ var fps = document.getElementById('fps');
                                         if(gameRunning){
                                             fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                                             if(isMobile()){
-                                                skybox.position.z = fakeMesh.position.z;
+                                                city.position.z = fakeMesh.position.z + 65;
                                             }
                                                 fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
                                             gameRender()
