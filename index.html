@@ -384,6 +384,14 @@ var fps = document.getElementById('fps');
                 hdrSkyboxMaterial.disableLighting = true;
                 hdrSkybox.material = hdrSkyboxMaterial;
                 hdrSkybox.infiniteDistance = true;
+            } else {
+                var fog = BABYLON.Mesh.CreateBox("skyBox", 110.0, scene);
+                var fogMat = new BABYLON.StandardMaterial("skyBox", scene);
+                fogMat.backFaceCulling = false;
+                // fogMat.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+                // fogMat.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+                fogMat.diffuseTexture = new BABYLON.Texture("textures/bigRedLogo.png", scene);
+                fog.material = fogMat;
             }
             
             //GIVE GLOW TO GLOWING OBJ
@@ -392,26 +400,26 @@ var fps = document.getElementById('fps');
                 glow.intensity = 0.8;
             }
 
-            var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
-            speedGround.position = new BABYLON.Vector3(-3,0.05,10);
-            var speedGroundmat = new BABYLON.StandardMaterial("speedGroundmat", scene);
-            var speedTex = new BABYLON.Texture("img/speedArrows2.png", scene);
-            speedTex.hasAlpha = true;
-            speedGroundmat.diffuseTexture = speedTex;
-            speedGroundmat.useAlphaFromDiffuseTexture = true;
-            speedGroundmat.backFaceCulling = false;
-            speedGroundmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
-            speedGround.material = speedGroundmat;
-            speedGround.isVisible = false;
+            // var speedGround = BABYLON.MeshBuilder.CreateGround("speedGround", {width: 2, height: 8}, scene);
+            // speedGround.position = new BABYLON.Vector3(-3,0.05,10);
+            // var speedGroundmat = new BABYLON.StandardMaterial("speedGroundmat", scene);
+            // var speedTex = new BABYLON.Texture("img/speedArrows2.png", scene);
+            // speedTex.hasAlpha = true;
+            // speedGroundmat.diffuseTexture = speedTex;
+            // speedGroundmat.useAlphaFromDiffuseTexture = true;
+            // speedGroundmat.backFaceCulling = false;
+            // speedGroundmat.emissiveColor = new BABYLON.Color3.FromHexString('#ff0000')
+            // speedGround.material = speedGroundmat;
+            // speedGround.isVisible = false;
 
-            speedGrounds = [];
+            // speedGrounds = [];
 
-            function createSpeedGround(speedGroundPositionX, speedGroundPositionZ){
-                var newSpeedGround = speedGround.createInstance("newSpeedGround");
-                speedGrounds.push(newSpeedGround);
-                newSpeedGround.position = new BABYLON.Vector3(speedGroundPositionX, 0, speedGroundPositionZ);
-                speedTrackCollider(newSpeedGround)
-            }
+            // function createSpeedGround(speedGroundPositionX, speedGroundPositionZ){
+            //     var newSpeedGround = speedGround.createInstance("newSpeedGround");
+            //     speedGrounds.push(newSpeedGround);
+            //     newSpeedGround.position = new BABYLON.Vector3(speedGroundPositionX, 0, speedGroundPositionZ);
+            //     speedTrackCollider(newSpeedGround)
+            // }
 
             
             //POSITION Z OF THE ELEMNENTS OF GAME
@@ -671,6 +679,18 @@ var fps = document.getElementById('fps');
 
                 highlandCollider(newStairs, newHighland)
             }
+            // scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
+
+// scene.fogColor = new BABYLON.Color3(0.9, 0.9, 0.85);
+// scene.fogDensity = 0.01;
+
+// //Only if LINEAR
+// scene.fogStart = 50.0;
+// scene.fogEnd = 60.0;
+
+    
+    
+
                 // createHighlandMesh(3, posZ + 10)
             //CREATE PEACES FOR GROUND/BRIDGE/TRACK
             // comercial wall
@@ -692,10 +712,18 @@ var fps = document.getElementById('fps');
             // comercialWall2.addRotation(0,3.14,0)
 
             var comercialWalls = [];
-            for (let i = 0; i < 8; i++) {
-                var newComercialWall = comercialWall.clone("newComercialWall");
-                newComercialWall.position.z = (i * 20) + 2
-                comercialWalls.push(newComercialWall)
+            if(!isMobile()){
+                for (let i = 0; i < 8; i++) {
+                    var newComercialWall = comercialWall.clone("newComercialWall");
+                    newComercialWall.position.z = (i * 20) + 2
+                    comercialWalls.push(newComercialWall)
+                }
+            }   else{
+                for (let i = 0; i < 4; i++) {
+                    var newComercialWall = comercialWall.clone("newComercialWall");
+                    newComercialWall.position.z = (i * 20) + 2
+                    comercialWalls.push(newComercialWall)
+                }
             }
             var bridgeComercialWalls = BABYLON.Mesh.MergeMeshes(comercialWalls);
             bridgeComercialWalls.isVisible = false;
@@ -722,10 +750,18 @@ var fps = document.getElementById('fps');
             // comercialWallLogo2.addRotation(0,3.14,0)
 
             var comercialWallLogos = [];
-            for (let i = 0; i < 7; i++) {
-                var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
-                newComercialWallLogo.position.z = (i * 20) + 12
-                comercialWallLogos.push(newComercialWallLogo)
+            if(!isMobile()){
+                for (let i = 0; i < 7; i++) {
+                    var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
+                    newComercialWallLogo.position.z = (i * 20) + 12
+                    comercialWallLogos.push(newComercialWallLogo)
+                }
+            } else {
+                for (let i = 0; i < 4; i++) {
+                    var newComercialWallLogo = comercialWallLogo.clone("newComercialWallLogo");
+                    newComercialWallLogo.position.z = (i * 20) + 12
+                    comercialWallLogos.push(newComercialWallLogo)
+                }
             }
             var bridgeComercialWallLogos = BABYLON.Mesh.MergeMeshes(comercialWallLogos);
             bridgeComercialWallLogos.isVisible = false;
@@ -747,34 +783,41 @@ var fps = document.getElementById('fps');
             backWallLogo.isVisible = true;
 
             var backWallLogoFront = backWallLogo.clone("backWallLogoFront");
-            backWallLogoFront.position.z = 140;
+            if(!isMobile()){
+                backWallLogoFront.position.z = 140;
+            }else {
+                backWallLogoFront.position.z = 60;
+            }
             backWallLogoFront.addRotation(0.5,3.14,0)
             
             //main platform for running
-            var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
             
             if(!isMobile()){
-            var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
-            bridgeMat.reflectionTexture = hdrBcgRefTexture;
-            bridgeMat.refractionTexture = hdrBcgRefTexture;
-            bridgeMat.reflectionTexture.level = 1;
-            bridgeMat.specularPower = 150;
-            bridgeMat.indexOfRefraction = 0.52;
-            bridgeMat.alpha = 0.8;
-            bridgeMat.directIntensity = 0.0;
-            bridgeMat.environmentIntensity = 0.7;
-            bridgeMat.cameraExposure = 0.66;
-            bridgeMat.cameraContrast = 1.66;
+                var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:150}, scene);
+                var bridgeMat = new BABYLON.PBRMaterial("bridgeMat", scene);
+                bridgeMat.reflectionTexture = hdrBcgRefTexture;
+                bridgeMat.refractionTexture = hdrBcgRefTexture;
+                bridgeMat.reflectionTexture.level = 1;
+                bridgeMat.specularPower = 150;
+                bridgeMat.indexOfRefraction = 0.52;
+                bridgeMat.alpha = 0.8;
+                bridgeMat.directIntensity = 0.0;
+                bridgeMat.environmentIntensity = 0.7;
+                bridgeMat.cameraExposure = 0.66;
+                bridgeMat.cameraContrast = 1.66;
+                bridgeGround.position = new BABYLON.Vector3(0,0,70)
             } else {
+                var bridgeGround = BABYLON.MeshBuilder.CreateGround("ground", {width: 9, height:70}, scene);
                 var bridgeMat = new BABYLON.StandardMaterial("bridgeLayoutMat", scene);
                 bridgeMat.diffuseColor = new BABYLON.Color3.FromHexString('#000000')
+                bridgeGround.position = new BABYLON.Vector3(0,0,25)
                 // bridgeMat.diffuseTexture = new BABYLON.Texture("img/podloga3.jpg", scene);
                 // bridgeMat.diffuseTexture.uScale = 1;
                 // bridgeMat.diffuseTexture.vScale = 50;
             }
             bridgeGround.material = bridgeMat;
             // bridgeGround.position.z = 140;
-            bridgeGround.position = new BABYLON.Vector3(0,0,70)
+            
             bridgeGround.isVisible = true;
 
             //create bridge plane to go bellow
@@ -789,9 +832,10 @@ var fps = document.getElementById('fps');
                 bridgeLayout.material = bridgeLayoutMat;
             }
             //create glass walls
-            var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
-            glassWall.position = new BABYLON.Vector3(-5,2.5,70)
+            
             if(!isMobile()){
+                var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 150}, scene);
+                glassWall.position = new BABYLON.Vector3(-5,2.5,70)
                 var glassWallMat = new BABYLON.PBRMaterial("glassWallMat", scene);
                 glassWallMat.reflectionTexture = hdrBcgRefTexture;
                 glassWallMat.refractionTexture = hdrBcgRefTexture;
@@ -805,6 +849,8 @@ var fps = document.getElementById('fps');
                 glassWallMat.reflectivityColor = new BABYLON.Color3(0.1, 0.1, 0.1);
                 glassWallMat.albedoColor = new BABYLON.Color3(0.1, 0.1, 0.1);
             } else {
+                var glassWall = new BABYLON.MeshBuilder.CreateBox("glassWall", {width: 0.05, height: 5, depth: 70}, scene);
+                glassWall.position = new BABYLON.Vector3(-5,2.5,25)
                 var glassWallMat = new BABYLON.StandardMaterial("glassWallMat", scene);
                 glassWallMat.diffuseColor = new BABYLON.Color3.FromHexString('#000000')
             }
@@ -819,19 +865,31 @@ var fps = document.getElementById('fps');
             // frontGlassWall.material = glassWallMat;
 
             //side walks
-            var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth: 150}, scene);
+            if(!isMobile()){
+                var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth:150}, scene);
+                sideWalk.position = new BABYLON.Vector3(-5,0,70)
+            } else {
+                var sideWalk = new BABYLON.MeshBuilder.CreateBox("sideWalk", {width: 1, height: 0.4, depth:70}, scene);
+                sideWalk.position = new BABYLON.Vector3(-5,0,25)
+            }
             var sideWalkMat = new BABYLON.StandardMaterial("sideWalkMat", scene);
             sideWalkMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
             sideWalkMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
             sideWalk.material = sideWalkMat;
-            sideWalk.position = new BABYLON.Vector3(-5,0,70)
+            
             //other sidewalk
             var sideWalk2 = sideWalk.clone("sideWalk2");
             sideWalk2.position.x = 5;
             //side walks glass part
-            var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
+            if(!isMobile()){
+                var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:150}, scene);
+                sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
+            } else {
+                var sideWalkGlassPart = new BABYLON.MeshBuilder.CreateBox("sideWalkGlassPart", {width: 0.1, height: 0.1, depth:70}, scene);
+                sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,25)
+            }
             sideWalkGlassPart.material = glassWallMat;
-            sideWalkGlassPart.position = new BABYLON.Vector3(-4.5,0.2,70)
+            
             //other sidewalk glass part
             var sideWalkGlassPart2 = sideWalkGlassPart.clone("sideWalkGlassPart2");
             sideWalkGlassPart2.position.x = 4.5;
@@ -843,10 +901,18 @@ var fps = document.getElementById('fps');
             sideStrip.isVisible = false
 
             var sideStrips = [];
-            for (let i = 0; i < 15; i++) {
-                var newSideStrip = sideStrip.clone("sideStrip");
-                newSideStrip.position.z = (i * 10) - 3
-                sideStrips.push(newSideStrip)
+            if(!isMobile()){
+                for (let i = 0; i < 15; i++) {
+                    var newSideStrip = sideStrip.clone("sideStrip");
+                    newSideStrip.position.z = (i * 10) - 3
+                    sideStrips.push(newSideStrip)
+                }
+            } else {
+                for (let i = 0; i < 8; i++) {
+                    var newSideStrip = sideStrip.clone("sideStrip");
+                    newSideStrip.position.z = (i * 10) - 3
+                    sideStrips.push(newSideStrip)
+                }
             }
             var bridgeSideStrips = BABYLON.Mesh.MergeMeshes(sideStrips);
             bridgeSideStrips.isVisible = false;
@@ -855,22 +921,36 @@ var fps = document.getElementById('fps');
             bridgeSideStripsRight.position.x = 9.6;
                 
             //running tracks
-            var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
+            if(!isMobile()){
+                var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 150}, scene);
+                runningTrack.position = new BABYLON.Vector3(-1.5,0,70)
+            } else {
+                var runningTrack = new BABYLON.MeshBuilder.CreateBox("runningTrack", {width: 0.2, height: 0.1, depth: 70}, scene);
+                runningTrack.position = new BABYLON.Vector3(-1.5,0,25)
+            }
             var runningTrackMat = new BABYLON.StandardMaterial("runningTrackMat", scene);
             runningTrackMat.diffuseColor = new BABYLON.Color3.FromHexString('#00cdcd')
             runningTrackMat.emissiveColor = new BABYLON.Color3.FromHexString('#00cdcd');
             runningTrack.material = runningTrackMat;
-            runningTrack.position = new BABYLON.Vector3(-1.5,0,70)
+            
             //right running track
             var runningTrackRight = runningTrack.clone("runningTrackRight");
             runningTrackRight.position.x = 1.5;
             //running tracks glass part
             var runningGlassPart = sideWalkGlassPart.clone("runningGlassPart");
-            runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,70)
+            if(!isMobile()){
+                runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,70)
+            } else {
+                runningGlassPart.position = new BABYLON.Vector3(-1.5,0.05,25)
+            }
             //running tracks glass part right
             var runningGlassPartRight = sideWalkGlassPart.clone("runningGlassPartRight");
-            runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
-
+            if(!isMobile()){
+                runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,70)
+            } else {
+                runningGlassPartRight.position = new BABYLON.Vector3(1.5,0.05,25)
+            }
+            
             var bridgeMesh = BABYLON.Mesh.MergeMeshes([/*frontGlassWall*/backWallLogo,bridgeComercialWallLogos, bridgeComercialWallLogosRight, bridgeComercialWalls, bridgeComercialWallsRight, bridgeSideStripsRight, bridgeSideStrips, bridgeLayout, glassWall, glassWall2, sideWalk, sideWalk2, sideWalkGlassPart, sideWalkGlassPart2, runningTrack, runningTrackRight, runningGlassPart, runningGlassPartRight], true, true, undefined, false, true);
             bridgeMesh.isVisible = true;
 
@@ -882,14 +962,21 @@ var fps = document.getElementById('fps');
                 runningTracks.push(bridgeMeshInstance)
                 bridgeMeshInstance.position = new BABYLON.Vector3(0,0,posZ)
                 var bridgeGroundInstance = bridgeGround.createInstance('bridgeGroundInstance');
-                bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 70)
+                if(!isMobile()){
+                    bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 70)
+                    posZ += 150;
+
+                } else {
+                    bridgeGroundInstance.position = new BABYLON.Vector3(0,0,posZ + 25)
+                    posZ += 70;
+                }
                 grounds.push(bridgeGroundInstance)
                 addGravity(bridgeGroundInstance)
                 
             }
             
             function createTrackOptionOne(){
-                createTrackOne()
+                
                 createCoinLane(0, 0, posZ + 15, 10)
                 createHighlandMesh(3, posZ + 48)
                 createHighlandMesh(-3, posZ + 53)
@@ -898,11 +985,12 @@ var fps = document.getElementById('fps');
                 createSimpleLaserWall(-3, 0, posZ + 105, 3)
                 createSimpleLaserWall(3, 0, posZ + 95, 3)
                 createCoinLane(0, 2, posZ + 103, 10)
-                posZ += 150
+                createTrackOne()
+                //46
             }
 
             function createTrackOptionTwo(){
-                createTrackOne()
+                
                 createHighlandMesh(0, posZ + 15)
                 createCoinLane(0, 2, posZ + 18, 10)
                 createSimpleLaserWall(3, 0, posZ + 20, 1)
@@ -916,11 +1004,12 @@ var fps = document.getElementById('fps');
                 createSimpleLaserWall(0, 0, posZ + 120, 3)
                 createSimpleLaserWall(-3, 1.3, posZ + 125, 2)
                 createSimpleLaserWall(3, 0, posZ + 130, 1)
-                posZ += 150
+                createTrackOne()
+                //45
             }
 
             function createTrackOptionThree(){
-                createTrackOne()
+                
                 createHighlandMesh(-3, posZ + 15)
                 createCoinLane(3, 0, posZ + 50, 10)
                 createSimpleLaserWall(0, 0, posZ + 50, 3)
@@ -930,11 +1019,11 @@ var fps = document.getElementById('fps');
                 createSimpleLaserWall(0, 0, posZ + 120, 3)
                 createCoinLane(3, 0, posZ + 120, 5)
                 createCoinLane(-3, 0, posZ + 120, 5)
-                posZ += 150
+                createTrackOne()
+                //40
             }
 
             function createTrackOptionFour(){
-                createTrackOne()
                 createHighlandMesh(-3, posZ + 15)
                 createHighlandMesh(3, posZ + 25)
                 createCoinLane(0, 0, posZ + 35, 15)
@@ -946,11 +1035,11 @@ var fps = document.getElementById('fps');
                 createSimpleLaserWall(-3, 0, posZ + 115, 3)
                 createSimpleLaserWall(3, 0, posZ + 115, 3)
                 createSimpleLaserWall(0, 1.3, posZ + 120, 2)
-                posZ += 150
+                createTrackOne()
+                //37
             }
 
             function createTrackOptionFive(){
-                createTrackOne()
                 createCoinLane(-3, 0, posZ + 15, 10)
                 createCoinLane(0, 0, posZ + 15, 10)
                 createCoinLane(3, 0, posZ + 15, 10)
@@ -965,11 +1054,11 @@ var fps = document.getElementById('fps');
                 createCoinLane(0, 0, posZ + 101, 5)
                 createSimpleLaserWall(0, 0, posZ + 120, 3)
                 createCoinLane(0, 0, posZ + 121, 5)
-                posZ += 150
+                createTrackOne()
+                //53
             }
             
             function createTrackOptionSix(){
-                createTrackOne()
                 createSimpleLaserWall(-3, 0, posZ + 15, 3)
                 createSimpleLaserWall(3, 0, posZ + 15, 3)
                 createSimpleLaserWall(0, 0, posZ + 25, 1)
@@ -991,7 +1080,8 @@ var fps = document.getElementById('fps');
                 createSimpleLaserWall(3, 0, posZ + 125, 3)
                 createCoinLane(0, 0, posZ + 126, 5)
                 createSimpleLaserWall(0, 0, posZ + 140, 3)
-                posZ += 150
+                createTrackOne()
+                //39
             }
             var randNum = () =>{
                 return Math.floor(Math.random() * 6);
@@ -1001,6 +1091,14 @@ var fps = document.getElementById('fps');
 
             function randomTrackOpt(){
                 trackOptions[randNum()]();
+            }
+
+            // var randNum = () =>{
+            //     return Math.floor(Math.random() * 6);
+            // }
+            //var trackOptionsMob = [createTrackOptionOneMob, createTrackOptionTwoMob, createTrackOptionThreeMob, createTrackOptionFourMob, createTrackOptionFiveMob, createTrackOptionSixMob];
+            function randomTrackOptMob(){
+                createTrackOne()
             }
           
             //game info
@@ -1193,22 +1291,35 @@ var fps = document.getElementById('fps');
             function gameRender(){
                 //loop track and elements creation
                 if (runningTracks.length < 2) {
-                    randomTrackOpt()
-                    // createTrackOptionSix()
+                    if(!isMobile()){
+                        randomTrackOpt()
+                    } else {
+                        randomTrackOptMob()
+                        // createTrackOptionSix()
+                    }
                 }
                 //dispose track
                 for (let i = 0; i < runningTracks.length; i++) {
-                    if ((fakeMesh.position.z - 160) > runningTracks[i].position.z){
-                        runningTracks[i].dispose();
-                        grounds[i].dispose();
-                        runningTracks.splice(i, 1);
-                        grounds.splice(i, 1);
+                    if(!isMobile()){
+                        if ((fakeMesh.position.z - 155) > runningTracks[i].position.z){
+                            runningTracks[i].dispose();
+                            grounds[i].dispose();
+                            runningTracks.splice(i, 1);
+                            grounds.splice(i, 1);
+                        }
+                    } else {
+                        if ((fakeMesh.position.z - 75) > runningTracks[i].position.z){
+                            runningTracks[i].dispose();
+                            grounds[i].dispose();
+                            runningTracks.splice(i, 1);
+                            grounds.splice(i, 1);
+                        }
                     }
                 }
                 //dispose fooes
                 if (fooes.length > 0) {
                     for (let i = 0; i < fooes.length; i++) {
-                        if ((fakeMesh.position.z - 10) > fooes[i].position.z){
+                        if ((fakeMesh.position.z - 5) > fooes[i].position.z){
                         fooes[i].dispose();
                         fooes.splice(i, 1);
                         }
@@ -1217,21 +1328,21 @@ var fps = document.getElementById('fps');
                 //dispose coins
                 if (coins.length > 0) {
                     for (let i = 0; i < coins.length; i++) {
-                        if ((fakeMesh.position.z - 10) > coins[i].position.z){
+                        if ((fakeMesh.position.z - 5) > coins[i].position.z){
                             coins[i].dispose();
                             coins.splice(i, 1);
                         }
                     }
                 }
                 //dispose speed ground
-                if (speedGrounds.length > 0) {
-                    for (let i = 0; i < speedGrounds.length; i++) {
-                        if ((fakeMesh.position.z - 10) > speedGrounds[i].position.z){
-                            speedGrounds[i].dispose();
-                            speedGrounds.splice(i, 1);
-                        }
-                    }
-                }
+                // if (speedGrounds.length > 0) {
+                //     for (let i = 0; i < speedGrounds.length; i++) {
+                //         if ((fakeMesh.position.z - 5) > speedGrounds[i].position.z){
+                //             speedGrounds[i].dispose();
+                //             speedGrounds.splice(i, 1);
+                //         }
+                //     }
+                // }
                 if (stairsArr.length > 0) {
                     for (let i = 0; i < stairsArr.length; i++) {
                         if ((fakeMesh.position.z - 60) > stairsArr[i].position.z){
@@ -1258,6 +1369,9 @@ var fps = document.getElementById('fps');
                 scene.animationGroups.find(a => a.name === 'run').start(true, 1, 0);
                 //change viperman and fake mesh position z - move thrue space
                 scene.beforeRender = function() {
+                    if(isMobile()){
+                        fog.position.z = fakeMesh.position.z;
+                    }
                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
                     gameRender()
                 };
@@ -1401,6 +1515,9 @@ var fps = document.getElementById('fps');
                                 scene.beforeRender = function() {
                                     if(gameRunning){
                                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                        if(isMobile()){
+                                            fog.position.z = fakeMesh.position.z;
+                                        }
                                         if(fakeMesh.position.y > 1.81){
                                             fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
                                         }
@@ -1423,6 +1540,9 @@ var fps = document.getElementById('fps');
                             scene.beforeRender = function() {
                                 if(gameRunning){
                                     fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                    if(isMobile()){
+                                        fog.position.z = fakeMesh.position.z;
+                                    }
                                     fakeMesh.position.y -= 0;
                                     gameRender()
                                 }
@@ -1546,6 +1666,9 @@ var fps = document.getElementById('fps');
                                 scene.beforeRender = function() {
                                     if(gameRunning){
                                         fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                        if(isMobile()){
+                                            fog.position.z = fakeMesh.position.z;
+                                        }
                                         fakeMesh.position.y -= 0;
                                         gameRender()
                                     }
@@ -1566,6 +1689,9 @@ var fps = document.getElementById('fps');
                                     scene.beforeRender = function() {
                                         if(gameRunning){
                                             fakeMesh.position.z += playerSpeed * scene.getAnimationRatio();
+                                            if(isMobile()){
+                                                fog.position.z = fakeMesh.position.z;
+                                            }
                                                 fakeMesh.position.y -= playerSpeed * scene.getAnimationRatio();
                                             gameRender()
                                         }
