@@ -1595,30 +1595,62 @@ var fps = document.getElementById('fps');
                 }
                 if(document.body.clientWidth > document.body.clientHeight){
                     coinDevider.fontSize = 125 + "px";
+                    coinDevider.top = document.body.clientHeight/26.42 + 'px';
                 } else {
-                    coinDevider.fontSize = 125 + "px";
+                    coinDevider.fontSize = 90 + "px";
+                    coinDevider.top = 30 + 'px';
                 }
                 if(document.body.clientWidth > document.body.clientHeight){
-                imageLogo.width = 0.25;
-                imageLogo.height = 1;
+                imageLogo.width = 0.2;
+                imageLogo.height = 0.7;
                 imageLogo.left = -(document.body.clientWidth/15.12) + 'px';
+                imageLogo.top = document.body.clientHeight/26.42 + 'px';
                 } else {
-                    imageLogo.width = 0.25;
-                    imageLogo.height = 1;
+                    imageLogo.width = 0.2;
+                    imageLogo.height = 0.7;
                     imageLogo.left = -90 + 'px';
+                    imageLogo.top = 30 + 'px';
                 }
                 if(document.body.clientWidth > document.body.clientHeight){
                     coinBlock.fontSize = 125 + "px";
                     coinBlock.left = document.body.clientWidth/15.36 + 'px';
+                    coinBlock.top = document.body.clientHeight/26.42 + 'px';
                 } else {
-                    coinBlock.fontSize = 125 + "px";
-                    coinBlock.left = 125 + 'px';
+                    coinBlock.fontSize = 90 + "px";
+                    coinBlock.left = 90 + 'px';
+                    coinBlock.top = 30 + 'px';
                 }
+                var newHighscoreBlock = new BABYLON.GUI.TextBlock();
+                    newHighscoreBlock.text = "Your Score";
+                    newHighscoreBlock.color = "#fff";
+                    if(document.body.clientWidth > document.body.clientHeight){
+                        newHighscoreBlock.fontSize = 50 + "px";
+                        newHighscoreBlock.top = -(document.body.clientHeight/15.1) + 'px';
+                    } else {
+                        newHighscoreBlock.fontSize = 50 + "px";
+                        newHighscoreBlock.top = -60 + 'px';
+                    }
+                    newHighscoreBlock.alpha = 2.5;
+                    coinsHolder.addControl(newHighscoreBlock);
+
                 if(colectedCoins > highscore){
+                    var newHighscoreBlock = new BABYLON.GUI.TextBlock();
+                    newHighscoreBlock.text = "New Highscore";
+                    newHighscoreBlock.color = "#fff";
+                    if(document.body.clientWidth > document.body.clientHeight){
+                        newHighscoreBlock.fontSize = 50 + "px";
+                        newHighscoreBlock.top = -(document.body.clientHeight/15.1) + 'px';
+                    } else {
+                        newHighscoreBlock.fontSize = 50 + "px";
+                        newHighscoreBlock.top = -60 + 'px';
+                    }
+                    newHighscoreBlock.alpha = 2.5;
+                    coinsHolder.addControl(newHighscoreBlock);
+                    
                     localStorage.setItem("viperHighscore", colectedCoins);
                 }
             }
-            console.log(document.body.clientWidth)
+            console.log(document.body.clientHeight)
             
             //COLLIDERS
             //add collision and gravity to ground
