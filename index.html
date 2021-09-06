@@ -143,6 +143,9 @@ var fps = document.getElementById('fps');
             }
         //end of loading
 
+        //highscore
+        var highscore = localStorage.getItem("viperHighscore");
+
         function createScene() {
             // for loading
             engine.displayLoadingUI();
@@ -357,6 +360,42 @@ var fps = document.getElementById('fps');
             }
             coinBlock.alpha = 2.5;
             coinsHolder.addControl(coinBlock);
+
+            //highscore
+            var highScoreHolder = new BABYLON.GUI.Rectangle();
+            highScoreHolder.thickness = 0;
+            if(document.body.clientWidth > document.body.clientHeight){
+                highScoreHolder.width = 0.07;
+                highScoreHolder.height = 0.04;
+                highScoreHolder.left = 20 + 'px';
+                highScoreHolder.top = 120 + 'px';
+            } else {
+                highScoreHolder.width = 250 + 'px';
+                highScoreHolder.height = 70 + 'px';
+                highScoreHolder.left = 30 + 'px';
+                highScoreHolder.top = 220 + 'px';
+            }
+            highScoreHolder.background = "black";
+            highScoreHolder.alpha = 0.4;
+            highScoreHolder.cornerRadius = 15;
+            highScoreHolder.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+            highScoreHolder.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(highScoreHolder);
+
+            var highScoreBlock = new BABYLON.GUI.TextBlock();
+            highScoreBlock.text = "High Score: " + highscore;
+            highScoreBlock.color = "#fff";
+            // highScoreBlock.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+            if(document.body.clientWidth > document.body.clientHeight){
+                highScoreBlock.fontSize = 15 + "px";
+                // highScoreBlock.left = -(document.body.clientWidth/96) + 'px';
+                // highScoreBlock.left = 0 + 'px'
+            } else {
+                highScoreBlock.fontSize = 30 + "px";
+                // highScoreBlock.left = -40 + 'px';
+            }
+            highScoreBlock.alpha = 2.5;
+            highScoreHolder.addControl(highScoreBlock);
 
             //MUSIC IN THE GAME
             var gameMusic = new BABYLON.Sound("gameMusic", "sounds/TRON Legacy (End Titles).mp3", scene, null, {
@@ -1574,6 +1613,9 @@ var fps = document.getElementById('fps');
                 } else {
                     coinBlock.fontSize = 125 + "px";
                     coinBlock.left = 125 + 'px';
+                }
+                if(colectedCoins > highscore){
+                    localStorage.setItem("viperHighscore", colectedCoins);
                 }
             }
             console.log(document.body.clientWidth)
