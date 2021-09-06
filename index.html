@@ -41,7 +41,7 @@
 <body>
 <div id='container' style="width: 100vw; height: 100vh; overflow: hidden;">
     <canvas id="renderCanvas"></canvas>
-    <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p>
+    <!-- <p id='fps' style="position: absolute; top: 80%; left: 40%; font-size: 50px; color: red;">1111</p> -->
 </div> 
     <script>
 
@@ -58,16 +58,12 @@ function isMobile() {
 
         return false;
     }
-    console.log(navigator.userAgent);
-    console.log((document.body.clientWidth - 800) / 2)
-if(isMobile()){
-    console.log('mob je')
-} else {console.log('nije mob')}
 
-var fps = document.getElementById('fps');
-        setInterval(function(){ 
-           fps.innerHTML = engine.getFps()
-            }, 1000)
+
+// var fps = document.getElementById('fps');
+//         setInterval(function(){ 
+//            fps.innerHTML = engine.getFps()
+//             }, 1000)
 
         //GET CANVAS
         var container = document.getElementById("container");
@@ -139,7 +135,7 @@ var fps = document.getElementById('fps');
 
             BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
                 document.getElementById("customLoadingScreenDiv").style.display = "none";
-                console.log("scene is now loaded");
+                // console.log("scene is now loaded");
             }
         //end of loading
 
@@ -1573,7 +1569,6 @@ var fps = document.getElementById('fps');
             function gameOver(){ 
                 running = false;
                 gameRunning = false;
-                console.log(running)
                 gameOverSign.notRenderable = false;
                 scene.animationGroups.find(a => a.name === 'run').pause(true);
                 scene.animationGroups.find(a => a.name === 'game_over').start(false, 1, 0)
@@ -1650,7 +1645,6 @@ var fps = document.getElementById('fps');
                     localStorage.setItem("viperHighscore", colectedCoins);
                 }
             }
-            console.log(document.body.clientHeight)
             
             //COLLIDERS
             //add collision and gravity to ground
@@ -1937,10 +1931,10 @@ var fps = document.getElementById('fps');
 
             
 
-            setInterval(function(){
-            console.log(scene.meshes.length)
-            console.log(fakeMesh.position.z)
-        }, 500) 
+        //     setInterval(function(){
+        //     console.log(scene.meshes.length)
+        //     console.log(fakeMesh.position.z)
+        // }, 500) 
             return scene;
             //END OF SCENE
         
